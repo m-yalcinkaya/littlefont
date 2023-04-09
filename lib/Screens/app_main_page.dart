@@ -1,110 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:littlefont/Items/app_drawer.dart';
-import 'package:littlefont/Screens/create_note.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class AppMainPage extends StatefulWidget {
-  const AppMainPage({Key? key}) : super(key: key);
 
-  @override
-  State<AppMainPage> createState() => _AppMainPageState();
-}
-
-class _AppMainPageState extends State<AppMainPage> {
-  String? mainText;
-
-  List<String> _notlar = [];
-
-  Future<void> _addNote() async {
-    final yeniNot = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const CreateNote()),
-    );
-
-    setState(() {
-      _notlar.add(yeniNot);
-    });
-  }
-
-  Future<void> _deleteNotes(int index) async {
-    setState(() {
-      _notlar.removeAt(index);
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadNotes();
-  }
-
-  Future<void> _loadNotes() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _notlar = prefs.getStringList('notlar') ?? [];
-    });
-  }
-
-  Future<void> _saveNotes() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('notlar', _notlar);
-  }
-
-  @override
-  void dispose() {
-    _saveNotes();
-    super.dispose();
-  }
+class MyHomePage extends StatelessWidget {
+  final notlar = ['Mustafa', 'meryem'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:  const AppDrawer(),
-      appBar: AppBar(
-        title: const Text('Merhaba'),
-      ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-          childAspectRatio: 1,
-        ),
-        itemCount: _notlar.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text(_notlar[index]),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
-                          child:const Text('Kapat'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              onLongPress: () => _deleteNotes(index),
-              child: Center(
-                child: Text(_notlar[index]),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          MySliverAppBar(),
+          SliverToBoxAdapter(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: Card(
+                      elevation: 20,
+                      child: Text('Musafa00'),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: Card(
+                      elevation: 20,
+                      child: Text('Musafa00'),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: Card(
+                      elevation: 20,
+                      child: Text('Musafa00'),
+                    ),
+                  ),
+
+                ],
               ),
             ),
-          );
-        },
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNote,
-        tooltip: 'Not Ekle',
-        child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
 }
+
+
+class MySliverAppBar extends StatelessWidget {
+  const MySliverAppBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      expandedHeight: 200.0,
+      flexibleSpace: FlexibleSpaceBar(
+        collapseMode: CollapseMode.parallax,
+        expandedTitleScale: 1.5,
+        title: Text('Merhaba, Mustafa'),
+        background: FittedBox(
+          fit: BoxFit.cover,
+            child: Image(image: AssetImage(
+                'assets/images/pexels-photo-1039083.jpg'),
+            ),
+        ),
+      ),
+    );
+  }
+}
+
+
 

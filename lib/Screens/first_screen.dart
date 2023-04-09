@@ -5,16 +5,16 @@ import '../Items/button.dart';
 import 'login_page.dart';
 
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class FirstScreen extends StatefulWidget {
+  const FirstScreen({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<FirstScreen> createState() => _FirstScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _FirstScreenState extends State<FirstScreen> {
 
   final text1Controller = TextEditingController();
   final text2Controller = TextEditingController();
@@ -80,7 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => SignUp(),
               )),
-              child: const Text('Uygulamada yeni misin? Hemen Kaydol', style: TextStyle(
+              child: const Text('Uygulamada yeni misin? Hemen Kaydol', style:
+              TextStyle(
                 color: Colors.white,
               ),),
             ),

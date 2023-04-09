@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:littlefont/Screens/app_main_page.dart';
+import 'package:littlefont/Screens/my_notes.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class AppDrawer extends StatelessWidget {
                 title: const Text('Anasayfa'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const AppMainPage(),));
+                    builder: (context) => const MyNotes(),));
                 },
               ),
               ListTile(
@@ -60,19 +60,27 @@ class AppDrawer extends StatelessWidget {
                 title: const Text('Notlarım'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const AppMainPage(),));
+                    builder: (context) => const MyNotes(),));
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.account_circle),
-                title: const Text('Profil'),
+                leading: const Icon(Icons.favorite_outlined),
+                title: const Text('Favoriler'),
                 onTap: () {
                   // Profil sayfasına git
                 },
               ),
+
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Ayarlar'),
+                onTap: () {
+
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: const Text('Hakkında'),
                 onTap: () {
 
                 },

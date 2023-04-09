@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_main_page.dart';
+import 'package:littlefont/Screens/app_main_page.dart';
 import 'package:littlefont/Items/button.dart';
 
 class SignUp extends StatelessWidget {
@@ -170,7 +170,7 @@ class SignUp extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>const AppMainPage(),
+                        builder: (context) => MyHomePage(),
                       ));
                 },
                 Width: 150,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:littlefont/Screens/app_main_page.dart';
+import 'package:littlefont/Screens/my_notes.dart';
 import 'package:littlefont/Items/button.dart';
 import 'first_screen.dart';
 
@@ -15,7 +15,7 @@ class Login extends StatefulWidget {
   });
 
 
-  final MyHomePage widget;
+  final FirstScreen widget;
   final TextEditingController text1Controller;
   final TextEditingController text2Controller;
 
@@ -112,7 +112,7 @@ class _LoginState extends State<Login> {
     widget.text1Controller.text = '';
     widget.text2Controller.text = '';
     return Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AppMainPage(),));
+                          builder: (context) => MyNotes(),));
   }
 }
 

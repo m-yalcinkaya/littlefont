@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:littlefont/Screens/app_main_page.dart';
 import 'package:littlefont/Items/button.dart';
+import 'package:littlefont/Screens/my_notes.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({Key? key}) : super(key: key);
@@ -170,7 +170,7 @@ class SignUp extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MyHomePage(),
+                        builder: (context) => MyNotes(),
                       ));
                 },
                 Width: 150,

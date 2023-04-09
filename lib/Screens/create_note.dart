@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:littlefont/Repository/notes_repository.dart';
 
 class CreateNote extends StatefulWidget {
   const CreateNote({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class _CreateNoteState extends State<CreateNote> {
   final headController = TextEditingController();
   final textController = TextEditingController();
   bool isError = false;
+  
 
   @override
   void initState() {
@@ -26,7 +28,8 @@ class _CreateNoteState extends State<CreateNote> {
 
   @override
   Widget build(BuildContext context) {
-
+    NotesRepository noteRepository = NotesRepository();
+    noteRepository.notlar.add(Notes(title: headController.text, content: textController.text));
     return WillPopScope(
       onWillPop: () async {
         return true;

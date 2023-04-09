@@ -6,17 +6,17 @@ class SignUp extends StatelessWidget {
   SignUp({Key? key}) : super(key: key);
 
 
-  FocusNode adFocusNode = FocusNode();
-  FocusNode soyadfocusNode = FocusNode();
-  FocusNode postaFocusNode = FocusNode();
-  FocusNode sifreFocusNode = FocusNode();
+  final FocusNode adFocusNode = FocusNode();
+  final FocusNode soyadfocusNode = FocusNode();
+  final FocusNode postaFocusNode = FocusNode();
+  final FocusNode sifreFocusNode = FocusNode();
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kayıt Ol'),
+        title: const Text('Kayıt Ol'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -26,8 +26,7 @@ class SignUp extends StatelessWidget {
             children: [
               Column(
                 children: [
-
-                  SizedBox(height: 50,),
+                  const SizedBox(height: 50,),
                   Button(
                     text: 'Facebook ile giriş yap',
                     textColor: Colors.black,
@@ -49,11 +48,11 @@ class SignUp extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
+                children: const [
+                  SizedBox(
                     width: 150,
                     height: 10,
                     child: Divider(
@@ -65,7 +64,7 @@ class SignUp extends StatelessWidget {
                   ),
                   //Divider(thickness: 4, color: Colors.black, indent: 0, endIndent: 150),
                   Text('veya'),
-                  Container(
+                  SizedBox(
                     width: 150,
                     height: 10,
                     child: Divider(
@@ -78,9 +77,9 @@ class SignUp extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding:const EdgeInsets.all(10),
                 child: SizedBox(
                   width: 220,
                   height: 40,
@@ -88,7 +87,7 @@ class SignUp extends StatelessWidget {
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(soyadfocusNode);
                     },
-                    decoration: InputDecoration(
+                    decoration:const InputDecoration(
                       hintText: 'Adınızı giriniz',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.horizontal(
@@ -101,7 +100,7 @@ class SignUp extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding:const EdgeInsets.all(10),
                 child: SizedBox(
                   width: 220,
                   height: 40,
@@ -110,7 +109,7 @@ class SignUp extends StatelessWidget {
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(postaFocusNode);
                     },
-                    decoration: InputDecoration(
+                    decoration:const InputDecoration(
                       hintText: 'Soyadınızı giriniz',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.horizontal(
@@ -123,7 +122,7 @@ class SignUp extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding:const EdgeInsets.all(10),
                 child: SizedBox(
                   width: 220,
                   height: 40,
@@ -132,7 +131,7 @@ class SignUp extends StatelessWidget {
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(sifreFocusNode);
                     },
-                    decoration: InputDecoration(
+                    decoration:const InputDecoration(
                       hintText: 'E-postanızı giriniz',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.horizontal(
@@ -145,14 +144,14 @@ class SignUp extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding:const EdgeInsets.all(10),
                 child: SizedBox(
                   width: 220,
                   height: 40,
                   child: TextField(
                     focusNode: sifreFocusNode,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration:const InputDecoration(
                       hintText: 'Şifrenizi giriniz',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.horizontal(
@@ -171,7 +170,7 @@ class SignUp extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AppMainPage(),
+                        builder: (context) =>const AppMainPage(),
                       ));
                 },
                 Width: 150,

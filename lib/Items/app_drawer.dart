@@ -8,7 +8,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.only(
+      borderRadius: const BorderRadius.only(
         bottomRight: Radius.circular(50),
         topRight: Radius.circular(50),
       ),
@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
             children: <Widget>[
               DrawerHeader(
                 curve: Curves.ease,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/pexels-photo-1563356.jpg',),
                     fit: BoxFit.fill,
@@ -29,7 +29,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 child: Column(
                   children:  [
-                    Icon(
+                    const Icon(
                       Icons.access_time_filled,
                       color: Colors.white,
                       size: 80,
@@ -37,7 +37,7 @@ class AppDrawer extends StatelessWidget {
                     Text(
                       'LittleFont',
                       style: GoogleFonts.akshar(
-                        textStyle: TextStyle(
+                         textStyle: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
@@ -48,31 +48,31 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.home),
-                title: Text('Anasayfa'),
+                leading:const Icon(Icons.home),
+                title: const Text('Anasayfa'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AppMainPage(),));
+                    builder: (context) => const AppMainPage(),));
                 },
               ),
               ListTile(
-                leading: Icon(Icons.notes),
-                title: Text('Notlarım'),
+                leading: const Icon(Icons.notes),
+                title: const Text('Notlarım'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AppMainPage(),));
+                    builder: (context) => const AppMainPage(),));
                 },
               ),
               ListTile(
-                leading: Icon(Icons.account_circle),
-                title: Text('Profil'),
+                leading: const Icon(Icons.account_circle),
+                title: const Text('Profil'),
                 onTap: () {
                   // Profil sayfasına git
                 },
               ),
               ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Ayarlar'),
+                leading: const Icon(Icons.settings),
+                title: const Text('Ayarlar'),
                 onTap: () {
 
                 },

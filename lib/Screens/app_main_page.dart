@@ -4,7 +4,7 @@ import 'package:littlefont/Screens/create_note.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppMainPage extends StatefulWidget {
-  AppMainPage({Key? key}) : super(key: key);
+  const AppMainPage({Key? key}) : super(key: key);
 
   @override
   State<AppMainPage> createState() => _AppMainPageState();
@@ -18,7 +18,7 @@ class _AppMainPageState extends State<AppMainPage> {
   Future<void> _addNote() async {
     final yeniNot = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CreateNote()),
+      MaterialPageRoute(builder: (context) => const CreateNote()),
     );
 
     setState(() {
@@ -59,12 +59,12 @@ class _AppMainPageState extends State<AppMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:  AppDrawer(),
+      drawer:  const AppDrawer(),
       appBar: AppBar(
-        title: Text('Merhaba'),
+        title: const Text('Merhaba'),
       ),
       body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
@@ -83,7 +83,7 @@ class _AppMainPageState extends State<AppMainPage> {
                       actions: [
                         ElevatedButton(
                           onPressed: () => Navigator.pop(context),
-                          child: Text('Kapat'),
+                          child:const Text('Kapat'),
                         ),
                       ],
                     );
@@ -102,7 +102,7 @@ class _AppMainPageState extends State<AppMainPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _addNote,
         tooltip: 'Not Ekle',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

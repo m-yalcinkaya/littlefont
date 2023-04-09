@@ -40,8 +40,8 @@ class _CreateNoteState extends State<CreateNote> {
                   onPressed: () => showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text('Uyarı Mesajı'),
-                      content: Text('Notunuzu kaydetmek istediğinize emin misiniz?'),
+                      title:const  Text('Uyarı Mesajı'),
+                      content: const Text('Notunuzu kaydetmek istediğinize emin misiniz?'),
                       actions: [
                         TextButton(
                           onPressed: () {
@@ -63,7 +63,7 @@ class _CreateNoteState extends State<CreateNote> {
                       ],
                     ),
                   ),
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                 ),
               ),
             ],
@@ -88,7 +88,7 @@ class _CreateNoteState extends State<CreateNote> {
                       textInputAction: TextInputAction.newline,
                       maxLines: null,
                       controller: headController,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 40,
                       ),
                       decoration: InputDecoration(
@@ -96,13 +96,13 @@ class _CreateNoteState extends State<CreateNote> {
                         hintText: 'Başlığı girin'
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     TextField(
                       controller: textController,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Yazmaya başlayın',
                       ),
                       maxLines: null,

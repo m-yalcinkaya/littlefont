@@ -42,6 +42,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
       itemCount: widget.notesRepository.favourites.length,
       itemBuilder: (context, index) {
         return Card(
+          color: widget.notesRepository.favourites[index].color,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(

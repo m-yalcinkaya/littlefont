@@ -8,6 +8,7 @@ import 'package:littlefont/Screens/recycle_bin_page.dart';
 
 class AppDrawer extends StatelessWidget {
   final NotesRepository notesRepository;
+
   const AppDrawer({Key? key, required this.notesRepository}) : super(key: key);
 
   @override
@@ -55,27 +56,14 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.home),
-                title: const Text('Anasayfa'),
-                onTap: () {
-                  Navigator.pop(context);
-                  if(Navigator.canPop(context)){
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const MyHomePage(),
-                    ));
-                  }
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.notes),
                 title: const Text('Notlarım'),
                 onTap: () {
                   Navigator.pop(context);
-                  if(!Navigator.canPop(context)){
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const MyNotes(),
+                      builder: (context) => MyNotes(notesRepository: notesRepository),
                     ));
-                  }
+
                 },
               ),
               ListTile(
@@ -83,11 +71,11 @@ class AppDrawer extends StatelessWidget {
                 title: const Text('Favoriler'),
                 onTap: () {
                   Navigator.pop(context);
-                  if(Navigator.canPop(context)){
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FavouritesPage(notesRepository: notesRepository),
+                      builder: (context) =>
+                          FavouritesPage(notesRepository: notesRepository),
                     ));
-                  }
+
                 },
               ),
               ListTile(
@@ -95,11 +83,11 @@ class AppDrawer extends StatelessWidget {
                 title: const Text('Çöp Kutusu'),
                 onTap: () {
                   Navigator.pop(context);
-                  if(Navigator.canPop(context)){
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RecycleBin(notesRepository: notesRepository),
+                      builder: (context) =>
+                          RecycleBin(notesRepository: notesRepository),
                     ));
-                  }
+
                 },
               ),
               ListTile(
@@ -107,11 +95,10 @@ class AppDrawer extends StatelessWidget {
                 title: const Text('Ayarlar'),
                 onTap: () {
                   Navigator.pop(context);
-                  if(Navigator.canPop(context)){
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RecycleBin(notesRepository: notesRepository),
-                    ));
-                  }
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        RecycleBin(notesRepository: notesRepository),
+                  ));
                 },
               ),
               ListTile(
@@ -119,11 +106,11 @@ class AppDrawer extends StatelessWidget {
                 title: const Text('Hakkında'),
                 onTap: () {
                   Navigator.pop(context);
-                  if(Navigator.canPop(context)){
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RecycleBin(notesRepository: notesRepository),
+                      builder: (context) =>
+                          RecycleBin(notesRepository: notesRepository),
                     ));
-                  }
+
                 },
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:littlefont/Items/app_drawer.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
 
 
@@ -20,6 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
     notesRepository = NotesRepository();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+      drawer: AppDrawer(notesRepository: notesRepository,),
     );
   }
 }
@@ -69,13 +72,19 @@ class MySliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SliverAppBar(
+    return SliverAppBar(
       expandedHeight: 200.0,
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         expandedTitleScale: 1.5,
-        title: Text('Merhaba, Mustafa'),
-        background: FittedBox(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: const [
+            SizedBox(width: 10), // veya Expanded(child: SizedBox()),
+            Text('Başlık'),
+          ],
+        ),
+        background: const FittedBox(
           fit: BoxFit.cover,
             child: Image(image: AssetImage(
                 'assets/images/pexels-photo-1039083.jpg'),

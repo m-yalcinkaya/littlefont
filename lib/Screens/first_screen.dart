@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:littlefont/Repository/login_repository.dart';
 import 'package:littlefont/Screens/sign_up_page.dart';
 import '../Items/button.dart';
 import 'login_page.dart';
@@ -18,6 +19,13 @@ class _FirstScreenState extends State<FirstScreen> {
 
   final text1Controller = TextEditingController();
   final text2Controller = TextEditingController();
+  late LoginRepository loginRepository;
+
+  @override
+  void initState() {
+    loginRepository = LoginRepository();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,23 +70,17 @@ class _FirstScreenState extends State<FirstScreen> {
               text: 'Giriş Yap',
               color: Colors.red,
               onPressedOperations: () {
-                Future.delayed(const Duration(microseconds: 500), () {
                   setState(() {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Login(
-                          widget: widget,
-                          text1Controller: text1Controller,
-                          text2Controller: text2Controller),
-                    ));
+                      builder: (context) => Login(loginRepository: loginRepository)));
                   });
-                },);
               },
               width: 200,
               height: 42,
             ),
             TextButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SignUp(),
+                builder: (context) => SignUp(loginRepository: loginRepository),
               )),
               child: const  Text('Uygulamada yeni misin? Hemen Kaydol', style:
               TextStyle(

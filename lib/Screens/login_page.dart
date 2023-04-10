@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:littlefont/Screens/my_notes_page.dart';
+import 'package:littlefont/Repository/login_repository.dart';
+import 'package:littlefont/Screens/app_main_page.dart';
 import 'package:littlefont/Items/button.dart';
-import 'first_screen.dart';
 
-  bool userNameCompability = true;
-  bool passwordCompability = true;
+bool userNameCompability = true;
+bool passwordCompability = true;
 
 class Login extends StatefulWidget {
+  final LoginRepository loginRepository;
+
   const Login({
-    super.key,
-    required this.widget,
-    required this.text1Controller,
-    required this.text2Controller,
+    super.key, required this.loginRepository,
   });
-
-
-  final FirstScreen widget;
-  final TextEditingController text1Controller;
-  final TextEditingController text2Controller;
 
   @override
   State<Login> createState() => _LoginState();
@@ -25,103 +19,109 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  _LoginState();
-
-
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController text1Controller = TextEditingController();
+    TextEditingController text2Controller = TextEditingController();
+
+
     return Scaffold(
-      body: Container(
-        color: Colors.red[400],
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            PhysicalModel(
-              borderRadius: BorderRadius.circular(50),
-              color: Colors.white,
-              elevation: 10,
-              child: Column(
-                children: [
-                  const Padding(
-                    padding:  EdgeInsets.all(12.0),
-                    child:  Icon(
-                      Icons.people,
-                      color: Colors.black,
-                      size: 80,
-                    ),
-                  ),
-                  const SizedBox(height: 10,),
-                  Center(
-                    child: Container(
-                      margin: const EdgeInsets.all(2),
-                      width: 330,
-                      height: 75,
-                      alignment: Alignment.center,
-                      child: TextField1(
-                        text1Controller: widget.text1Controller,
+      body: Form(
+        key: formKey,
+        child: Container(
+          color: Colors.blue.shade100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              PhysicalModel(
+                borderRadius: BorderRadius.circular(50),
+                color: Colors.white,
+                elevation: 10,
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Icon(
+                        Icons.people,
+                        color: Colors.black,
+                        size: 80,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10,),
-                  Center(
-                    child: Container(
-                      margin: const EdgeInsets.all(2),
-                      width: 330,
-                      height: 75,
-                      alignment: Alignment.center,
-                      child: TextField2(
-                        text2Controller: widget.text2Controller,
+                    const SizedBox(height: 10,),
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.all(2),
+                        width: 330,
+                        height: 75,
+                        alignment: Alignment.center,
+                        child: TextField1(
+                          formKey: formKey,
+                          loginRepository: widget.loginRepository,
+                          text1Controller: text1Controller,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 15),
-                      alignment: Alignment.topCenter,
-                      child: Button(
-                        height: 35,
-                        text: 'Giriş Yap',
-                        onPressedOperations: () {
-                          (widget.text1Controller.text.length < 8) == true ?
-                          userNameCompability = false : userNameCompability = true;
-                          (widget.text2Controller.text.length < 10) == true ?
-                          passwordCompability = false : passwordCompability = true;
-                          (((widget.text1Controller.text.length >= 8) && (widget.text2Controller.text.length >= 10))
-                              == true) ? buildPush(context) : null;
-                          setState(() {
-                          });
-                        },
-                        width: 100,
-                        color: Colors.red,
-                        textColor: Colors.white,
+                    const SizedBox(height: 10,),
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.all(2),
+                        width: 330,
+                        height: 75,
+                        alignment: Alignment.center,
+                        child: TextField2(
+                          formKey: formKey,
+                          loginRepository: widget.loginRepository,
+                          text2Controller: text2Controller,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 15),
+                        alignment: Alignment.topCenter,
+                        child: Button(
+                          height: 35,
+                          text: 'Giriş Yap',
+                          onPressedOperations: () {
+
+                            final isSuitable = formKey.currentState
+                                ?.validate();
+
+                            if (isSuitable == true) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const MyHomePage(),));
+                            }
+
+                            setState(() {});
+                          },
+                          width: 100,
+                          color: Colors.red,
+                          textColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Future<dynamic> buildPush(BuildContext context) {
-    widget.text1Controller.text = '';
-    widget.text2Controller.text = '';
-    return Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const MyNotes(),));
   }
 }
 
 class TextField1 extends StatefulWidget {
   const TextField1({
     super.key,
-    required this.text1Controller,
+    required this.text1Controller, required this.loginRepository, required this.formKey,
   });
 
+  final LoginRepository loginRepository;
+  final GlobalKey<FormState> formKey;
   final TextEditingController text1Controller;
 
   @override
@@ -134,19 +134,40 @@ class _TextField1State extends State<TextField1> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       onChanged: (value) {
         setState(() {
           lenghtString = value.length;
         });
       },
+      validator: (value) {
+        bool isMailSymbol = false;
+        for (var i = 0; i < value!.length; i++) {
+          if (value[i] == '@') {
+            isMailSymbol = true;
+            break;
+          }
+        }
+
+        bool isFounded = false;
+
+        if (isMailSymbol && value.contains('.com')) {
+          for (int i = 0; i < widget.loginRepository.accounts.length; i++) {
+            if (widget.loginRepository.accounts[i].email == value) {
+              isFounded = true;
+            }
+          }
+
+          return isFounded ? null : 'Yanlış E-posta';
+        }else {
+          return 'Geçersiz E-posta';
+        }
+      },
       controller: widget.text1Controller,
       decoration: InputDecoration(
-        labelText: 'Kullanıcı Adı',
-        hintText: 'Kullanıcı adını giriniz',
-        helperText: 'En az 8 karakter girilmelidir.',
-        counterText: '$lenghtString characters',
-        errorText: userNameCompability ? null : 'Kullanıcı adı 8 karakteri geçmeli',
+        labelText: 'E-Posta',
+        hintText: 'E-Postanızı giriniz',
+        counterText: '$lenghtString Karakter',
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.horizontal(
               left: Radius.circular(20),
@@ -161,10 +182,13 @@ class _TextField1State extends State<TextField1> {
 class TextField2 extends StatefulWidget {
   const TextField2({
     super.key,
-    required this.text2Controller,
+    required this.text2Controller, required this.loginRepository, required this.formKey,
   });
 
+  final GlobalKey<FormState> formKey;
+  final LoginRepository loginRepository;
   final TextEditingController text2Controller;
+
   @override
   State<TextField2> createState() => _TextField2State();
 }
@@ -174,20 +198,29 @@ class _TextField2State extends State<TextField2> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       onChanged: (value) {
         setState(() {
           lenghtString = value.length;
         });
+      },
+      validator: (value) {
+
+        bool isFounded = false;
+        for(int i=0; i<widget.loginRepository.accounts.length; i++){
+          if(widget.loginRepository.accounts[i].password == value){
+            isFounded = true;break;
+          }
+        }
+
+        return isFounded ? null : 'Geçersiz Şifre';
       },
       controller: widget.text2Controller,
       obscureText: true,
       decoration: InputDecoration(
         labelText: 'Şifre',
         hintText: 'Şifreyi giriniz',
-        helperText: 'En az 10 karakter girilmelidir.',
-        counterText: '$lenghtString characters',
-        errorText: passwordCompability ? null : 'Parola 10 karakteri geçmeli !!',
+        counterText: '$lenghtString Karakter',
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.horizontal(
               left: Radius.circular(20),

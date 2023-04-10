@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:littlefont/Screens/my_notes.dart';
+import 'package:littlefont/Screens/my_notes_page.dart';
 import 'package:littlefont/Items/button.dart';
 import 'first_screen.dart';
 

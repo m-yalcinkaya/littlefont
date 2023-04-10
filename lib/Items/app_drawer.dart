@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:littlefont/Screens/my_notes.dart';
+import 'package:littlefont/Repository/notes_repository.dart';
+import 'package:littlefont/Screens/app_main_page.dart';
+import 'package:littlefont/Screens/favourites_page.dart';
+import 'package:littlefont/Screens/my_notes_page.dart';
+import 'package:littlefont/Screens/recycle_bin_page.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  final NotesRepository notesRepository;
+  const AppDrawer({Key? key, required this.notesRepository}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +27,15 @@ class AppDrawer extends StatelessWidget {
                 curve: Curves.ease,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/pexels-photo-1563356.jpg',),
+                    image: AssetImage(
+                      'assets/images/pexels-photo-1563356.jpg',
+                    ),
                     fit: BoxFit.fill,
                   ),
                   color: Colors.red,
                 ),
                 child: Column(
-                  children:  [
+                  children: [
                     const Icon(
                       Icons.access_time_filled,
                       color: Colors.white,
@@ -37,7 +44,7 @@ class AppDrawer extends StatelessWidget {
                     Text(
                       'LittleFont',
                       style: GoogleFonts.akshar(
-                         textStyle: const TextStyle(
+                        textStyle: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
@@ -48,41 +55,75 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading:const Icon(Icons.home),
+                leading: const Icon(Icons.home),
                 title: const Text('Anasayfa'),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MyNotes(),));
+                  Navigator.pop(context);
+                  if(Navigator.canPop(context)){
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const MyHomePage(),
+                    ));
+                  }
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.notes),
                 title: const Text('Notlarım'),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MyNotes(),));
+                  Navigator.pop(context);
+                  if(!Navigator.canPop(context)){
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const MyNotes(),
+                    ));
+                  }
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.favorite_outlined),
                 title: const Text('Favoriler'),
                 onTap: () {
-                  // Profil sayfasına git
+                  Navigator.pop(context);
+                  if(Navigator.canPop(context)){
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => FavouritesPage(notesRepository: notesRepository),
+                    ));
+                  }
                 },
               ),
-
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text('Çöp Kutusu'),
+                onTap: () {
+                  Navigator.pop(context);
+                  if(Navigator.canPop(context)){
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RecycleBin(notesRepository: notesRepository),
+                    ));
+                  }
+                },
+              ),
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Ayarlar'),
                 onTap: () {
-
+                  Navigator.pop(context);
+                  if(Navigator.canPop(context)){
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RecycleBin(notesRepository: notesRepository),
+                    ));
+                  }
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.info),
                 title: const Text('Hakkında'),
                 onTap: () {
-
+                  Navigator.pop(context);
+                  if(Navigator.canPop(context)){
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RecycleBin(notesRepository: notesRepository),
+                    ));
+                  }
                 },
               ),
             ],

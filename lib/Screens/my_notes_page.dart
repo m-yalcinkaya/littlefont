@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:littlefont/Items/app_drawer.dart';
-import 'package:littlefont/Screens/create_note.dart';
+import 'package:littlefont/Screens/create_note_page.dart';
 import 'package:littlefont/Screens/edit_page.dart';
-import 'package:littlefont/Screens/view_note.dart';
+import 'package:littlefont/Screens/view_note_page.dart';
 import '../Repository/notes_repository.dart';
 
 class MyNotes extends StatefulWidget {
@@ -15,15 +15,14 @@ class MyNotes extends StatefulWidget {
 NotesRepository notesRepository = NotesRepository();
 
 class _MyNotesState extends State<MyNotes> {
-  String? mainText;
   NotesRepository note = NotesRepository();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(notesRepository: notesRepository),
       appBar: AppBar(
-        title: const Text('Merhaba'),
+        title: const Text('Notlarım'),
       ),
       body: buildGridView(),
       floatingActionButton: FloatingActionButton(
@@ -101,7 +100,17 @@ class _MyNotesState extends State<MyNotes> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        null;
+                        if(notesRepository.favourites.contains(notesRepository.notes[index])){
+                          showDialog(
+                              context: context,
+                              builder:(context) => buildAlertDialog(context, index)
+                          );
+                        }else{
+                          setState(() {
+                            notesRepository.recycle.add(notesRepository.notes[index]);
+                            notesRepository.notes.remove(notesRepository.notes[index]);
+                          });
+                        }
                       },
                       icon: const Icon(Icons.delete),
                     ),
@@ -124,4 +133,34 @@ class _MyNotesState extends State<MyNotes> {
       },
     );
   }
+
+
+
+  AlertDialog buildAlertDialog(BuildContext context, int index) {
+    return AlertDialog(
+      title: const Text('Uyarı Mesajı'),
+      content:
+      const Text('Notunuz favori olarak işaretlenmiş notunuzu silmek istediğinize emin misiniz?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            setState(() {
+              notesRepository.recycle.add(notesRepository.notes[index]);
+              notesRepository.favourites.remove(notesRepository.notes[index]);
+              notesRepository.notes.remove(notesRepository.notes[index]);
+            });
+          },
+          child: const Text('Sil'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('İptal'),
+        ),
+      ],
+    );
+  }
+
 }

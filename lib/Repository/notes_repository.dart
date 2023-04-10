@@ -8,6 +8,8 @@ class NotesRepository {
 
   List<Notes> favourites = [];
 
+  List<Notes> recycle = [];
+
 }
 
 class Notes {

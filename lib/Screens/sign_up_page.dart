@@ -32,7 +32,7 @@ class SignUp extends StatelessWidget {
                     textColor: Colors.black,
                     color: Colors.white,
                     height: 50,
-                    Width: 250,
+                    width: 250,
                     onPressedOperations: () {},
                     image: 'assets/images/Facebook_Logo_(2019).png',
                   ),
@@ -41,7 +41,7 @@ class SignUp extends StatelessWidget {
                     textColor: Colors.black,
                     color: Colors.white,
                     height: 50,
-                    Width: 250,
+                    width: 250,
                     image: 'assets/images/Twitter-logo.svg.png',
                     onPressedOperations: () {},
                   ),
@@ -170,10 +170,10 @@ class SignUp extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MyNotes(),
+                        builder: (context) => const MyNotes(),
                       ));
                 },
-                Width: 150,
+                width: 150,
                 height: 10,
                 textColor: Colors.white,
               ),

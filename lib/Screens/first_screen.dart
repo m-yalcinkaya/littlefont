@@ -73,14 +73,14 @@ class _FirstScreenState extends State<FirstScreen> {
                   });
                 },);
               },
-              Width: 200,
+              width: 200,
               height: 42,
             ),
             TextButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => SignUp(),
               )),
-              child: const Text('Uygulamada yeni misin? Hemen Kaydol', style:
+              child: const  Text('Uygulamada yeni misin? Hemen Kaydol', style:
               TextStyle(
                 color: Colors.white,
               ),),

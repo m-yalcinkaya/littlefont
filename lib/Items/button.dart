@@ -5,17 +5,17 @@ class Button extends StatefulWidget {
   final String text;
   final Color color;
   final VoidCallback? onPressedOperations;
-  final double Width;
+  final double width;
   final double height;
   Widget? child;
-  var image = null;
+  var image;
 
   Button({
     super.key,
     required this.text,
     required this.color,
     required this.onPressedOperations,
-    required this.Width,
+    required this.width,
     required this.height,
     this.image,
     required this.textColor, this.child
@@ -37,13 +37,14 @@ class _ButtonState extends State<Button> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(image, height: 25, width: 25,),
-          Padding(padding: EdgeInsets.only(left: 20)),
+          const Padding(padding: EdgeInsets.only(left: 20)),
           Text(widget.text, style: TextStyle(color: textColor))
         ],
       );
     }
-    else
+    else {
       addImageButton = Text(widget.text, style: TextStyle(color: textColor));
+    }
   }
 
 
@@ -52,14 +53,14 @@ class _ButtonState extends State<Button> {
   Widget build(BuildContext context) {
     addImageButtonControl(widget.image, widget.textColor);
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Material(
         borderRadius: BorderRadius.circular(30.0),
         shadowColor: Colors.grey,
         elevation: 5.0,
         color: widget.color,
         child: MaterialButton(
-          minWidth: widget.Width,
+          minWidth: widget.width,
           height: widget.height,
           onPressed: widget.onPressedOperations,
           child: addImageButton,

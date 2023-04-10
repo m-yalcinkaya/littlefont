@@ -12,7 +12,6 @@ class _CreateNoteState extends State<CreateNote> {
   final headController = TextEditingController();
   final textController = TextEditingController();
   bool isError = false;
-  
 
   @override
   void initState() {
@@ -26,10 +25,10 @@ class _CreateNoteState extends State<CreateNote> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    NotesRepository noteRepository = NotesRepository();
-    noteRepository.notlar.add(Notes(title: headController.text, content: textController.text));
+
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -43,15 +42,17 @@ class _CreateNoteState extends State<CreateNote> {
                   onPressed: () => showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title:const  Text('Uyarı Mesajı'),
-                      content: const Text('Notunuzu kaydetmek istediğinize emin misiniz?'),
+                      title: const Text('Uyarı Mesajı'),
+                      content: const Text(
+                          'Notunuzu kaydetmek istediğinize emin misiniz?'),
                       actions: [
                         TextButton(
                           onPressed: () {
-                            setState(() {
                               Navigator.pop(context, 'Cancel');
-                              Navigator.of(context).maybePop(textController.text);
-                            });
+                              Navigator.of(context).maybePop(Notes(
+                                  title: headController.text,
+                                  content: textController.text),
+                              );
                           },
                           child: const Text('Onayla'),
                         ),
@@ -81,7 +82,7 @@ class _CreateNoteState extends State<CreateNote> {
                       maxLength: 50,
                       onChanged: (value) {
                         setState(() {
-                          if(headController.text.length == 50) {
+                          if (headController.text.length == 50) {
                             isError = true;
                           } else {
                             isError = false;
@@ -95,11 +96,14 @@ class _CreateNoteState extends State<CreateNote> {
                         fontSize: 40,
                       ),
                       decoration: InputDecoration(
-                        errorText: isError ? '50 den fazla karakter giremezsin': null,
-                        hintText: 'Başlığı girin'
-                      ),
+                          errorText: isError
+                              ? '50 den fazla karakter giremezsin'
+                              : null,
+                          hintText: 'Başlığı girin'),
                     ),
-                    const SizedBox(height: 20,),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     TextField(
                       controller: textController,
                       style: const TextStyle(

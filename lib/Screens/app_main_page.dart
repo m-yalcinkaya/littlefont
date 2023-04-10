@@ -3,37 +3,50 @@ import 'package:littlefont/Repository/notes_repository.dart';
 
 
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
 
 
   @override
-  Widget build(BuildContext context) {
-    NotesRepository notesRepository = NotesRepository();
+  State<MyHomePage> createState() => _MyHomePageState();
+}
 
+class _MyHomePageState extends State<MyHomePage> {
+  late NotesRepository notesRepository;
+
+  @override
+  void initState() {
+    notesRepository = NotesRepository();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          MySliverAppBar(),
-          SliverToBoxAdapter(
+          const MySliverAppBar(),
+          const SliverToBoxAdapter(
             child: SizedBox(height: 20),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 150, // Notlar için ayrılan alanın yüksekliği
+              height: 150,
               child: ListView.builder(
-                scrollDirection: Axis.horizontal, // Notları yatay olarak göster
-                itemCount: notesRepository.notlar.length, // Kaç tane notunuz varsa burada belirtin
+                scrollDirection: Axis.horizontal,
+                itemCount: notesRepository.notes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return PhysicalModel(
                     borderRadius: BorderRadius.circular(25),
                     elevation: 20,
                     color: Colors.white70,
-                    child: Container(
-                      width: 200, // Her not için ayrılan alanın genişliği
+                    child: SizedBox(
+                      width: 200,
                       child: Card(
                         child: ListTile(
-                          title: Text(notesRepository.notlar[index].title),
-                          subtitle: Text(notesRepository.notlar[index].content),
+                          title: Text(notesRepository.notes[index].title),
+                          subtitle: Text(notesRepository.notes[index].content),
                         ),
                       ),
                     ),
@@ -56,7 +69,7 @@ class MySliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
+    return const SliverAppBar(
       expandedHeight: 200.0,
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,

@@ -93,7 +93,7 @@ class _LoginState extends State<Login> {
                           setState(() {
                           });
                         },
-                        Width: 100,
+                        width: 100,
                         color: Colors.red,
                         textColor: Colors.white,
                       ),
@@ -112,7 +112,7 @@ class _LoginState extends State<Login> {
     widget.text1Controller.text = '';
     widget.text2Controller.text = '';
     return Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MyNotes(),));
+                          builder: (context) => const MyNotes(),));
   }
 }
 

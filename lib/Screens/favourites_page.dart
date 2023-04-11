@@ -3,17 +3,16 @@ import 'package:littlefont/Repository/notes_repository.dart';
 import 'package:littlefont/Screens/view_note_page.dart';
 
 class FavouritesPage extends StatefulWidget {
-
   final NotesRepository notesRepository;
-  const FavouritesPage({Key? key, required this.notesRepository}) : super(key: key);
+
+  const FavouritesPage({Key? key, required this.notesRepository})
+      : super(key: key);
 
   @override
   State<FavouritesPage> createState() => _FavouritesPageState();
 }
 
 class _FavouritesPageState extends State<FavouritesPage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +27,19 @@ class _FavouritesPageState extends State<FavouritesPage> {
           ),
           title: const Text('Favoriler'),
         ),
-        body: buildGridView());
+        body: widget.notesRepository.favourites.isEmpty
+            ? const Center(
+                child: Text(
+                'Hiç Favori Notunuz Yok',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                ),
+              ))
+            : Padding(
+                padding: const EdgeInsets.all(8),
+                child: buildGridView(),
+              ));
   }
 
   GridView buildGridView() {
@@ -46,20 +57,50 @@ class _FavouritesPageState extends State<FavouritesPage> {
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ShowNote(index: index, notesRepository: widget.notesRepository),
+                builder: (context) => ShowNote(
+                    index: index, notesRepository: widget.notesRepository),
               ));
             },
             child: Column(children: [
-              const Spacer(),
               Expanded(
-                child: Text(
-                  widget.notesRepository.favourites[index].title,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      widget.notesRepository.favourites;
+                      widget.notesRepository.notes;
+                      setState(() {
+                        widget.notesRepository.favourites
+                            .remove(widget.notesRepository.favourites[index]);
+                      });
+                      widget.notesRepository.favourites;
+                      widget.notesRepository.notes;
+                    },
+                    icon: const Icon(Icons.star),
+                  ),
                 ),
               ),
               Expanded(
                 child: Text(
-                  widget.notesRepository.favourites[index].content,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  widget.notesRepository.favourites[index].title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      widget.notesRepository.favourites[index].content,
+                    ),
+                  ),
                 ),
               ),
               const Spacer(),

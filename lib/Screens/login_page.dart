@@ -3,14 +3,13 @@ import 'package:littlefont/Repository/login_repository.dart';
 import 'package:littlefont/Screens/app_main_page.dart';
 import 'package:littlefont/Items/button.dart';
 
-bool userNameCompability = true;
-bool passwordCompability = true;
+
 
 class Login extends StatefulWidget {
   final LoginRepository loginRepository;
-
+  final  GlobalKey<FormState> formKey;
   const Login({
-    super.key, required this.loginRepository,
+    super.key, required this.loginRepository, required this.formKey,
   });
 
   @override
@@ -19,7 +18,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  final formKey = GlobalKey<FormState>();
+
+
+  late String? name;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       body: Form(
-        key: formKey,
+        key: widget.formKey,
         child: Container(
           color: Colors.blue.shade100,
           child: Column(
@@ -57,7 +58,7 @@ class _LoginState extends State<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField1(
-                          formKey: formKey,
+                          formKey: widget.formKey,
                           loginRepository: widget.loginRepository,
                           text1Controller: text1Controller,
                         ),
@@ -71,7 +72,7 @@ class _LoginState extends State<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField2(
-                          formKey: formKey,
+                          formKey: widget.formKey,
                           loginRepository: widget.loginRepository,
                           text2Controller: text2Controller,
                         ),
@@ -87,15 +88,23 @@ class _LoginState extends State<Login> {
                           text: 'Giriş Yap',
                           onPressedOperations: () {
 
-                            final isSuitable = formKey.currentState
+                            final isSuitable = widget.formKey.currentState
                                 ?.validate();
 
                             if (isSuitable == true) {
+                              Account? account;
+
+                              for(Account a in widget.loginRepository.accounts){
+                                if(a.email == text1Controller.text) {
+                                  account = a;
+                                }
+                              }
+                              name = account?.name;
+
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const MyHomePage(),));
+                                builder: (context) => AppMainPage(name: name,),));
                             }
 
-                            setState(() {});
                           },
                           width: 100,
                           color: Colors.red,
@@ -130,7 +139,6 @@ class TextField1 extends StatefulWidget {
 
 class _TextField1State extends State<TextField1> {
   int lenghtString = 0;
-
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/my_notes_page.dart';
 import 'package:littlefont/Screens/view_note_page.dart';
 
 class RecycleBin extends StatefulWidget {
@@ -59,7 +58,7 @@ class _RecycleBinState extends State<RecycleBin> {
             ))
           : Column(children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20) + EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.symmetric(vertical: 20) + const EdgeInsets.only(left: 15),
               child: Text(
                   widget.notesRepository.recyleInfo,
               ),
@@ -101,12 +100,26 @@ class _RecycleBinState extends State<RecycleBin> {
               const Spacer(),
               Expanded(
                 child: Text(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   widget.notesRepository.recycle[index].title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Expanded(
-                child: Text(
-                  widget.notesRepository.recycle[index].content,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      widget.notesRepository.recycle[index].content,
+                    ),
+                  ),
                 ),
               ),
               const Spacer(),

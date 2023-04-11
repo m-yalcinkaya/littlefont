@@ -12,6 +12,7 @@ class _CreateNoteState extends State<CreateNote> {
   final headController = TextEditingController();
   final textController = TextEditingController();
   bool isError = false;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -29,17 +30,18 @@ class _CreateNoteState extends State<CreateNote> {
   @override
   Widget build(BuildContext context) {
 
-    return WillPopScope(
-      onWillPop: () async {
-        return true;
-      },
+    return Form(
+      key: formKey,
       child: Scaffold(
           appBar: AppBar(
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: IconButton(
-                  onPressed: () => showDialog(
+                  onPressed: () {
+                    final isSuitable = formKey.currentState?.validate();
+
+                    isSuitable! ? showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
                       title: const Text('Uyarı Mesajı'),
@@ -48,25 +50,24 @@ class _CreateNoteState extends State<CreateNote> {
                       actions: [
                         TextButton(
                           onPressed: () {
-                              Navigator.pop(context, 'Cancel');
-                              Navigator.of(context).maybePop(Notes(
-                                  title: headController.text,
-                                  content: textController.text),
-                              );
+                            Navigator.pop(context);
+                            Navigator.of(context).maybePop(Notes(
+                                title: headController.text,
+                                content: textController.text),
+                            );
                           },
                           child: const Text('Onayla'),
                         ),
                         TextButton(
                           onPressed: () {
-                            setState(() {
-                              Navigator.pop(context, 'İptal');
-                            });
+                            Navigator.pop(context);
                           },
                           child: const Text('İptal'),
                         ),
                       ],
                     ),
-                  ),
+                    ) : null;
+                  },
                   icon: const Icon(Icons.add),
                 ),
               ),
@@ -78,16 +79,10 @@ class _CreateNoteState extends State<CreateNote> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                    TextField(
+                    TextFormField(
                       maxLength: 50,
-                      onChanged: (value) {
-                        setState(() {
-                          if (headController.text.length == 50) {
-                            isError = true;
-                          } else {
-                            isError = false;
-                          }
-                        });
+                      validator: (value) {
+                        return value!.length > 50 ? 'Başlık 50 den fazla karakter içeremez' : null;
                       },
                       textInputAction: TextInputAction.newline,
                       maxLines: null,
@@ -95,16 +90,12 @@ class _CreateNoteState extends State<CreateNote> {
                       style: const TextStyle(
                         fontSize: 40,
                       ),
-                      decoration: InputDecoration(
-                          errorText: isError
-                              ? '50 den fazla karakter giremezsin'
-                              : null,
-                          hintText: 'Başlığı girin'),
+                      decoration: const InputDecoration(hintText: 'Başlığı girin'),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    TextField(
+                    TextFormField(
                       controller: textController,
                       style: const TextStyle(
                         fontSize: 20,

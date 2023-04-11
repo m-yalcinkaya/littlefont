@@ -2,8 +2,8 @@
 class LoginRepository {
 
   List<Account> accounts = [
-    Account(name: 'Ali',surname: 'Yalcinkaya',email: 'mustafa_meryem_09@gmail.com',password: '123456'),
-    Account(name: 'Mustafa', surname: 'Yalçinkaya', email: '548mustafa@gmail.com', password: 'Mustafa123'),
+    Account(name: 'Ahmet',surname: 'Erdem',email: 'deneme@gmail.com',password: 'Giriş123'),
+    Account(name: 'Saliha', surname: 'Çakmak', email: 'deneme@hotmail.com', password: 'Giriş123'),
   ];
 
 

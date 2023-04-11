@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: const FirstScreen(title: 'Giriş Yap'),
+      home: FirstScreen(title: 'Giriş Yap'),
     );
   }
 }

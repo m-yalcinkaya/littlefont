@@ -7,18 +7,17 @@ class Button extends StatefulWidget {
   final VoidCallback? onPressedOperations;
   final double width;
   final double height;
-  Widget? child;
-  var image;
+  final String? image;
 
-  Button({
+  const Button({
     super.key,
     required this.text,
     required this.color,
     required this.onPressedOperations,
     required this.width,
     required this.height,
+    required this.textColor,
     this.image,
-    required this.textColor, this.child
   });
 
   @override
@@ -26,10 +25,7 @@ class Button extends StatefulWidget {
 }
 
 class _ButtonState extends State<Button> {
-
   late Widget addImageButton;
-
-
 
   void addImageButtonControl(image, textColor) {
     if (image != null) {
@@ -46,8 +42,6 @@ class _ButtonState extends State<Button> {
       addImageButton = Text(widget.text, style: TextStyle(color: textColor));
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {

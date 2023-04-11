@@ -4,24 +4,26 @@ import 'package:littlefont/Repository/login_repository.dart';
 import 'package:littlefont/Screens/login_page.dart';
 
 class SignUp extends StatelessWidget {
-  LoginRepository loginRepository;
+
+  final LoginRepository loginRepository;
+  final GlobalKey<FormState> formKey;
 
   SignUp({
     Key? key,
-    required this.loginRepository,
+    required this.loginRepository, required this.formKey,
   }) : super(key: key);
 
-  final FocusNode adFocusNode = FocusNode();
-  final FocusNode soyadfocusNode = FocusNode();
-  final FocusNode postaFocusNode = FocusNode();
-  final FocusNode sifreFocusNode = FocusNode();
+  final FocusNode nameFocusNode = FocusNode();
+  final FocusNode surnamefocusNode = FocusNode();
+  final FocusNode mailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
 
-  final formKey = GlobalKey<FormState>();
 
-  late String _name;
-  late String _surname;
-  late String _email;
-  late String _password;
+
+  late final String _name;
+  late final String _surname;
+  late final String _email;
+  late final String _password;
 
 
   @override
@@ -109,7 +111,7 @@ class SignUp extends StatelessWidget {
                             child: TextFormField(
                               onEditingComplete: () {
                                 FocusScope.of(context)
-                                    .requestFocus(soyadfocusNode);
+                                    .requestFocus(surnamefocusNode);
                               },
                               validator: (value) {
 
@@ -148,7 +150,7 @@ class SignUp extends StatelessWidget {
                             width: 220,
                             height: 40,
                             child: TextFormField(
-                              focusNode: soyadfocusNode,
+                              focusNode: surnamefocusNode,
                               validator: (value) {
                                 bool isNumeric = false;
                                 for(int i=0; i< value!.length; i++){
@@ -166,7 +168,7 @@ class SignUp extends StatelessWidget {
                               },
                               onEditingComplete: () {
                                 FocusScope.of(context)
-                                    .requestFocus(postaFocusNode);
+                                    .requestFocus(mailFocusNode);
                               },
                               decoration: const InputDecoration(
                                 filled: true,
@@ -188,7 +190,7 @@ class SignUp extends StatelessWidget {
                             width: 220,
                             height: 40,
                             child: TextFormField(
-                              focusNode: postaFocusNode,
+                              focusNode: mailFocusNode,
                               validator: (value) {
 
                                 bool isMailSymbol = false;
@@ -205,7 +207,7 @@ class SignUp extends StatelessWidget {
                               },
                               onEditingComplete: () {
                                 FocusScope.of(context)
-                                    .requestFocus(sifreFocusNode);
+                                    .requestFocus(passwordFocusNode);
                               },
                               decoration: const InputDecoration(
                                 filled: true,
@@ -227,7 +229,7 @@ class SignUp extends StatelessWidget {
                             width: 220,
                             height: 40,
                             child: TextFormField(
-                              focusNode: sifreFocusNode,
+                              focusNode: passwordFocusNode,
                               obscureText: true,
                               validator: (value) {
                                 if (value != null) {
@@ -245,6 +247,7 @@ class SignUp extends StatelessWidget {
                                       ? null
                                       : 'Şifre küçük-büyük karakter ve en az bir tane rakam içermelidir';
                                 }
+                                return null;
                               },
                               onSaved: (newValue) {
                                 _password = newValue!;
@@ -284,6 +287,7 @@ class SignUp extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) => Login(
                                       loginRepository: loginRepository,
+                                      formKey: formKey,
                                     ),
                                   ));
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/app_main_page.dart';
 import 'package:littlefont/Screens/favourites_page.dart';
 import 'package:littlefont/Screens/my_notes_page.dart';
 import 'package:littlefont/Screens/recycle_bin_page.dart';
@@ -67,14 +66,14 @@ class AppDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.favorite_outlined),
+                leading: const Icon(Icons.star),
                 title: const Text('Favoriler'),
                 onTap: () {
                   Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          FavouritesPage(notesRepository: notesRepository),
-                    ));
+                     Navigator.of(context).push(MaterialPageRoute(
+                       builder: (context) =>
+                           FavouritesPage(notesRepository: notesRepository),
+                     ));
 
                 },
               ),
@@ -88,17 +87,6 @@ class AppDrawer extends StatelessWidget {
                           RecycleBin(notesRepository: notesRepository),
                     ));
 
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text('Ayarlar'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        RecycleBin(notesRepository: notesRepository),
-                  ));
                 },
               ),
               ListTile(

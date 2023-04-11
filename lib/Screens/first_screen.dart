@@ -6,26 +6,18 @@ import '../Items/button.dart';
 import 'login_page.dart';
 
 
-class FirstScreen extends StatefulWidget {
-  const FirstScreen({super.key, required this.title});
+class FirstScreen extends StatelessWidget {
+  FirstScreen({super.key, required this.title});
+
+  final formKey = GlobalKey<FormState>();
 
   final String title;
 
-  @override
-  State<FirstScreen> createState() => _FirstScreenState();
-}
-
-class _FirstScreenState extends State<FirstScreen> {
-
   final text1Controller = TextEditingController();
-  final text2Controller = TextEditingController();
-  late LoginRepository loginRepository;
 
-  @override
-  void initState() {
-    loginRepository = LoginRepository();
-    super.initState();
-  }
+  final text2Controller = TextEditingController();
+
+  final loginRepository = LoginRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -70,17 +62,20 @@ class _FirstScreenState extends State<FirstScreen> {
               text: 'Giriş Yap',
               color: Colors.red,
               onPressedOperations: () {
-                  setState(() {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Login(loginRepository: loginRepository)));
-                  });
+                      builder: (context) => Login(loginRepository: loginRepository,
+                      formKey: formKey,
+                      )));
               },
               width: 200,
               height: 42,
             ),
             TextButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SignUp(loginRepository: loginRepository),
+                builder: (context) =>
+                    SignUp(loginRepository: loginRepository,
+                      formKey: formKey
+                ),
               )),
               child: const  Text('Uygulamada yeni misin? Hemen Kaydol', style:
               TextStyle(

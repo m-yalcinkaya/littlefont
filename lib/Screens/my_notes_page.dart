@@ -8,22 +8,23 @@ import '../Repository/notes_repository.dart';
 class MyNotes extends StatefulWidget {
   final NotesRepository notesRepository;
 
-   const MyNotes({Key? key, required this.notesRepository}) : super(key: key);
+  const MyNotes({Key? key, required this.notesRepository}) : super(key: key);
 
   @override
   State<MyNotes> createState() => _MyNotesState();
 }
 
-
 class _MyNotesState extends State<MyNotes> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notlarım'),
       ),
-      body: buildGridView(),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: buildGridView(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final note = await Navigator.of(context).push(MaterialPageRoute(
@@ -31,7 +32,10 @@ class _MyNotesState extends State<MyNotes> {
           ));
           setState(() {
             if (note != null) {
-              widget.notesRepository.notes = [...widget.notesRepository.notes, note];
+              widget.notesRepository.notes = [
+                ...widget.notesRepository.notes,
+                note
+              ];
             }
           });
         },
@@ -40,7 +44,6 @@ class _MyNotesState extends State<MyNotes> {
       ),
     );
   }
-
 
   GridView buildGridView() {
     return GridView.builder(
@@ -57,8 +60,8 @@ class _MyNotesState extends State<MyNotes> {
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    ShowNote(index: index, notesRepository: widget.notesRepository),
+                builder: (context) => ShowNote(
+                    index: index, notesRepository: widget.notesRepository),
               ));
             },
             child: Column(children: [
@@ -68,31 +71,42 @@ class _MyNotesState extends State<MyNotes> {
                   child: IconButton(
                     onPressed: () {
                       setState(() {
-                        if (widget.notesRepository.favourites
-                            .contains(widget.notesRepository.notes[index])) {
-                          widget.notesRepository.favourites
-                              .remove(widget.notesRepository.notes[index]);
+                        final value = widget.notesRepository.notes[index];
+                        if (widget.notesRepository.favourites.contains(value)) {
+                          widget.notesRepository.favourites.remove(value);
                         } else {
-                          widget.notesRepository.favourites
-                              .add(widget.notesRepository.notes[index]);
+                          widget.notesRepository.favourites.add(value);
                         }
                       });
                     },
                     icon: widget.notesRepository.favourites
-                        .contains(widget.notesRepository.notes[index])
-                        ? const Icon(Icons.favorite)
-                        : const Icon(Icons.favorite_outline_rounded),
+                            .contains(widget.notesRepository.notes[index])
+                        ? const Icon(Icons.star)
+                        : const Icon(Icons.star_border),
                   ),
                 ),
               ),
               Expanded(
                 child: Text(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   widget.notesRepository.notes[index].title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Expanded(
-                child: Text(
-                  widget.notesRepository.notes[index].content,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      widget.notesRepository.notes[index].content,
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -100,29 +114,35 @@ class _MyNotesState extends State<MyNotes> {
                   alignment: Alignment.bottomRight,
                   child: PopupMenuButton(
                     onSelected: (value) async {
-                      if(value == 'delete'){
-                        if(widget.notesRepository.favourites.contains(widget.notesRepository.notes[index])){
+                      if (value == 'delete') {
+                        if (widget.notesRepository.favourites
+                            .contains(widget.notesRepository.notes[index])) {
                           showDialog(
                               context: context,
-                              builder:(context) => buildAlertDialog(context, index)
-                          );
+                              builder: (context) =>
+                                  buildAlertDialog(context, index));
+                          setState(() {});
+                        } else {
                           setState(() {
-                          });
-                        }else{
-                          setState(() {
-                            widget.notesRepository.recycle.add(widget.notesRepository.notes[index]);
-                            final interValue = widget.notesRepository.notes[index];
+                            widget.notesRepository.recycle
+                                .add(widget.notesRepository.notes[index]);
+                            final interValue =
+                                widget.notesRepository.notes[index];
                             widget.notesRepository.notes.remove(interValue);
                           });
                         }
-                      }else if(value == 'edit'){
-                        final note = await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => EditPage(note: widget.notesRepository.notes[index]),));
+                      } else if (value == 'edit') {
+                        final note =
+                            await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => EditPage(
+                              note: widget.notesRepository.notes[index]),
+                        ));
                         setState(() {
-                          note != null ? widget.notesRepository.notes[index] = note : null;
+                          note != null
+                              ? widget.notesRepository.notes[index] = note
+                              : null;
                         });
-
-                      }else if(value == 'share'){
+                      } else if (value == 'share') {
                         await FlutterShare.share(
                           title: 'Notunu Paylaş',
                           text: '',
@@ -165,7 +185,8 @@ class _MyNotesState extends State<MyNotes> {
           onPressed: () {
             Navigator.pop(context);
             setState(() {
-              widget.notesRepository.recycle.add(widget.notesRepository.notes[index]);
+              widget.notesRepository.recycle
+                  .add(widget.notesRepository.notes[index]);
               final interValue = widget.notesRepository.notes[index];
               widget.notesRepository.favourites.remove(interValue);
               widget.notesRepository.notes.remove(interValue);

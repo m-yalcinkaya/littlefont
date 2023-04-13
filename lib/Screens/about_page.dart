@@ -1,31 +1,3 @@
-/*
-import 'package:flutter/material.dart';
-
-class AboutPage extends StatelessWidget {
-  const AboutPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Hakkında'),),
-      body: Padding(
-        padding: EdgeInsets.all(50),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Text(
-                '',
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {

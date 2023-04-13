@@ -4,7 +4,6 @@ import 'package:littlefont/Screens/view_note_page.dart';
 
 class RecycleBin extends StatefulWidget {
   final NotesRepository notesRepository;
-
   const RecycleBin({Key? key, required this.notesRepository}) : super(key: key);
 
   @override

@@ -9,18 +9,19 @@ class NotesRepository {
     Notes(title: 'Okul Listesi', content: 'Defter, kalem, fon kağıdı, meyve'),
   ];
 
-
-
-
   List<Notes> favourites = [];
 
   List<Notes> recycle = [];
 
   String recyleInfo = 'Sildiğin notlar tamamen silinene kadar 30 gün çöp kutusunda kalır.';
 
+
+  List<Category> category = [];
+
+  addCategory(String categoryName){
+    category.add(Category(categoryName: categoryName));
+  }
 }
-
-
 
 
 class Notes {
@@ -29,4 +30,12 @@ class Notes {
   Color color = const Color.fromARGB(200, 200, 250, 220);
 
   Notes({required this.title, required this.content});
+}
+
+class Category{
+  String categoryName;
+
+  List<Notes> notes = [];
+
+  Category({required this.categoryName});
 }

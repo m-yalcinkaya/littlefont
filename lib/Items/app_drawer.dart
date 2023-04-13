@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
+import 'package:littlefont/Screens/category_page.dart';
 import 'package:littlefont/Screens/favourites_page.dart';
 import 'package:littlefont/Screens/my_notes_page.dart';
 import 'package:littlefont/Screens/recycle_bin_page.dart';
 
 class AppDrawer extends StatelessWidget {
   final NotesRepository notesRepository;
+  final String? name;
+  final String? surname;
 
-  const AppDrawer({Key? key, required this.notesRepository}) : super(key: key);
+  const AppDrawer({Key? key, required this.notesRepository, this.name, required this.surname, }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +57,22 @@ class AppDrawer extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(
+                height: 100,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20,),
+                    const CircleAvatar(
+                      child: Icon(Icons.account_circle_rounded),
+                    ),
+                    const SizedBox(height: 5,),
+                    Text(
+                    '$name $surname',
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(thickness: 15),
               ListTile(
                 leading: const Icon(Icons.notes),
                 title: const Text('Notlarım'),
@@ -62,6 +81,17 @@ class AppDrawer extends StatelessWidget {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => MyNotes(notesRepository: notesRepository),
                     ));
+
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.notes),
+                title: const Text('Kategoriler'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CategoryPage(notesRepository: notesRepository),
+                  ));
 
                 },
               ),

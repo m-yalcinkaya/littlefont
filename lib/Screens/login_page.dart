@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
 
 
   late String? name;
+  late String? surname;
 
   @override
   Widget build(BuildContext context) {
@@ -100,9 +101,10 @@ class _LoginState extends State<Login> {
                                 }
                               }
                               name = account?.name;
+                              surname = account?.surname;
 
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AppMainPage(name: name,),));
+                                builder: (context) => AppMainPage(name: name, surname: surname),));
                             }
 
                           },

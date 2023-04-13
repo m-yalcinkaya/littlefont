@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:littlefont/Items/app_drawer.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
-
+import 'package:littlefont/Screens/add_category.dart';
+import 'package:littlefont/Screens/category_page.dart';
+import 'package:littlefont/Screens/my_notes_page.dart';
+import 'package:littlefont/Screens/show_category_notes.dart';
 import 'create_note_page.dart';
 
-class AppMainPage extends StatelessWidget {
+class AppMainPage extends StatefulWidget {
   final String? name;
+  final String? surname;
+  const AppMainPage({Key? key, required this.name, this.surname, }) : super(key: key);
 
-  AppMainPage({Key? key, required this.name}) : super(key: key);
+  @override
+  State<AppMainPage> createState() => _AppMainPageState();
+}
 
+class _AppMainPageState extends State<AppMainPage> {
   final NotesRepository notesRepository = NotesRepository();
 
   @override
@@ -25,7 +33,7 @@ class AppMainPage extends StatelessWidget {
               collapseMode: CollapseMode.parallax,
               expandedTitleScale: 1.5,
               title: Text(
-                'Merhaba, $name!',
+                'Merhaba, ${widget.name}!',
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -37,10 +45,26 @@ class AppMainPage extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
+            child: Row(
+              children: [
+                const SizedBox(width: 25,),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyNotes(notesRepository: notesRepository),));
+                    },
+                    child: const Text('Notlar >'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(
             child: SizedBox(
               height: 150,
               child: ListView.builder(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 scrollDirection: Axis.horizontal,
                 itemCount: notesRepository.notes.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -54,7 +78,7 @@ class AppMainPage extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        subtitle: Text(notesRepository.notes[index].content),
+                        subtitle: Center(child: Text(notesRepository.notes[index].content)),
                       ),
                     ),
                   );
@@ -62,8 +86,24 @@ class AppMainPage extends StatelessWidget {
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Row(
+              children: [
+                const SizedBox(width: 25,),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage(notesRepository: notesRepository),));
+                    },
+                    child: const Text('Kategoriler >'),
+                  ),
+                ),
+              ],
+            ),
+          ),
           SliverPadding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
@@ -73,20 +113,46 @@ class AppMainPage extends StatelessWidget {
               ),
               delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return const Card();
+                  return Card(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  ShowCategory(notesRepository: notesRepository, indexCategory: index),));
+                      },
+                      child: Center(child: Text(notesRepository.category[index].categoryName)),
+                    ),
+                  );
                 },
-                childCount: 6,
+                childCount: notesRepository.category.length,
               ),
             ),
           ),
         ],
       ),
-      drawer: AppDrawer(notesRepository: notesRepository,),
+      drawer: AppDrawer(notesRepository: notesRepository,name: widget.name, surname: widget.surname),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CreateNote(),));
-        },
-        child: const Icon(Icons.add),
+        onPressed: () { null; },
+        child: PopupMenuButton(
+          icon: const Icon(Icons.add),
+          onSelected: (value)  {
+            if (value == 'note') {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CreateNote(),));
+            } else if (value == 'category') {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddCategory(notesRepository: notesRepository),));
+            }
+          },
+          itemBuilder: (context) {
+            return [
+              const PopupMenuItem<String>(
+                value: 'note',
+                child: Text('Not ekle'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'category',
+                child: Text('Kategori ekle'),
+              ),
+            ];
+          },
+        ),
       ),
     );
   }

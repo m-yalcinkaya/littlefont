@@ -15,21 +15,14 @@ class _CreateNoteState extends State<CreateNote> {
   final formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     headController.dispose();
     textController.dispose();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Form(
       key: formKey,
       child: Scaffold(
@@ -41,32 +34,35 @@ class _CreateNoteState extends State<CreateNote> {
                   onPressed: () {
                     final isSuitable = formKey.currentState?.validate();
 
-                    isSuitable! ? showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Uyarı Mesajı'),
-                      content: const Text(
-                          'Notunuzu kaydetmek istediğinize emin misiniz?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.of(context).maybePop(Notes(
-                                title: headController.text,
-                                content: textController.text),
-                            );
-                          },
-                          child: const Text('Onayla'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('İptal'),
-                        ),
-                      ],
-                    ),
-                    ) : null;
+                    isSuitable!
+                        ? showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Uyarı Mesajı'),
+                              content: const Text(
+                                  'Notunuzu kaydetmek istediğinize emin misiniz?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.of(context).maybePop(
+                                      Notes(
+                                          title: headController.text,
+                                          content: textController.text),
+                                    );
+                                  },
+                                  child: const Text('Onayla'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('İptal'),
+                                ),
+                              ],
+                            ),
+                          )
+                        : null;
                   },
                   icon: const Icon(Icons.add),
                 ),
@@ -82,7 +78,9 @@ class _CreateNoteState extends State<CreateNote> {
                     TextFormField(
                       maxLength: 50,
                       validator: (value) {
-                        return value!.length > 50 ? 'Başlık 50 den fazla karakter içeremez' : null;
+                        return value!.length > 50
+                            ? 'Başlık 50 den fazla karakter içeremez'
+                            : null;
                       },
                       textInputAction: TextInputAction.newline,
                       maxLines: null,
@@ -90,7 +88,8 @@ class _CreateNoteState extends State<CreateNote> {
                       style: const TextStyle(
                         fontSize: 40,
                       ),
-                      decoration: const InputDecoration(hintText: 'Başlığı girin'),
+                      decoration:
+                          const InputDecoration(hintText: 'Başlığı girin'),
                     ),
                     const SizedBox(
                       height: 20,

@@ -8,7 +8,8 @@ class AddToCategory extends StatefulWidget {
 
   const AddToCategory({
     Key? key,
-    required this.notesRepository, required this.indexCategory,
+    required this.notesRepository,
+    required this.indexCategory,
   }) : super(key: key);
 
   @override
@@ -21,11 +22,10 @@ class _AddToCategoryState extends State<AddToCategory> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
-              setState(() {
-              });
+            setState(() {});
           },
         ),
         title: const Text('Notlarım'),
@@ -60,51 +60,58 @@ class _AddToCategoryState extends State<AddToCategory> {
             },
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () {
-                            setState(() {
-                              final value = widget.notesRepository.notes[index];
-                              if (widget.notesRepository.category[widget.indexCategory].notes.contains(value)) {
-                                widget.notesRepository.category[widget.indexCategory].notes.remove(value);
-                              } else {
-                                widget.notesRepository.category[widget.indexCategory].notes.add(value);
-                              }
-                            });
-                        },
-                        icon: widget.notesRepository.category[widget.indexCategory].notes
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        final value = widget.notesRepository.notes[index];
+                        if (widget.notesRepository
+                            .category[widget.indexCategory].notes
+                            .contains(value)) {
+                          widget.notesRepository.category[widget.indexCategory]
+                              .notes
+                              .remove(value);
+                        } else {
+                          widget.notesRepository.category[widget.indexCategory]
+                              .notes
+                              .add(value);
+                        }
+                      });
+                    },
+                    icon: widget.notesRepository.category[widget.indexCategory]
+                            .notes
                             .contains(widget.notesRepository.notes[index])
-                            ? const Icon(Icons.add_box_rounded)
-                            : const Icon(Icons.add_box_outlined),
-                      ),
-                    ),
+                        ? const Icon(Icons.add_box_rounded)
+                        : const Icon(Icons.add_box_outlined),
                   ),
-                  Expanded(
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  widget.notesRepository.notes[index].title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      maxLines: 1,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      widget.notesRepository.notes[index].title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      widget.notesRepository.notes[index].content,
                     ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          widget.notesRepository.notes[index].content,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
+                ),
+              ),
+              const Spacer(),
             ]),
           ),
         );

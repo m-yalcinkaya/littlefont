@@ -4,32 +4,28 @@ import 'package:littlefont/Repository/login_repository.dart';
 import 'package:littlefont/Screens/login_page.dart';
 
 class SignUp extends StatelessWidget {
-
   final LoginRepository loginRepository;
-  final GlobalKey<FormState> formKey;
+  final GlobalKey<FormState> formKeySignUp = GlobalKey<FormState>();
 
   SignUp({
     Key? key,
-    required this.loginRepository, required this.formKey,
+    required this.loginRepository,
   }) : super(key: key);
 
   final FocusNode nameFocusNode = FocusNode();
-  final FocusNode surnamefocusNode = FocusNode();
+  final FocusNode surnameFocusNode = FocusNode();
   final FocusNode mailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-
-
 
   late final String _name;
   late final String _surname;
   late final String _email;
   late final String _password;
 
-
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: formKeySignUp,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Kayıt Ol'),
@@ -53,21 +49,12 @@ class SignUp extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Button(
-                          text: 'Facebook ile giriş yap',
+                          text: 'Google ile giriş yap',
                           textColor: Colors.black,
                           color: Colors.white,
                           height: 50,
                           width: 300,
-                          onPressedOperations: () {},
-                          image: 'assets/images/Facebook_Logo_(2019).png',
-                        ),
-                        Button(
-                          text: 'Twitter ile giriş yap',
-                          textColor: Colors.black,
-                          color: Colors.white,
-                          height: 50,
-                          width: 300,
-                          image: 'assets/images/Twitter-logo.svg.png',
+                          image: 'assets/images/google.png',
                           onPressedOperations: () {},
                         ),
                         const SizedBox(
@@ -104,21 +91,21 @@ class SignUp extends StatelessWidget {
                           height: 20,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.only(
+                              bottom: 5, top: 5, right: 10, left: 10),
                           child: SizedBox(
                             width: 220,
                             height: 40,
                             child: TextFormField(
                               onEditingComplete: () {
                                 FocusScope.of(context)
-                                    .requestFocus(surnamefocusNode);
+                                    .requestFocus(surnameFocusNode);
                               },
                               validator: (value) {
-
                                 bool isNumeric = false;
-                                for(int i=0; i< value!.length; i++){
+                                for (int i = 0; i < value!.length; i++) {
                                   int? number = int.tryParse(value[i]);
-                                  if(number != null){
+                                  if (number != null) {
                                     isNumeric = true;
                                     break;
                                   }
@@ -126,7 +113,6 @@ class SignUp extends StatelessWidget {
 
                                 return isNumeric ? 'İsim rakam içeremez' : null;
                               },
-
                               onSaved: (newValue) {
                                 _name = newValue!;
                               },
@@ -145,23 +131,26 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.only(
+                              bottom: 5, top: 5, right: 10, left: 10),
                           child: SizedBox(
                             width: 220,
                             height: 40,
                             child: TextFormField(
-                              focusNode: surnamefocusNode,
+                              focusNode: surnameFocusNode,
                               validator: (value) {
                                 bool isNumeric = false;
-                                for(int i=0; i< value!.length; i++){
+                                for (int i = 0; i < value!.length; i++) {
                                   int? number = int.tryParse(value[i]);
-                                  if(number != null){
+                                  if (number != null) {
                                     isNumeric = true;
                                     break;
                                   }
                                 }
 
-                                return isNumeric ? 'Soyisim rakam içeremez' : null;
+                                return isNumeric
+                                    ? 'Soyisim rakam içeremez'
+                                    : null;
                               },
                               onSaved: (newValue) {
                                 _surname = newValue!;
@@ -185,22 +174,36 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.only(
+                              bottom: 5, top: 5, right: 10, left: 10),
                           child: SizedBox(
                             width: 220,
                             height: 40,
                             child: TextFormField(
                               focusNode: mailFocusNode,
                               validator: (value) {
-
                                 bool isMailSymbol = false;
+                                bool isFounded = true;
                                 for (var i = 0; i < value!.length; i++) {
                                   if (value[i] == '@') {
                                     isMailSymbol = true;
                                     break;
                                   }
+
+                                  for (int i = 0;
+                                      i < loginRepository.accounts.length;
+                                      i++) {
+                                    if (loginRepository.accounts[i].email ==
+                                        value) {
+                                      isFounded = false;
+                                    }
+                                  }
                                 }
-                                return (isMailSymbol && value.contains('.com')) ? null : 'Geçersiz E-posta';
+                                return (isMailSymbol &&
+                                            value.contains('.com')) &&
+                                        isFounded
+                                    ? null
+                                    : 'Geçersiz E-posta';
                               },
                               onSaved: (newValue) {
                                 _email = newValue!;
@@ -224,7 +227,8 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.only(
+                              bottom: 5, top: 5, right: 10, left: 10),
                           child: SizedBox(
                             width: 220,
                             height: 40,
@@ -241,6 +245,7 @@ class SignUp extends StatelessWidget {
                                       break;
                                     }
                                   }
+
                                   return value != value.toUpperCase() &&
                                           value != value.toLowerCase() &&
                                           isNumeric
@@ -270,16 +275,16 @@ class SignUp extends StatelessWidget {
                           text: 'Kayıt Ol',
                           color: Colors.blue.shade400,
                           onPressedOperations: () {
-
-                            final isSuitable = formKey.currentState?.validate();
+                            final isSuitable =
+                                formKeySignUp.currentState?.validate();
                             if (isSuitable == true) {
-                              formKey.currentState?.save();
+                              formKeySignUp.currentState?.save();
 
                               loginRepository.accounts.add(Account(
-                                  name: _name,
-                                  surname: _surname,
-                                  email: _email,
-                                  password: _password,
+                                name: _name,
+                                surname: _surname,
+                                email: _email,
+                                password: _password,
                               ));
 
                               Navigator.push(
@@ -287,15 +292,24 @@ class SignUp extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) => Login(
                                       loginRepository: loginRepository,
-                                      formKey: formKey,
                                     ),
                                   ));
-
                             }
                           },
                           width: 150,
-                          height: 10,
+                          height: 50,
                           textColor: Colors.black,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => Login(
+                                loginRepository: loginRepository,
+                              ),
+                            ));
+                          },
+                          child: const Text('Hesabın var mu? Giriş yap'),
                         ),
                       ],
                     ),

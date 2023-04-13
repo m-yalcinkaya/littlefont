@@ -10,7 +10,12 @@ import 'create_note_page.dart';
 class AppMainPage extends StatefulWidget {
   final String? name;
   final String? surname;
-  const AppMainPage({Key? key, required this.name, this.surname, }) : super(key: key);
+
+  const AppMainPage({
+    Key? key,
+    required this.name,
+    this.surname,
+  }) : super(key: key);
 
   @override
   State<AppMainPage> createState() => _AppMainPageState();
@@ -25,8 +30,6 @@ class _AppMainPageState extends State<AppMainPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            floating: true,
-            snap: false,
             pinned: true,
             expandedHeight: 245.0,
             flexibleSpace: FlexibleSpaceBar(
@@ -39,7 +42,7 @@ class _AppMainPageState extends State<AppMainPage> {
                 ),
               ),
               background: const Image(
-                image: AssetImage('assets/images/pexels-photo-1563356.jpg'),
+                image: AssetImage('assets/images/pexels-photo-3225517.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -47,12 +50,17 @@ class _AppMainPageState extends State<AppMainPage> {
           SliverToBoxAdapter(
             child: Row(
               children: [
-                const SizedBox(width: 25,),
+                const SizedBox(
+                  width: 25,
+                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyNotes(notesRepository: notesRepository),));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            MyNotes(notesRepository: notesRepository),
+                      ));
                     },
                     child: const Text('Notlar >'),
                   ),
@@ -73,12 +81,17 @@ class _AppMainPageState extends State<AppMainPage> {
                     child: Card(
                       child: ListTile(
                         title: Text(
-                            notesRepository.notes[index].title,
+                          notesRepository.notes[index].title,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        subtitle: Center(child: Text(notesRepository.notes[index].content)),
+                        subtitle: Center(
+                          child: Text(
+                            notesRepository.notes[index].content,
+                            maxLines: 4,
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -89,12 +102,17 @@ class _AppMainPageState extends State<AppMainPage> {
           SliverToBoxAdapter(
             child: Row(
               children: [
-                const SizedBox(width: 25,),
+                const SizedBox(
+                  width: 25,
+                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoryPage(notesRepository: notesRepository),));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            CategoryPage(notesRepository: notesRepository),
+                      ));
                     },
                     child: const Text('Kategoriler >'),
                   ),
@@ -112,13 +130,25 @@ class _AppMainPageState extends State<AppMainPage> {
                 childAspectRatio: 2,
               ),
               delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                (BuildContext context, int index) {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  ShowCategory(notesRepository: notesRepository, indexCategory: index),));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShowCategory(
+                                  notesRepository: notesRepository,
+                                  indexCategory: index),
+                            ));
                       },
-                      child: Center(child: Text(notesRepository.category[index].categoryName)),
+                      child: Center(
+                          child: Text(
+                        notesRepository.category[index].categoryName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )),
                     ),
                   );
                 },
@@ -128,16 +158,29 @@ class _AppMainPageState extends State<AppMainPage> {
           ),
         ],
       ),
-      drawer: AppDrawer(notesRepository: notesRepository,name: widget.name, surname: widget.surname),
+      drawer: AppDrawer(
+          notesRepository: notesRepository,
+          name: widget.name,
+          surname: widget.surname),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { null; },
+        onPressed: () {
+          null;
+        },
         child: PopupMenuButton(
           icon: const Icon(Icons.add),
-          onSelected: (value)  {
+          onSelected: (value) async {
             if (value == 'note') {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CreateNote(),));
+              final note = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const CreateNote(),
+              ));
+              notesRepository.notes.add(note);
+              setState(() {});
             } else if (value == 'category') {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddCategory(notesRepository: notesRepository),));
+              await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    AddCategory(notesRepository: notesRepository),
+              ));
+              setState(() {});
             }
           },
           itemBuilder: (context) {

@@ -39,13 +39,14 @@ class _EditPageState extends State<EditPage> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                if((widget.note.title == headController.text) &&
-                    widget.note.content == textController.text){
+                if ((widget.note.title == headController.text) &&
+                    widget.note.content == textController.text) {
                   Navigator.of(context).maybePop(
-                    Notes(title: headController.text, content: textController.text),
+                    Notes(
+                        title: headController.text,
+                        content: textController.text),
                   );
-
-                }else{
+                } else {
                   showDialog(
                     context: context,
                     builder: (context) => exitAlertDialog(context),
@@ -59,13 +60,14 @@ class _EditPageState extends State<EditPage> {
                 padding: const EdgeInsets.only(right: 10),
                 child: IconButton(
                   onPressed: () {
-                    if((widget.note.title == headController.text) &&
-                        widget.note.content == textController.text){
+                    if ((widget.note.title == headController.text) &&
+                        widget.note.content == textController.text) {
                       Navigator.of(context).maybePop(
-                        Notes(title: headController.text, content: textController.text),
+                        Notes(
+                            title: headController.text,
+                            content: textController.text),
                       );
-
-                    }else{
+                    } else {
                       showDialog(
                         context: context,
                         builder: (context) => saveAlertDialog(context),
@@ -156,12 +158,11 @@ class _EditPageState extends State<EditPage> {
     );
   }
 
-
   AlertDialog exitAlertDialog(BuildContext context) {
     return AlertDialog(
       title: const Text('Uyarı Mesajı'),
       content:
-      const Text('Notunuzda değişiklikler var, kaydetmek ister misiniz?'),
+          const Text('Notunuzda değişiklikler var, kaydetmek ister misiniz?'),
       actions: [
         TextButton(
           onPressed: () {
@@ -176,7 +177,7 @@ class _EditPageState extends State<EditPage> {
           onPressed: () {
             setState(() {
               Navigator.pop(context, 'Çıkış');
-              Navigator.maybePop(context,widget.note);
+              Navigator.maybePop(context, widget.note);
             });
           },
           child: const Text('Kaydetme'),
@@ -193,6 +194,3 @@ class _EditPageState extends State<EditPage> {
     );
   }
 }
-
-
-

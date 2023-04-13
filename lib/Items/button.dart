@@ -32,13 +32,16 @@ class _ButtonState extends State<Button> {
       addImageButton = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(image, height: 25, width: 25,),
+          Image.asset(
+            image,
+            height: 25,
+            width: 25,
+          ),
           const Padding(padding: EdgeInsets.only(left: 20)),
           Text(widget.text, style: TextStyle(color: textColor))
         ],
       );
-    }
-    else {
+    } else {
       addImageButton = Text(widget.text, style: TextStyle(color: textColor));
     }
   }
@@ -63,4 +66,3 @@ class _ButtonState extends State<Button> {
     );
   }
 }
-

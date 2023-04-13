@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Screens/first_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -16,8 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: FirstScreen(title: 'Giriş Yap'),
+      home: FirstScreen(),
     );
   }
 }
-

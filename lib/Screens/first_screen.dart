@@ -5,13 +5,10 @@ import 'package:littlefont/Screens/sign_up_page.dart';
 import '../Items/button.dart';
 import 'login_page.dart';
 
-
 class FirstScreen extends StatelessWidget {
-  FirstScreen({super.key, required this.title});
-
-  final formKey = GlobalKey<FormState>();
-
-  final String title;
+  FirstScreen({
+    super.key,
+  });
 
   final text1Controller = TextEditingController();
 
@@ -34,10 +31,12 @@ class FirstScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 80,),
+            const SizedBox(
+              height: 80,
+            ),
             Container(
               alignment: Alignment.topCenter,
-              child:const Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(10),
                 child: Icon(
                   Icons.access_time_filled,
@@ -49,38 +48,41 @@ class FirstScreen extends StatelessWidget {
             Text(
               'LittleFont',
               style: GoogleFonts.akshar(
-                textStyle:const TextStyle(
+                textStyle: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                 ),
               ),
             ),
-            const SizedBox(height: 70,),
+            const SizedBox(
+              height: 70,
+            ),
             Button(
               textColor: Colors.white,
               text: 'Giriş Yap',
               color: Colors.red,
               onPressedOperations: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Login(loginRepository: loginRepository,
-                      formKey: formKey,
-                      )));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Login(
+                          loginRepository: loginRepository,
+                        )));
               },
               width: 200,
               height: 42,
             ),
             TextButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    SignUp(loginRepository: loginRepository,
-                      formKey: formKey
+                builder: (context) => SignUp(
+                  loginRepository: loginRepository,
                 ),
               )),
-              child: const  Text('Uygulamada yeni misin? Hemen Kaydol', style:
-              TextStyle(
-                color: Colors.white,
-              ),),
+              child: const Text(
+                'Uygulamada yeni misin? Hemen Kaydol',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),

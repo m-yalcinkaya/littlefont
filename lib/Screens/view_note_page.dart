@@ -4,8 +4,9 @@ import 'package:littlefont/Repository/notes_repository.dart';
 class ShowNote extends StatelessWidget {
   final int index;
   final NotesRepository notesRepository;
-  const ShowNote({Key? key, required this.index, required this.notesRepository}) : super(key: key);
 
+  const ShowNote({Key? key, required this.index, required this.notesRepository})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +42,17 @@ class ShowNote extends StatelessWidget {
   }
 }
 
-
 class ShowCategoryNote extends StatelessWidget {
   final int index;
   final NotesRepository notesRepository;
   final int indexCategory;
-  const ShowCategoryNote({Key? key, required this.index, required this.notesRepository, required this.indexCategory,}) : super(key: key);
 
+  const ShowCategoryNote({
+    Key? key,
+    required this.index,
+    required this.notesRepository,
+    required this.indexCategory,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +89,3 @@ class ShowCategoryNote extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-

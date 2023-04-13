@@ -4,7 +4,11 @@ import 'package:littlefont/Screens/category_page.dart';
 
 class AddCategory extends StatelessWidget {
   final NotesRepository notesRepository;
-  AddCategory({Key? key, required this.notesRepository,}) : super(key: key);
+
+  AddCategory({
+    Key? key,
+    required this.notesRepository,
+  }) : super(key: key);
 
   final formKey = GlobalKey<FormState>();
 
@@ -15,7 +19,9 @@ class AddCategory extends StatelessWidget {
     return Form(
       key: formKey,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Kategori Ekle'),),
+        appBar: AppBar(
+          title: const Text('Kategori Ekle'),
+        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -26,29 +32,38 @@ class AddCategory extends StatelessWidget {
                 controller: controller,
                 validator: (value) {
                   bool isFounded = false;
-                  for(int i=0; i<notesRepository.category.length;){
-                    if(notesRepository.category[i].categoryName == value){
+                  for (int i = 0; i < notesRepository.category.length;) {
+                    if (notesRepository.category[i].categoryName == value) {
                       isFounded = true;
                     }
-                    return isFounded ? 'Aynı isimde bir kategori zaten var!!' : null;
+                    return isFounded
+                        ? 'Aynı isimde bir kategori zaten var!!'
+                        : null;
                   }
                   return null;
                 },
                 style: const TextStyle(
                   fontSize: 20,
                 ),
-                decoration: const InputDecoration(hintText: 'Kategori ismi girin'),
+                decoration:
+                    const InputDecoration(hintText: 'Bir Kategori Oluşturun'),
               ),
             ),
             ElevatedButton(
-                onPressed: () {
-                  final isSuitable = formKey.currentState?.validate();
-                  if(isSuitable == true){
-                    notesRepository.addCategory(controller.text);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CategoryPage(notesRepository: notesRepository,),));
-                  }
-                },
-                child: const Text('Kaydet'),
+              onPressed: () {
+                final isSuitable = formKey.currentState?.validate();
+                if (isSuitable == true) {
+                  notesRepository.addCategory(controller.text);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoryPage(
+                          notesRepository: notesRepository,
+                        ),
+                      ));
+                }
+              },
+              child: const Text('Oluştur'),
             )
           ],
         ),

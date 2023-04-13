@@ -4,6 +4,7 @@ import 'package:littlefont/Screens/view_note_page.dart';
 
 class RecycleBin extends StatefulWidget {
   final NotesRepository notesRepository;
+
   const RecycleBin({Key? key, required this.notesRepository}) : super(key: key);
 
   @override
@@ -11,11 +12,6 @@ class RecycleBin extends StatefulWidget {
 }
 
 class _RecycleBinState extends State<RecycleBin> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,39 +29,38 @@ class _RecycleBinState extends State<RecycleBin> {
       body: widget.notesRepository.recycle.isEmpty
           ? Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                    'Silinen Not Yok',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 40
-                  ),
+                  'Silinen Not Yok',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 40),
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.only(top: 20,bottom: 75,right: 65,left: 85,),
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                    bottom: 75,
+                    right: 65,
+                    left: 85,
+                  ),
                   child: Text(
                     widget.notesRepository.recyleInfo,
-                    style: const TextStyle(
-                         fontSize: 17),
+                    style: const TextStyle(fontSize: 17),
                   ),
                 ),
               ],
             ))
           : Column(children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20) + const EdgeInsets.only(left: 15),
-              child: Text(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20) +
+                    const EdgeInsets.only(left: 15),
+                child: Text(
                   widget.notesRepository.recyleInfo,
+                ),
               ),
-            ),
-            Expanded(child: buildGridView()),
-
-      ]
-      ),
+              Expanded(child: buildGridView()),
+            ]),
     );
   }
 
@@ -111,8 +106,7 @@ class _RecycleBinState extends State<RecycleBin> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,

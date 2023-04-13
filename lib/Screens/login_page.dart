@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:littlefont/Repository/login_repository.dart';
 import 'package:littlefont/Screens/app_main_page.dart';
 import 'package:littlefont/Items/button.dart';
-
-
+import 'package:littlefont/Screens/sign_up_page.dart';
 
 class Login extends StatefulWidget {
   final LoginRepository loginRepository;
-  final  GlobalKey<FormState> formKey;
-  const Login({
-    super.key, required this.loginRepository, required this.formKey,
+  final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
+
+  Login({
+    super.key,
+    required this.loginRepository,
   });
 
   @override
@@ -17,8 +18,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
-
+  final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
 
   late String? name;
   late String? surname;
@@ -28,14 +28,14 @@ class _LoginState extends State<Login> {
     TextEditingController text1Controller = TextEditingController();
     TextEditingController text2Controller = TextEditingController();
 
-
     return Scaffold(
       body: Form(
-        key: widget.formKey,
+        key: widget.formKeyLogin,
         child: Container(
           color: Colors.blue.shade100,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
             children: [
               PhysicalModel(
                 borderRadius: BorderRadius.circular(50),
@@ -48,10 +48,9 @@ class _LoginState extends State<Login> {
                       child: Icon(
                         Icons.people,
                         color: Colors.black,
-                        size: 80,
+                        size: 70,
                       ),
                     ),
-                    const SizedBox(height: 10,),
                     Center(
                       child: Container(
                         margin: const EdgeInsets.all(2),
@@ -59,13 +58,15 @@ class _LoginState extends State<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField1(
-                          formKey: widget.formKey,
+                          formKey: widget.formKeyLogin,
                           loginRepository: widget.loginRepository,
                           text1Controller: text1Controller,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Center(
                       child: Container(
                         margin: const EdgeInsets.all(2),
@@ -73,7 +74,7 @@ class _LoginState extends State<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField2(
-                          formKey: widget.formKey,
+                          formKey: widget.formKeyLogin,
                           loginRepository: widget.loginRepository,
                           text2Controller: text2Controller,
                         ),
@@ -82,21 +83,20 @@ class _LoginState extends State<Login> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: Container(
-                        padding: const EdgeInsets.only(top: 15),
                         alignment: Alignment.topCenter,
                         child: Button(
                           height: 35,
                           text: 'Giriş Yap',
                           onPressedOperations: () {
-
-                            final isSuitable = widget.formKey.currentState
-                                ?.validate();
+                            final isSuitable =
+                                widget.formKeyLogin.currentState?.validate();
 
                             if (isSuitable == true) {
                               Account? account;
 
-                              for(Account a in widget.loginRepository.accounts){
-                                if(a.email == text1Controller.text) {
+                              for (Account a
+                                  in widget.loginRepository.accounts) {
+                                if (a.email == text1Controller.text) {
                                   account = a;
                                 }
                               }
@@ -104,15 +104,26 @@ class _LoginState extends State<Login> {
                               surname = account?.surname;
 
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AppMainPage(name: name, surname: surname),));
+                                builder: (context) =>
+                                    AppMainPage(name: name, surname: surname),
+                              ));
                             }
-
                           },
                           width: 100,
                           color: Colors.red,
                           textColor: Colors.white,
                         ),
                       ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => SignUp(
+                            loginRepository: widget.loginRepository,
+                          ),
+                        ));
+                      },
+                      child: const Text('Hesabın yok mu? Kayıt ol'),
                     ),
                   ],
                 ),
@@ -128,7 +139,9 @@ class _LoginState extends State<Login> {
 class TextField1 extends StatefulWidget {
   const TextField1({
     super.key,
-    required this.text1Controller, required this.loginRepository, required this.formKey,
+    required this.text1Controller,
+    required this.loginRepository,
+    required this.formKey,
   });
 
   final LoginRepository loginRepository;
@@ -145,6 +158,7 @@ class _TextField1State extends State<TextField1> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
         setState(() {
           lenghtString = value.length;
@@ -169,7 +183,7 @@ class _TextField1State extends State<TextField1> {
           }
 
           return isFounded ? null : 'Yanlış E-posta';
-        }else {
+        } else {
           return 'Geçersiz E-posta';
         }
       },
@@ -180,10 +194,9 @@ class _TextField1State extends State<TextField1> {
         counterText: '$lenghtString Karakter',
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(20),
-              right: Radius.circular(20),
-            )
-        ),
+          left: Radius.circular(20),
+          right: Radius.circular(20),
+        )),
       ),
     );
   }
@@ -192,7 +205,9 @@ class _TextField1State extends State<TextField1> {
 class TextField2 extends StatefulWidget {
   const TextField2({
     super.key,
-    required this.text2Controller, required this.loginRepository, required this.formKey,
+    required this.text2Controller,
+    required this.loginRepository,
+    required this.formKey,
   });
 
   final GlobalKey<FormState> formKey;
@@ -209,17 +224,18 @@ class _TextField2State extends State<TextField2> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: TextInputType.text,
       onChanged: (value) {
         setState(() {
           lenghtString = value.length;
         });
       },
       validator: (value) {
-
         bool isFounded = false;
-        for(int i=0; i<widget.loginRepository.accounts.length; i++){
-          if(widget.loginRepository.accounts[i].password == value){
-            isFounded = true;break;
+        for (int i = 0; i < widget.loginRepository.accounts.length; i++) {
+          if (widget.loginRepository.accounts[i].password == value) {
+            isFounded = true;
+            break;
           }
         }
 
@@ -233,10 +249,9 @@ class _TextField2State extends State<TextField2> {
         counterText: '$lenghtString Karakter',
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(20),
-              right: Radius.circular(20),
-            )
-        ),
+          left: Radius.circular(20),
+          right: Radius.circular(20),
+        )),
       ),
     );
   }

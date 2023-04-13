@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
 import 'package:littlefont/Screens/add_to_category.dart';
 import 'package:littlefont/Screens/view_note_page.dart';
@@ -6,7 +7,12 @@ import 'package:littlefont/Screens/view_note_page.dart';
 class ShowCategory extends StatefulWidget {
   final int indexCategory;
   final NotesRepository notesRepository;
-  const ShowCategory({Key? key, required this.indexCategory, required this.notesRepository,}) : super(key: key);
+
+  const ShowCategory({
+    Key? key,
+    required this.indexCategory,
+    required this.notesRepository,
+  }) : super(key: key);
 
   @override
   State<ShowCategory> createState() => _ShowCategoryState();
@@ -17,18 +23,29 @@ class _ShowCategoryState extends State<ShowCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kategori : kategori'),
+        title: Text(
+            widget.notesRepository.category[widget.indexCategory].categoryName),
         actions: [
           IconButton(
             icon: const Icon(Icons.add_circle),
             color: Colors.white,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => AddToCategory(notesRepository: widget.notesRepository, indexCategory: widget.indexCategory),));
-            },),
+            onPressed: () async {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddToCategory(
+                        notesRepository: widget.notesRepository,
+                        indexCategory: widget.indexCategory),
+                  ));
+              setState(() {});
+            },
+          ),
         ],
       ),
-      body: buildGridView(),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: buildGridView(),
+      ),
     );
   }
 
@@ -40,24 +57,65 @@ class _ShowCategoryState extends State<ShowCategory> {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount: widget.notesRepository.category[widget.indexCategory].notes.length,
+      itemCount:
+          widget.notesRepository.category[widget.indexCategory].notes.length,
       itemBuilder: (context, index) {
         return Card(
-          color: Colors.white,
+          color: const Color.fromARGB(200, 220, 200, 210),
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ShowCategoryNote(
-                    index: index, notesRepository: widget.notesRepository, indexCategory: widget.indexCategory,),
+                  index: index,
+                  notesRepository: widget.notesRepository,
+                  indexCategory: widget.indexCategory,
+                ),
               ));
             },
             child: Column(children: [
-              const Spacer(),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(Icons.remove_circle_outline),
+                  onPressed: () async {
+                    await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Uyarı'),
+                        content: const Text(
+                            'Bu kategoriyi silmek istediğinize emin misiniz?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              widget.notesRepository
+                                  .category[widget.indexCategory].notes
+                                  .remove(widget
+                                      .notesRepository
+                                      .category[widget.indexCategory]
+                                      .notes[index]);
+                            },
+                            child: const Text('Sil'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('İptal'),
+                          ),
+                        ],
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ),
+              ),
               Expanded(
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  widget.notesRepository.category[widget.indexCategory].notes[index].title,
+                  widget.notesRepository.category[widget.indexCategory]
+                      .notes[index].title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -71,12 +129,27 @@ class _ShowCategoryState extends State<ShowCategory> {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      widget.notesRepository.category[widget.indexCategory].notes[index].content,
+                      widget.notesRepository.category[widget.indexCategory]
+                          .notes[index].content,
                     ),
                   ),
                 ),
               ),
-              const Spacer(),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: IconButton(
+                    onPressed: () async {
+                      await FlutterShare.share(
+                        title: 'Notunu Paylaş',
+                        text:
+                            '${widget.notesRepository.category[widget.indexCategory].notes[index].title}\n\n${widget.notesRepository.category[widget.indexCategory].notes[index].content}',
+                      );
+                    },
+                    icon: const Icon(Icons.share),
+                  ),
+                ),
+              ),
             ]),
           ),
         );

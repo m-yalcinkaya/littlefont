@@ -111,7 +111,7 @@ class _MyNotesState extends State<MyNotes> {
               ),
               Expanded(
                 child: Align(
-                  alignment: Alignment.bottomRight,
+                  alignment: Alignment.bottomLeft,
                   child: PopupMenuButton(
                     onSelected: (value) async {
                       if (value == 'delete') {
@@ -145,7 +145,8 @@ class _MyNotesState extends State<MyNotes> {
                       } else if (value == 'share') {
                         await FlutterShare.share(
                           title: 'Notunu Paylaş',
-                          text: '',
+                          text:
+                              '${widget.notesRepository.notes[index].title}\n\n${widget.notesRepository.notes[index].content}',
                         );
                       }
                     },

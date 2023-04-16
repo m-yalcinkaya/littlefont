@@ -185,13 +185,35 @@ class _AppMainPageState extends State<AppMainPage> {
           },
           itemBuilder: (context) {
             return [
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'note',
-                child: Text('Not ekle'),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.note_add,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text('Not ekle'),
+                  ],
+                ),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'category',
-                child: Text('Kategori ekle'),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.add_circle,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text('Kategori ekle'),
+                  ],
+                ),
               ),
             ];
           },

@@ -46,7 +46,7 @@ class _CategoryPageState extends State<CategoryPage> {
         crossAxisCount: 2,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        childAspectRatio: 1,
+        childAspectRatio: 3/2,
       ),
       itemCount: widget.notesRepository.category.length,
       itemBuilder: (context, index) {
@@ -96,7 +96,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 10,
               ),
               Center(
                   child: Text(

@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont/Repository/login_repository.dart';
-import 'package:littlefont/Screens/AppMainPage/app_main_page.dart';
-import 'package:littlefont/Items/button.dart';
-import 'package:littlefont/Screens/SignUpPage/sign_up_page.dart';
+import 'login_page_index.dart';
 
 class Login extends StatefulWidget {
   final LoginRepository loginRepository;

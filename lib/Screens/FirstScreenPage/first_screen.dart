@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:littlefont/Repository/login_repository.dart';
-import 'package:littlefont/Screens/SignUpPage/sign_up_page.dart';
-import '../../Items/button.dart';
-import '../LoginPage/login_page.dart';
+import 'first_screen_index.dart';
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({

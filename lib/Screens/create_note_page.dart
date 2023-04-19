@@ -28,6 +28,18 @@ class _CreateNoteState extends State<CreateNote> {
       child: Scaffold(
           appBar: AppBar(
             actions: [
+              IconButton(
+                onPressed: () {
+                  null;
+                },
+                icon: const Icon(Icons.font_download),
+              ),
+              IconButton(
+                onPressed: () {
+                  null;
+                },
+                icon: const Icon(Icons.color_lens),
+              ),
               Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: IconButton(

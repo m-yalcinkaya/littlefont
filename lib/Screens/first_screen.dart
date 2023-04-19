@@ -5,10 +5,47 @@ import 'package:littlefont/Screens/sign_up_page.dart';
 import '../Items/button.dart';
 import 'login_page.dart';
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends StatefulWidget {
   FirstScreen({
     super.key,
   });
+
+  @override
+  State<FirstScreen> createState() => _FirstScreenState();
+}
+
+class _FirstScreenState extends State<FirstScreen> with TickerProviderStateMixin{
+  
+  late AnimationController controller;
+  late Animation<double> animation;
+
+  @override
+  void dispose() {
+  controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 2),
+    );
+
+
+    animation = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+    ).animate(controller);
+
+
+    if(controller.status == AnimationStatus.completed){
+      controller.reverse;
+    }else {
+      controller.forward();
+    }
+  }
 
   final text1Controller = TextEditingController();
 
@@ -36,23 +73,36 @@ class FirstScreen extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.topCenter,
-              child: const Padding(
-                padding: EdgeInsets.all(10),
-                child: Icon(
-                  Icons.access_time_filled,
-                  color: Colors.white,
-                  size: 100,
-                ),
-              ),
-            ),
-            Text(
-              'LittleFont',
-              style: GoogleFonts.akshar(
-                textStyle: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                ),
+              child: AnimatedBuilder(
+                animation: animation,
+                builder: (BuildContext context, Widget? child) {
+                  return Opacity(
+                      opacity: animation.value,
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Icon(
+                            Icons.access_time_filled,
+                            color: Colors.white,
+                            size: 100,
+                          ),
+                        ),
+                        Text(
+                          'LittleFont',
+                          style: GoogleFonts.akshar(
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+
               ),
             ),
             const SizedBox(

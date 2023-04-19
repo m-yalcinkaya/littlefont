@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'about_page_index.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});

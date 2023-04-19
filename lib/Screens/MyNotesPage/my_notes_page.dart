@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'package:littlefont/Screens/create_note_page.dart';
-import 'package:littlefont/Screens/edit_page.dart';
-import 'package:littlefont/Screens/view_note_page.dart';
-import '../Repository/notes_repository.dart';
+import 'my_notes_page_index.dart';
 
 class MyNotes extends StatefulWidget {
   final NotesRepository notesRepository;

@@ -1,11 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont/Items/app_drawer.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/add_category.dart';
-import 'package:littlefont/Screens/category_page.dart';
-import 'package:littlefont/Screens/my_notes_page.dart';
-import 'package:littlefont/Screens/show_category_notes.dart';
-import 'create_note_page.dart';
+import 'app_main_index.dart';
 
 class AppMainPage extends StatefulWidget {
   final String? name;
@@ -36,7 +29,7 @@ class _AppMainPageState extends State<AppMainPage> {
               collapseMode: CollapseMode.parallax,
               expandedTitleScale: 1.5,
               title: Text(
-                'Merhaba, ${widget.name}!',
+                'Hi, ${widget.name}!',
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -62,7 +55,7 @@ class _AppMainPageState extends State<AppMainPage> {
                             MyNotes(notesRepository: notesRepository),
                       ));
                     },
-                    child: const Text('Notlar >'),
+                    child: const Text('Notes >'),
                   ),
                 ),
               ],
@@ -114,7 +107,7 @@ class _AppMainPageState extends State<AppMainPage> {
                             CategoryPage(notesRepository: notesRepository),
                       ));
                     },
-                    child: const Text('Kategoriler >'),
+                    child: const Text('Categories >'),
                   ),
                 ),
               ],
@@ -196,7 +189,7 @@ class _AppMainPageState extends State<AppMainPage> {
                     SizedBox(
                       width: 10,
                     ),
-                    Text('Not ekle'),
+                    Text('Add Note'),
                   ],
                 ),
               ),
@@ -211,13 +204,25 @@ class _AppMainPageState extends State<AppMainPage> {
                     SizedBox(
                       width: 10,
                     ),
-                    Text('Kategori ekle'),
+                    Text('Add Category'),
                   ],
                 ),
               ),
             ];
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.newspaper),
+            label: 'News',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble),
+            label: 'Chats',
+          ),
+        ],
       ),
     );
   }

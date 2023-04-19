@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:littlefont/Repository/login_repository.dart';
-import 'package:littlefont/Screens/app_main_page.dart';
+import 'package:littlefont/Screens/AppMainPage/app_main_page.dart';
 import 'package:littlefont/Items/button.dart';
-import 'package:littlefont/Screens/sign_up_page.dart';
+import 'package:littlefont/Screens/SignUpPage/sign_up_page.dart';
 
 class Login extends StatefulWidget {
   final LoginRepository loginRepository;
@@ -88,8 +88,8 @@ class _LoginState extends State<Login> {
                           height: 35,
                           text: 'Giriş Yap',
                           onPressedOperations: () {
-                            final isSuitable =
-                                widget.formKeyLogin.currentState?.validate();
+                            const isSuitable = true;
+                                // widget.formKeyLogin.currentState?.validate();
 
                             if (isSuitable == true) {
                               Account? account;

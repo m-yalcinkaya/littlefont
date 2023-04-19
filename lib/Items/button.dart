@@ -50,7 +50,7 @@ class _ButtonState extends State<Button> {
   Widget build(BuildContext context) {
     addImageButtonControl(widget.image, widget.textColor);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Material(
         borderRadius: BorderRadius.circular(30.0),
         shadowColor: Colors.grey,

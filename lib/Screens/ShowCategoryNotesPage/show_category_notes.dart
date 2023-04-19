@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/add_to_category.dart';
-import 'package:littlefont/Screens/view_note_page.dart';
+import 'show_category_notes_page_index.dart';
 
 class ShowCategory extends StatefulWidget {
   final int indexCategory;

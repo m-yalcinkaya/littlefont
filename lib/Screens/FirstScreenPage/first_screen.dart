@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:littlefont/Repository/login_repository.dart';
-import 'package:littlefont/Screens/sign_up_page.dart';
-import '../Items/button.dart';
-import 'login_page.dart';
+import 'package:littlefont/Screens/SignUpPage/sign_up_page.dart';
+import '../../Items/button.dart';
+import '../LoginPage/login_page.dart';
 
 class FirstScreen extends StatefulWidget {
-  FirstScreen({
+  const FirstScreen({
     super.key,
   });
 
@@ -119,7 +119,7 @@ class _FirstScreenState extends State<FirstScreen> with TickerProviderStateMixin
                         )));
               },
               width: 200,
-              height: 42,
+              height: 20,
             ),
             TextButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(

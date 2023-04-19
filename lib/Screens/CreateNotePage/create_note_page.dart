@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
+import 'create_note_page_index.dart';
 
 class CreateNote extends StatefulWidget {
   const CreateNote({Key? key}) : super(key: key);

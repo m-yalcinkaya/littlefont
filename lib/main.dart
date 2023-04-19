@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Screens/first_screen.dart';
+import 'Screens/FirstScreenPage/first_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: FirstScreen(),
+      home: const FirstScreen(),
     );
   }
 }

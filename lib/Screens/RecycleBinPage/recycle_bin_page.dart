@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/view_note_page.dart';
+import 'recycle_bin_page_index.dart';
 
 class RecycleBin extends StatefulWidget {
   final NotesRepository notesRepository;

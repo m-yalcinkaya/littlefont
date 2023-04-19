@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/about_page.dart';
-import 'package:littlefont/Screens/category_page.dart';
-import 'package:littlefont/Screens/favourites_page.dart';
-import 'package:littlefont/Screens/first_screen.dart';
-import 'package:littlefont/Screens/my_notes_page.dart';
-import 'package:littlefont/Screens/recycle_bin_page.dart';
+import 'package:littlefont/Screens/AboutPage/about_page.dart';
+import 'package:littlefont/Screens/CategoryPage/category_page.dart';
+import 'package:littlefont/Screens/FavouritesPage/favourites_page.dart';
+import 'package:littlefont/Screens/FirstScreenPage/first_screen.dart';
+import 'package:littlefont/Screens/MyNotesPage/my_notes_page.dart';
+import 'package:littlefont/Screens/RecycleBinPage/recycle_bin_page.dart';
 
 class AppDrawer extends StatefulWidget {
   final NotesRepository notesRepository;
@@ -158,7 +158,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => FirstScreen()),
+                    MaterialPageRoute(builder: (context) => const FirstScreen()),
                     (Route<dynamic> route) => false,
                   );
                 },

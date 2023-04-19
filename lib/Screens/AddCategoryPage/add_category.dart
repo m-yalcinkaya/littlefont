@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/category_page.dart';
+import 'add_category_index.dart';
 
 class AddCategory extends StatelessWidget {
   final NotesRepository notesRepository;

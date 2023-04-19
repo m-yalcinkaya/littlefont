@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
+import 'view_note_page_index.dart';
 
 class ShowNote extends StatelessWidget {
   final int index;

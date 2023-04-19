@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/view_note_page.dart';
+import 'package:littlefont/Screens/ViewNotePage/view_note_page.dart';
 
 class FavouritesPage extends StatefulWidget {
   final NotesRepository notesRepository;

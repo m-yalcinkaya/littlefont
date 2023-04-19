@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
-import 'package:littlefont/Screens/add_category.dart';
-import 'package:littlefont/Screens/show_category_notes.dart';
+import 'category_index.dart';
 
 class CategoryPage extends StatefulWidget {
   final NotesRepository notesRepository;

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:littlefont/Screens/AddCategoryPage/add_category_index.dart';
 import 'Screens/FirstScreenPage/first_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

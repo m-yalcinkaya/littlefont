@@ -1,31 +1,17 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'favourites_page_index.dart';
 
-class FavouritesPage extends StatefulWidget {
-  final NotesRepository notesRepository;
-
-  const FavouritesPage({Key? key, required this.notesRepository})
-      : super(key: key);
+class FavouritesPage extends ConsumerWidget {
+  const FavouritesPage({Key? key}) : super(key: key);
 
   @override
-  State<FavouritesPage> createState() => _FavouritesPageState();
-}
-
-class _FavouritesPageState extends State<FavouritesPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              setState(() {
-                Navigator.pop(context);
-              });
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
           title: const Text('Favoriler'),
         ),
-        body: widget.notesRepository.favourites.isEmpty
+        body: ref.watch(notesProvider).favourites.isEmpty
             ? const Center(
                 child: Text(
                 'Hiç Favori Notunuz Yok',
@@ -36,11 +22,11 @@ class _FavouritesPageState extends State<FavouritesPage> {
               ))
             : Padding(
                 padding: const EdgeInsets.all(8),
-                child: buildGridView(),
+                child: buildGridView(ref: ref),
               ));
   }
 
-  GridView buildGridView() {
+  GridView buildGridView({required WidgetRef ref}) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -48,15 +34,14 @@ class _FavouritesPageState extends State<FavouritesPage> {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount: widget.notesRepository.favourites.length,
+      itemCount: ref.watch(notesProvider).favourites.length,
       itemBuilder: (context, index) {
         return Card(
-          color: widget.notesRepository.favourites[index].color,
+          color: ref.watch(notesProvider).favourites[index].color,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ShowNote(
-                    index: index, notesRepository: widget.notesRepository),
+                builder: (context) => ShowNote(index: index),
               ));
             },
             child: Column(children: [
@@ -65,15 +50,9 @@ class _FavouritesPageState extends State<FavouritesPage> {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      widget.notesRepository.favourites;
-                      widget.notesRepository.notes;
-                      setState(() {
-                        widget.notesRepository.favourites
-                            .remove(widget.notesRepository.favourites[index]);
-                      });
-                      widget.notesRepository.favourites;
-                      widget.notesRepository.notes;
-                    },
+                      ref.read(notesProvider).removeNote(
+                          index, ref.read(notesProvider).favourites);
+                      },
                     icon: const Icon(Icons.star),
                   ),
                 ),
@@ -82,7 +61,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  widget.notesRepository.favourites[index].title,
+                  ref.read(notesProvider).favourites[index].title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -96,7 +75,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      widget.notesRepository.favourites[index].content,
+                      ref.read(notesProvider).favourites[index].content,
                     ),
                   ),
                 ),

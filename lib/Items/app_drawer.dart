@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:littlefont/Repository/notes_repository.dart';
 import 'package:littlefont/Screens/AboutPage/about_page.dart';
 import 'package:littlefont/Screens/CategoryPage/category_page.dart';
 import 'package:littlefont/Screens/FavouritesPage/favourites_page.dart';
@@ -8,25 +8,18 @@ import 'package:littlefont/Screens/FirstScreenPage/first_screen.dart';
 import 'package:littlefont/Screens/MyNotesPage/my_notes_page.dart';
 import 'package:littlefont/Screens/RecycleBinPage/recycle_bin_page.dart';
 
-class AppDrawer extends StatefulWidget {
-  final NotesRepository notesRepository;
+class AppDrawer extends ConsumerWidget {
   final String? name;
   final String? surname;
 
   const AppDrawer({
     Key? key,
-    required this.notesRepository,
     this.name,
     required this.surname,
   }) : super(key: key);
 
   @override
-  State<AppDrawer> createState() => _AppDrawerState();
-}
-
-class _AppDrawerState extends State<AppDrawer> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         bottomRight: Radius.circular(50),
@@ -87,7 +80,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       height: 5,
                     ),
                     Text(
-                      '${widget.name} ${widget.surname}',
+                      '$name $surname',
                       style: const TextStyle(
                         fontSize: 16,
                       ),
@@ -104,9 +97,8 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        MyNotes(notesRepository: widget.notesRepository),
+                        MyNotes(),
                   ));
-                  setState(() {});
                 },
               ),
               ListTile(
@@ -116,7 +108,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        CategoryPage(notesRepository: widget.notesRepository),
+                        CategoryPage(),
                   ));
                 },
               ),
@@ -127,7 +119,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        FavouritesPage(notesRepository: widget.notesRepository),
+                        FavouritesPage(),
                   ));
                 },
               ),
@@ -138,7 +130,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        RecycleBin(notesRepository: widget.notesRepository),
+                        RecycleBin(),
                   ));
                 },
               ),

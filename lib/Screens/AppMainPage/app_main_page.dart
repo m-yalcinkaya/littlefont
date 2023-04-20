@@ -1,6 +1,7 @@
+import '../../Repository/category_repository.dart';
 import 'app_main_index.dart';
 
-class AppMainPage extends StatefulWidget {
+class AppMainPage extends ConsumerWidget {
   final String? name;
   final String? surname;
 
@@ -10,15 +11,9 @@ class AppMainPage extends StatefulWidget {
     this.surname,
   }) : super(key: key);
 
-  @override
-  State<AppMainPage> createState() => _AppMainPageState();
-}
-
-class _AppMainPageState extends State<AppMainPage> {
-  final NotesRepository notesRepository = NotesRepository();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -29,7 +24,7 @@ class _AppMainPageState extends State<AppMainPage> {
               collapseMode: CollapseMode.parallax,
               expandedTitleScale: 1.5,
               title: Text(
-                'Hi, ${widget.name}!',
+                'Hi, $name!',
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -52,7 +47,7 @@ class _AppMainPageState extends State<AppMainPage> {
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            MyNotes(notesRepository: notesRepository),
+                            const MyNotes(),
                       ));
                     },
                     child: const Text('Notes >'),
@@ -67,21 +62,21 @@ class _AppMainPageState extends State<AppMainPage> {
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 scrollDirection: Axis.horizontal,
-                itemCount: notesRepository.notes.length,
+                itemCount: ref.watch(notesProvider).notes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return SizedBox(
                     width: 200,
                     child: Card(
                       child: ListTile(
                         title: Text(
-                          notesRepository.notes[index].title,
+                          ref.watch(notesProvider).notes[index].title,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         subtitle: Center(
                           child: Text(
-                            notesRepository.notes[index].content,
+                            ref.watch(notesProvider).notes[index].content,
                             maxLines: 4,
                           ),
                         ),
@@ -104,7 +99,7 @@ class _AppMainPageState extends State<AppMainPage> {
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            CategoryPage(notesRepository: notesRepository),
+                            const CategoryPage(),
                       ));
                     },
                     child: const Text('Categories >'),
@@ -131,13 +126,12 @@ class _AppMainPageState extends State<AppMainPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ShowCategory(
-                                  notesRepository: notesRepository,
                                   indexCategory: index),
                             ));
                       },
                       child: Center(
                           child: Text(
-                        notesRepository.category[index].categoryName,
+                        ref.watch(categoryProvider).category[index].categoryName,
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                         ),
@@ -145,16 +139,15 @@ class _AppMainPageState extends State<AppMainPage> {
                     ),
                   );
                 },
-                childCount: notesRepository.category.length,
+                childCount: ref.watch(categoryProvider).category.length,
               ),
             ),
           ),
         ],
       ),
       drawer: AppDrawer(
-          notesRepository: notesRepository,
-          name: widget.name,
-          surname: widget.surname),
+          name: name,
+          surname: surname),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           null;
@@ -166,14 +159,12 @@ class _AppMainPageState extends State<AppMainPage> {
               final note = await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const CreateNote(),
               ));
-              notesRepository.notes.add(note);
-              setState(() {});
+              ref.read(notesProvider).addNote(note,ref.read(notesProvider).notes);
             } else if (value == 'category') {
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
-                    AddCategory(notesRepository: notesRepository),
+                    const AddCategory(),
               ));
-              setState(() {});
             }
           },
           itemBuilder: (context) {
@@ -217,6 +208,10 @@ class _AppMainPageState extends State<AppMainPage> {
           BottomNavigationBarItem(
               icon: Icon(Icons.newspaper),
             label: 'News',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.chat_bubble),

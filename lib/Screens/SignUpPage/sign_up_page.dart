@@ -1,12 +1,12 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'sign_up_page_index.dart';
 
-class SignUp extends StatelessWidget {
-  final LoginRepository loginRepository;
+class SignUp extends ConsumerWidget {
   final GlobalKey<FormState> formKeySignUp = GlobalKey<FormState>();
 
   SignUp({
     Key? key,
-    required this.loginRepository,
   }) : super(key: key);
 
   final FocusNode nameFocusNode = FocusNode();
@@ -20,7 +20,7 @@ class SignUp extends StatelessWidget {
   late final String _password;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Form(
       key: formKeySignUp,
       child: Scaffold(
@@ -179,9 +179,9 @@ class SignUp extends StatelessWidget {
                                 }
 
                                 for (int i = 0;
-                                    i < loginRepository.accounts.length;
+                                    i < ref.read(loginProvider).accounts.length;
                                     i++) {
-                                  if (loginRepository.accounts[i].email ==
+                                  if (ref.read(loginProvider).accounts[i].email ==
                                       value) {
                                     isFounded = false;
                                   }
@@ -265,7 +265,7 @@ class SignUp extends StatelessWidget {
                             if (isSuitable == true) {
                               formKeySignUp.currentState?.save();
 
-                              loginRepository.accounts.add(Account(
+                              ref.read(loginProvider).accounts.add(Account(
                                 name: _name,
                                 surname: _surname,
                                 email: _email,
@@ -275,8 +275,7 @@ class SignUp extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Login(
-                                      loginRepository: loginRepository,
+                                    builder: (context) => const Login(
                                     ),
                                   ));
                             }
@@ -289,8 +288,7 @@ class SignUp extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
-                              builder: (context) => Login(
-                                loginRepository: loginRepository,
+                              builder: (context) => const Login(
                               ),
                             ));
                           },

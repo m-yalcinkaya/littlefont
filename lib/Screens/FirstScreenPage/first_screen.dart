@@ -1,22 +1,26 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'first_screen_index.dart';
 
-class FirstScreen extends StatefulWidget {
+class FirstScreen extends ConsumerStatefulWidget{
   const FirstScreen({
     super.key,
   });
 
   @override
-  State<FirstScreen> createState() => _FirstScreenState();
+  ConsumerState<FirstScreen> createState() => _FirstScreenState();
 }
 
-class _FirstScreenState extends State<FirstScreen> with TickerProviderStateMixin{
+class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderStateMixin{
   
   late AnimationController controller;
   late Animation<double> animation;
 
   @override
   void dispose() {
-  controller.dispose();
+    controller.dispose();
+    text1Controller.dispose();
+    text2Controller.dispose();
     super.dispose();
   }
 
@@ -46,7 +50,6 @@ class _FirstScreenState extends State<FirstScreen> with TickerProviderStateMixin
 
   final text2Controller = TextEditingController();
 
-  final loginRepository = LoginRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -109,18 +112,14 @@ class _FirstScreenState extends State<FirstScreen> with TickerProviderStateMixin
               color: Colors.red,
               onPressedOperations: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Login(
-                          loginRepository: loginRepository,
-                        )));
+                    builder: (context) => const Login()));
               },
               width: 200,
               height: 20,
             ),
             TextButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SignUp(
-                  loginRepository: loginRepository,
-                ),
+                builder: (context) => SignUp(),
               )),
               child: const Text(
                 'Uygulamada yeni misin? Hemen Kaydol',

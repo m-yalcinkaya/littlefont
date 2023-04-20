@@ -1,14 +1,16 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../Repository/category_repository.dart';
 import 'view_note_page_index.dart';
 
-class ShowNote extends StatelessWidget {
+class ShowNote extends ConsumerWidget {
   final int index;
-  final NotesRepository notesRepository;
 
-  const ShowNote({Key? key, required this.index, required this.notesRepository})
+  const ShowNote({Key? key, required this.index})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -22,7 +24,7 @@ class ShowNote extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    notesRepository.notes[index].title,
+                    ref.watch(notesProvider).notes[index].title,
                     style: const TextStyle(
                       fontSize: 30,
                     ),
@@ -31,7 +33,7 @@ class ShowNote extends StatelessWidget {
               ),
               SizedBox(
                 width: 350,
-                child: Text(notesRepository.notes[index].content),
+                child: Text(ref.watch(notesProvider).notes[index].content),
               ),
             ],
           ),
@@ -41,20 +43,18 @@ class ShowNote extends StatelessWidget {
   }
 }
 
-class ShowCategoryNote extends StatelessWidget {
+class ShowCategoryNote extends ConsumerWidget {
   final int index;
-  final NotesRepository notesRepository;
   final int indexCategory;
 
   const ShowCategoryNote({
     Key? key,
     required this.index,
-    required this.notesRepository,
     required this.indexCategory,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -68,7 +68,7 @@ class ShowCategoryNote extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    notesRepository.category[indexCategory].notes[index].title,
+                    ref.watch(categoryProvider).category[indexCategory].notes[index].title,
                     style: const TextStyle(
                       fontSize: 30,
                     ),
@@ -78,7 +78,7 @@ class ShowCategoryNote extends StatelessWidget {
               SizedBox(
                 width: 350,
                 child: Text(
-                  notesRepository.category[indexCategory].notes[index].title,
+                  ref.watch(categoryProvider).category[indexCategory].notes[index].title,
                 ),
               ),
             ],

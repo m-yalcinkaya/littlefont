@@ -1,51 +1,47 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../Repository/category_repository.dart';
 import 'show_category_notes_page_index.dart';
 
-class ShowCategory extends StatefulWidget {
+class ShowCategory extends ConsumerWidget {
   final int indexCategory;
-  final NotesRepository notesRepository;
 
   const ShowCategory({
     Key? key,
     required this.indexCategory,
-    required this.notesRepository,
   }) : super(key: key);
 
   @override
-  State<ShowCategory> createState() => _ShowCategoryState();
-}
-
-class _ShowCategoryState extends State<ShowCategory> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            widget.notesRepository.category[widget.indexCategory].categoryName),
+            ref.watch(categoryProvider).category[indexCategory].categoryName),
         actions: [
           IconButton(
             icon: const Icon(Icons.add_circle),
             color: Colors.white,
             onPressed: () async {
+              print('calisti');
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddToCategory(
-                        notesRepository: widget.notesRepository,
-                        indexCategory: widget.indexCategory),
+                    builder: (context) =>
+                        AddToCategory(indexCategory: indexCategory),
                   ));
-              setState(() {});
+              print('calisti2');
             },
           ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: buildGridView(),
+        child: buildGridView(ref: ref),
       ),
     );
   }
 
-  GridView buildGridView() {
+  GridView buildGridView({required WidgetRef ref}) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -54,7 +50,7 @@ class _ShowCategoryState extends State<ShowCategory> {
         childAspectRatio: 1,
       ),
       itemCount:
-          widget.notesRepository.category[widget.indexCategory].notes.length,
+          ref.watch(categoryProvider).category[indexCategory].notes.length,
       itemBuilder: (context, index) {
         return Card(
           color: const Color.fromARGB(200, 220, 200, 210),
@@ -63,8 +59,7 @@ class _ShowCategoryState extends State<ShowCategory> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ShowCategoryNote(
                   index: index,
-                  notesRepository: widget.notesRepository,
-                  indexCategory: widget.indexCategory,
+                  indexCategory: indexCategory,
                 ),
               ));
             },
@@ -84,11 +79,13 @@ class _ShowCategoryState extends State<ShowCategory> {
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              widget.notesRepository
-                                  .category[widget.indexCategory].notes
-                                  .remove(widget
-                                      .notesRepository
-                                      .category[widget.indexCategory]
+                              ref
+                                  .read(categoryProvider)
+                                  .category[indexCategory]
+                                  .notes
+                                  .remove(ref
+                                      .read(categoryProvider)
+                                      .category[indexCategory]
                                       .notes[index]);
                             },
                             child: const Text('Sil'),
@@ -102,7 +99,6 @@ class _ShowCategoryState extends State<ShowCategory> {
                         ],
                       ),
                     );
-                    setState(() {});
                   },
                 ),
               ),
@@ -110,8 +106,11 @@ class _ShowCategoryState extends State<ShowCategory> {
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  widget.notesRepository.category[widget.indexCategory]
-                      .notes[index].title,
+                  ref
+                      .watch(categoryProvider)
+                      .category[indexCategory]
+                      .notes[index]
+                      .title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -125,8 +124,11 @@ class _ShowCategoryState extends State<ShowCategory> {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      widget.notesRepository.category[widget.indexCategory]
-                          .notes[index].content,
+                      ref
+                          .watch(categoryProvider)
+                          .category[indexCategory]
+                          .notes[index]
+                          .content,
                     ),
                   ),
                 ),
@@ -139,7 +141,7 @@ class _ShowCategoryState extends State<ShowCategory> {
                       await FlutterShare.share(
                         title: 'Notunu Paylaş',
                         text:
-                            '${widget.notesRepository.category[widget.indexCategory].notes[index].title}\n\n${widget.notesRepository.category[widget.indexCategory].notes[index].content}',
+                            '${ref.read(categoryProvider).category[indexCategory].notes[index].title}\n\n${ref.read(categoryProvider).category[indexCategory].notes[index].content}',
                       );
                     },
                     icon: const Icon(Icons.share),

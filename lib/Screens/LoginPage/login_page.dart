@@ -1,32 +1,41 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'login_page_index.dart';
 
-class Login extends StatefulWidget {
-  final LoginRepository loginRepository;
-  final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
+class Login extends ConsumerStatefulWidget {
 
-  Login({
+  const Login({
     super.key,
-    required this.loginRepository,
   });
 
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
   final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
 
   late String? name;
   late String? surname;
 
+
+  TextEditingController text1Controller = TextEditingController();
+  TextEditingController text2Controller = TextEditingController();
+
+
+  @override
+  void dispose() {
+    text1Controller.dispose();
+    text2Controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController text1Controller = TextEditingController();
-    TextEditingController text2Controller = TextEditingController();
 
     return Scaffold(
       body: Form(
-        key: widget.formKeyLogin,
+        key: formKeyLogin,
         child: Container(
           color: Colors.blue.shade100,
           child: Column(
@@ -54,8 +63,7 @@ class _LoginState extends State<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField1(
-                          formKey: widget.formKeyLogin,
-                          loginRepository: widget.loginRepository,
+                          formKey: formKeyLogin,
                           text1Controller: text1Controller,
                         ),
                       ),
@@ -70,8 +78,7 @@ class _LoginState extends State<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField2(
-                          formKey: widget.formKeyLogin,
-                          loginRepository: widget.loginRepository,
+                          formKey: formKeyLogin,
                           text2Controller: text2Controller,
                         ),
                       ),
@@ -91,7 +98,7 @@ class _LoginState extends State<Login> {
                               Account? account;
 
                               for (Account a
-                                  in widget.loginRepository.accounts) {
+                                  in ref.read(loginProvider).accounts) {
                                 if (a.email == text1Controller.text) {
                                   account = a;
                                 }
@@ -114,9 +121,7 @@ class _LoginState extends State<Login> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => SignUp(
-                            loginRepository: widget.loginRepository,
-                          ),
+                          builder: (context) => SignUp(),
                         ));
                       },
                       child: const Text('Hesabın yok mu? Kayıt ol'),
@@ -132,23 +137,21 @@ class _LoginState extends State<Login> {
   }
 }
 
-class TextField1 extends StatefulWidget {
+class TextField1 extends ConsumerStatefulWidget {
   const TextField1({
     super.key,
     required this.text1Controller,
-    required this.loginRepository,
     required this.formKey,
   });
 
-  final LoginRepository loginRepository;
   final GlobalKey<FormState> formKey;
   final TextEditingController text1Controller;
 
   @override
-  State<TextField1> createState() => _TextField1State();
+  ConsumerState<TextField1> createState() => _TextField1State();
 }
 
-class _TextField1State extends State<TextField1> {
+class _TextField1State extends ConsumerState<TextField1> {
   int lenghtString = 0;
 
   @override
@@ -172,8 +175,8 @@ class _TextField1State extends State<TextField1> {
         bool isFounded = false;
 
         if (isMailSymbol && value.contains('.com')) {
-          for (int i = 0; i < widget.loginRepository.accounts.length; i++) {
-            if (widget.loginRepository.accounts[i].email == value) {
+          for (int i = 0; i < ref.read(loginProvider).accounts.length; i++) {
+            if (ref.read(loginProvider).accounts[i].email == value) {
               isFounded = true;
             }
           }
@@ -198,23 +201,21 @@ class _TextField1State extends State<TextField1> {
   }
 }
 
-class TextField2 extends StatefulWidget {
+class TextField2 extends ConsumerStatefulWidget {
   const TextField2({
     super.key,
     required this.text2Controller,
-    required this.loginRepository,
     required this.formKey,
   });
 
   final GlobalKey<FormState> formKey;
-  final LoginRepository loginRepository;
   final TextEditingController text2Controller;
 
   @override
-  State<TextField2> createState() => _TextField2State();
+  ConsumerState<TextField2> createState() => _TextField2State();
 }
 
-class _TextField2State extends State<TextField2> {
+class _TextField2State extends ConsumerState<TextField2> {
   int lenghtString = 0;
 
   @override
@@ -228,8 +229,8 @@ class _TextField2State extends State<TextField2> {
       },
       validator: (value) {
         bool isFounded = false;
-        for (int i = 0; i < widget.loginRepository.accounts.length; i++) {
-          if (widget.loginRepository.accounts[i].password == value) {
+        for (int i = 0; i < ref.read(loginProvider).accounts.length; i++) {
+          if (ref.read(loginProvider).accounts[i].password == value) {
             isFounded = true;
             break;
           }

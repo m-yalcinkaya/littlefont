@@ -1,19 +1,28 @@
+import '../../Repository/category_repository.dart';
 import 'add_category_index.dart';
 
-class AddCategory extends StatelessWidget {
-  final NotesRepository notesRepository;
+class AddCategory extends ConsumerStatefulWidget {
 
-  AddCategory({
+  const AddCategory({
     Key? key,
-    required this.notesRepository,
   }) : super(key: key);
 
+  @override
+  ConsumerState<AddCategory> createState() => _AddCategoryState();
+}
+
+class _AddCategoryState extends ConsumerState<AddCategory> {
   final formKey = GlobalKey<FormState>();
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = TextEditingController();
-
     return Form(
       key: formKey,
       child: Scaffold(
@@ -30,8 +39,10 @@ class AddCategory extends StatelessWidget {
                 controller: controller,
                 validator: (value) {
                   bool isFounded = false;
-                  for (int i = 0; i < notesRepository.category.length;) {
-                    if (notesRepository.category[i].categoryName == value) {
+                  for (int i = 0;
+                      i < ref.read(categoryProvider).category.length;) {
+                    if (ref.read(categoryProvider).category[i].categoryName ==
+                        value) {
                       isFounded = true;
                     }
                     return isFounded
@@ -51,13 +62,11 @@ class AddCategory extends StatelessWidget {
               onPressed: () {
                 final isSuitable = formKey.currentState?.validate();
                 if (isSuitable == true) {
-                  notesRepository.addCategory(controller.text);
+                  ref.read(categoryProvider).addCategory(controller.text);
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CategoryPage(
-                          notesRepository: notesRepository,
-                        ),
+                        builder: (context) => const CategoryPage(),
                       ));
                 }
               },

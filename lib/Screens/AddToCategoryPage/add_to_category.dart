@@ -1,41 +1,36 @@
+import 'package:littlefont/Repository/category_repository.dart';
+
 import 'add_to_category_index.dart';
 
-class AddToCategory extends StatefulWidget {
-  final NotesRepository notesRepository;
+class AddToCategory extends ConsumerWidget {
   final int indexCategory;
 
   const AddToCategory({
     Key? key,
-    required this.notesRepository,
     required this.indexCategory,
   }) : super(key: key);
 
-  @override
-  State<AddToCategory> createState() => _AddToCategoryState();
-}
 
-class _AddToCategoryState extends State<AddToCategory> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
-            setState(() {});
           },
         ),
         title: const Text('Notlarım'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: buildGridView(),
+        child: buildGridView(ref: ref),
       ),
     );
   }
 
-  GridView buildGridView() {
+  GridView buildGridView({required ref}) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -43,7 +38,7 @@ class _AddToCategoryState extends State<AddToCategory> {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount: widget.notesRepository.notes.length,
+      itemCount: ref.watch(notesProvider).notes.length,
       itemBuilder: (context, index) {
         return Card(
           color: Colors.white,
@@ -52,7 +47,6 @@ class _AddToCategoryState extends State<AddToCategory> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ShowNote(
                   index: index,
-                  notesRepository: widget.notesRepository,
                 ),
               ));
             },
@@ -63,24 +57,18 @@ class _AddToCategoryState extends State<AddToCategory> {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      setState(() {
-                        final value = widget.notesRepository.notes[index];
-                        if (widget.notesRepository
-                            .category[widget.indexCategory].notes
-                            .contains(value)) {
-                          widget.notesRepository.category[widget.indexCategory]
-                              .notes
-                              .remove(value);
+                        final value = ref.read(notesProvider).notes[index];
+                        final category = ref.read(categoryProvider).category[indexCategory];
+
+                        if (category.notes.contains(value)) {
+                          category.removeNote(value, category.notes);
                         } else {
-                          widget.notesRepository.category[widget.indexCategory]
-                              .notes
-                              .add(value);
+                          category.addNote(value, category.notes);
                         }
-                      });
                     },
-                    icon: widget.notesRepository.category[widget.indexCategory]
+                    icon: ref.watch(categoryProvider).category[indexCategory]
                             .notes
-                            .contains(widget.notesRepository.notes[index])
+                            .contains(ref.watch(notesProvider).notes[index])
                         ? const Icon(Icons.add_box_rounded)
                         : const Icon(Icons.add_box_outlined),
                   ),
@@ -88,10 +76,10 @@ class _AddToCategoryState extends State<AddToCategory> {
               ),
               Expanded(
                 child: Text(
+                  ref.watch(notesProvider).notes[index].title,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  widget.notesRepository.notes[index].title,
                   style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -102,10 +90,10 @@ class _AddToCategoryState extends State<AddToCategory> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
+                      ref.watch(notesProvider).notes[index].content,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      widget.notesRepository.notes[index].content,
-                    ),
+                      ),
                   ),
                 ),
               ),

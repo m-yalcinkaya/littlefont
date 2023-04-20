@@ -1,38 +1,30 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'my_notes_page_index.dart';
 
-class MyNotes extends StatefulWidget {
-  final NotesRepository notesRepository;
-
-  const MyNotes({Key? key, required this.notesRepository}) : super(key: key);
+class MyNotes extends ConsumerWidget {
+  const MyNotes({Key? key}) : super(key: key);
 
   @override
-  State<MyNotes> createState() => _MyNotesState();
-}
-
-class _MyNotesState extends State<MyNotes> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notlarım'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: buildGridView(),
+        child: buildGridView(ref: ref),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final note = await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const CreateNote(),
           ));
-          setState(() {
-            if (note != null) {
-              widget.notesRepository.notes = [
-                ...widget.notesRepository.notes,
-                note
-              ];
-            }
-          });
+          if (note != null) {
+            ref.read(notesProvider).addNote(note, ref.read(notesProvider).notes);
+          }else {
+            return;
+          }
         },
         tooltip: 'Not Ekle',
         child: const Icon(Icons.add),
@@ -40,7 +32,7 @@ class _MyNotesState extends State<MyNotes> {
     );
   }
 
-  GridView buildGridView() {
+  GridView buildGridView({required WidgetRef ref}) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -48,15 +40,14 @@ class _MyNotesState extends State<MyNotes> {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount: widget.notesRepository.notes.length,
+      itemCount: ref.watch(notesProvider).notes.length,
       itemBuilder: (context, index) {
         return Card(
-          color: widget.notesRepository.notes[index].color,
+          color: ref.watch(notesProvider).notes[index].color,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ShowNote(
-                    index: index, notesRepository: widget.notesRepository),
+                builder: (context) => ShowNote(index: index),
               ));
             },
             child: Column(children: [
@@ -65,19 +56,15 @@ class _MyNotesState extends State<MyNotes> {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      setState(() {
-                        final value = widget.notesRepository.notes[index];
-                        if (widget.notesRepository.favourites.contains(value)) {
-                          widget.notesRepository.favourites.remove(value);
-                        } else {
-                          widget.notesRepository.favourites.add(value);
-                        }
-                      });
+                      final value = ref.read(notesProvider).notes[index];
+                      if (ref.read(notesProvider).favourites.contains(value)) {
+                        ref.read(notesProvider).removeNoteWithValue(value, ref.read(notesProvider).favourites);
+                      } else {
+                        ref.read(notesProvider).addNote(value, ref.read(notesProvider).favourites);
+                      }
                     },
-                    icon: widget.notesRepository.favourites
-                            .contains(widget.notesRepository.notes[index])
-                        ? const Icon(Icons.star)
-                        : const Icon(Icons.star_border),
+                    icon: ref.watch(notesProvider).favourites.contains(ref.read(notesProvider).notes[index])
+                        ? const Icon(Icons.star) : const Icon(Icons.star_border),
                   ),
                 ),
               ),
@@ -85,7 +72,7 @@ class _MyNotesState extends State<MyNotes> {
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  widget.notesRepository.notes[index].title,
+                  ref.watch(notesProvider).notes[index].title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -99,7 +86,7 @@ class _MyNotesState extends State<MyNotes> {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      widget.notesRepository.notes[index].content,
+                      ref.watch(notesProvider).notes[index].content,
                     ),
                   ),
                 ),
@@ -110,38 +97,37 @@ class _MyNotesState extends State<MyNotes> {
                   child: PopupMenuButton(
                     onSelected: (value) async {
                       if (value == 'delete') {
-                        if (widget.notesRepository.favourites
-                            .contains(widget.notesRepository.notes[index])) {
+                        if (ref
+                            .read(notesProvider)
+                            .favourites
+                            .contains(ref.read(notesProvider).notes[index])) {
                           showDialog(
                               context: context,
                               builder: (context) =>
-                                  buildAlertDialog(context, index));
-                          setState(() {});
+                                  buildAlertDialog(context, index, ref: ref));
                         } else {
-                          setState(() {
-                            widget.notesRepository.recycle
-                                .add(widget.notesRepository.notes[index]);
-                            final interValue =
-                                widget.notesRepository.notes[index];
-                            widget.notesRepository.notes.remove(interValue);
-                          });
+                          ref
+                              .read(notesProvider)
+                              .recycle
+                              .add(ref.read(notesProvider).notes[index]);
+                          final interValue =
+                              ref.read(notesProvider).notes[index];
+                          ref.read(notesProvider).notes.remove(interValue);
                         }
                       } else if (value == 'edit') {
                         final note =
                             await Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => EditPage(
-                              note: widget.notesRepository.notes[index]),
+                              note: ref.read(notesProvider).notes[index]),
                         ));
-                        setState(() {
-                          note != null
-                              ? widget.notesRepository.notes[index] = note
-                              : null;
-                        });
+                        note != null
+                            ? ref.read(notesProvider).notes[index] = note
+                            : null;
                       } else if (value == 'share') {
                         await FlutterShare.share(
                           title: 'Notunu Paylaş',
                           text:
-                              '${widget.notesRepository.notes[index].title}\n\n${widget.notesRepository.notes[index].content}',
+                              '${ref.read(notesProvider).notes[index].title}\n\n${ref.read(notesProvider).notes[index].content}',
                         );
                       }
                     },
@@ -171,7 +157,8 @@ class _MyNotesState extends State<MyNotes> {
     );
   }
 
-  AlertDialog buildAlertDialog(BuildContext context, int index) {
+  AlertDialog buildAlertDialog(BuildContext context, int index,
+      {required WidgetRef ref}) {
     return AlertDialog(
       title: const Text('Uyarı Mesajı'),
       content: const Text(
@@ -180,21 +167,19 @@ class _MyNotesState extends State<MyNotes> {
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            setState(() {
-              widget.notesRepository.recycle
-                  .add(widget.notesRepository.notes[index]);
-              final interValue = widget.notesRepository.notes[index];
-              widget.notesRepository.favourites.remove(interValue);
-              widget.notesRepository.notes.remove(interValue);
-            });
+            ref
+                .read(notesProvider)
+                .recycle
+                .add(ref.read(notesProvider).notes[index]);
+            final interValue = ref.read(notesProvider).notes[index];
+            ref.read(notesProvider).removeNote(index,ref.read(notesProvider).notes);
+            ref.read(notesProvider).removeNote(index,ref.read(notesProvider).notes);
           },
           child: const Text('Sil'),
         ),
         TextButton(
           onPressed: () {
-            setState(() {
-              Navigator.pop(context);
-            });
+            Navigator.pop(context);
           },
           child: const Text('İptal'),
         ),

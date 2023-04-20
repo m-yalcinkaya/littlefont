@@ -56,13 +56,20 @@ class _CreateNoteState extends State<CreateNote> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    Navigator.of(context).maybePop(
+                                    Navigator.of(context).pop(
                                       Notes(
                                           title: headController.text,
                                           content: textController.text),
                                     );
                                   },
-                                  child: const Text('Onayla'),
+                                  child: const Text('Kaydet'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context,null);
+                                  },
+                                  child: const Text('Kaydetmeden çık'),
                                 ),
                                 TextButton(
                                   onPressed: () {

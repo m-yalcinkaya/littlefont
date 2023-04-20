@@ -40,7 +40,7 @@ class _EditPageState extends State<EditPage> {
               onPressed: () {
                 if ((widget.note.title == headController.text) &&
                     widget.note.content == textController.text) {
-                  Navigator.of(context).maybePop(
+                  Navigator.of(context).pop(
                     Notes(
                         title: headController.text,
                         content: textController.text),
@@ -61,11 +61,7 @@ class _EditPageState extends State<EditPage> {
                   onPressed: () {
                     if ((widget.note.title == headController.text) &&
                         widget.note.content == textController.text) {
-                      Navigator.of(context).maybePop(
-                        Notes(
-                            title: headController.text,
-                            content: textController.text),
-                      );
+                      Navigator.of(context).pop(widget.note);
                     } else {
                       showDialog(
                         context: context,
@@ -138,8 +134,8 @@ class _EditPageState extends State<EditPage> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context, 'Cancel');
-            Navigator.of(context).maybePop(
+            Navigator.pop(context);
+            Navigator.of(context).pop(
               Notes(title: headController.text, content: textController.text),
             );
           },
@@ -147,9 +143,7 @@ class _EditPageState extends State<EditPage> {
         ),
         TextButton(
           onPressed: () {
-            setState(() {
-              Navigator.pop(context, 'İptal');
-            });
+              Navigator.pop(context);
           },
           child: const Text('İptal'),
         ),
@@ -165,8 +159,8 @@ class _EditPageState extends State<EditPage> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context, 'Cancel');
-            Navigator.of(context).maybePop(
+            Navigator.pop(context);
+            Navigator.of(context).pop(
               Notes(title: headController.text, content: textController.text),
             );
           },
@@ -174,18 +168,14 @@ class _EditPageState extends State<EditPage> {
         ),
         TextButton(
           onPressed: () {
-            setState(() {
-              Navigator.pop(context, 'Çıkış');
-              Navigator.maybePop(context, widget.note);
-            });
+              Navigator.pop(context);
+              Navigator.pop(context, widget.note);
           },
           child: const Text('Kaydetme'),
         ),
         TextButton(
           onPressed: () {
-            setState(() {
-              Navigator.pop(context, 'Çıkış');
-            });
+              Navigator.pop(context);
           },
           child: const Text('İptal'),
         ),

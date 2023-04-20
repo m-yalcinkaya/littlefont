@@ -1,4 +1,7 @@
-class LoginRepository {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont/Screens/AboutPage/about_page_index.dart';
+
+class LoginRepository extends ChangeNotifier{
   List<Account> accounts = [
     Account(
         name: 'Ahmet',
@@ -12,6 +15,10 @@ class LoginRepository {
         password: 'Giris123'),
   ];
 }
+
+final loginProvider = ChangeNotifierProvider((ref) {
+  return LoginRepository();
+});
 
 class Account {
   final String name;

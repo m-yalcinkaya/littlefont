@@ -22,14 +22,12 @@ class ShowCategory extends ConsumerWidget {
             icon: const Icon(Icons.add_circle),
             color: Colors.white,
             onPressed: () async {
-              print('calisti');
               await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
                         AddToCategory(indexCategory: indexCategory),
                   ));
-              print('calisti2');
             },
           ),
         ],

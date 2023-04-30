@@ -63,7 +63,7 @@ class MyNotes extends ConsumerWidget {
                         ref.read(notesProvider).addNote(value, ref.read(notesProvider).favourites);
                       }
                     },
-                    icon: ref.watch(notesProvider).favourites.contains(ref.read(notesProvider).notes[index])
+                    icon: ref.watch(notesProvider).favourites.contains(ref.watch(notesProvider).notes[index])
                         ? const Icon(Icons.star) : const Icon(Icons.star_border),
                   ),
                 ),
@@ -171,9 +171,9 @@ class MyNotes extends ConsumerWidget {
                 .read(notesProvider)
                 .recycle
                 .add(ref.read(notesProvider).notes[index]);
-            final interValue = ref.read(notesProvider).notes[index];
-            ref.read(notesProvider).removeNote(index,ref.read(notesProvider).notes);
-            ref.read(notesProvider).removeNote(index,ref.read(notesProvider).notes);
+            final noteRepo = ref.read(notesProvider);
+            noteRepo.removeNote(index, noteRepo.notes);
+            noteRepo.removeNote(index, noteRepo.notes);
           },
           child: const Text('Sil'),
         ),

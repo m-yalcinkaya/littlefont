@@ -1,5 +1,3 @@
-import 'package:littlefont/Repository/category_repository.dart';
-
 import 'add_to_category_index.dart';
 
 class AddToCategory extends ConsumerWidget {
@@ -66,9 +64,7 @@ class AddToCategory extends ConsumerWidget {
                           category.addNote(value, category.notes);
                         }
                     },
-                    icon: ref.watch(categoryProvider).category[indexCategory]
-                            .notes
-                            .contains(ref.watch(notesProvider).notes[index])
+                    icon: ref.watch(categoryProvider).category[indexCategory].notes.contains(ref.watch(notesProvider).notes[index])
                         ? const Icon(Icons.add_box_rounded)
                         : const Icon(Icons.add_box_outlined),
                   ),

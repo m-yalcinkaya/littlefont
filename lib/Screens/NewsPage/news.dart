@@ -7,9 +7,7 @@ class News extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: const Scaffold(
-
-      ),
+      body: const Text('News ekranı'),
     );
   }
 }

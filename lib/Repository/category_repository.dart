@@ -16,12 +16,23 @@ class CategoryRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void removeCategory(int index){
     category.removeAt(index);
     notifyListeners();
   }
+
+  void removeNote (Category category, Notes note) {
+    category.notes.remove(note);
+    notifyListeners();
+  }
+
+  void addNote (Category category, Notes note) {
+    category.notes.add(note);
+    notifyListeners();
+  }
+
 }
+
 
 final categoryProvider = ChangeNotifierProvider((ref) {
   return CategoryRepository();
@@ -35,16 +46,5 @@ class Category extends ChangeNotifier{
 
   List<Notes> notes = [];
 
-  void addNote (Notes note, List list) {
-    list.add(note);
-    notifyListeners();
-  }
-
-  void removeNote (Notes note, List list) {
-    list.remove(note);
-    notifyListeners();
-  }
-
   Category({required this.categoryName});
 }
-

@@ -1,4 +1,3 @@
-import '../../Repository/category_repository.dart';
 import 'app_main_index.dart';
 
 class AppMainPage extends ConsumerWidget {
@@ -7,7 +6,7 @@ class AppMainPage extends ConsumerWidget {
 
   const AppMainPage({
     Key? key,
-    required this.name,
+    this.name,
     this.surname,
   }) : super(key: key);
 
@@ -202,22 +201,6 @@ class AppMainPage extends ConsumerWidget {
             ];
           },
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.newspaper),
-            label: 'News',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble),
-            label: 'Chats',
-          ),
-        ],
       ),
     );
   }

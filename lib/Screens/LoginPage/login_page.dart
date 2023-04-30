@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont/Items/bottom_nav_bar.dart';
 
 import 'login_page_index.dart';
 
@@ -107,8 +108,8 @@ class _LoginState extends ConsumerState<Login> {
                               surname = account?.surname;
 
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    AppMainPage(name: name, surname: surname),
+                                builder: (context) => const BottomNavBar(),
+                                    /*AppMainPage(name: name, surname: surname),*/
                               ));
                             }
                           },

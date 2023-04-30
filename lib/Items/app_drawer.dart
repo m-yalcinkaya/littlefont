@@ -97,7 +97,7 @@ class AppDrawer extends ConsumerWidget {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        MyNotes(),
+                        const MyNotes(),
                   ));
                 },
               ),
@@ -108,7 +108,7 @@ class AppDrawer extends ConsumerWidget {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        CategoryPage(),
+                        const CategoryPage(),
                   ));
                 },
               ),
@@ -119,7 +119,7 @@ class AppDrawer extends ConsumerWidget {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        FavouritesPage(),
+                        const FavouritesPage(),
                   ));
                 },
               ),
@@ -130,7 +130,7 @@ class AppDrawer extends ConsumerWidget {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        RecycleBin(),
+                        const RecycleBin(),
                   ));
                 },
               ),

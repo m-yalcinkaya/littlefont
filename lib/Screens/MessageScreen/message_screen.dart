@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -22,7 +23,6 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle style = TextStyle(color: Colors.white);
 
     return Scaffold(
       appBar: AppBar(
@@ -87,13 +87,18 @@ class MessageScreen extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(30.0),
                                 child: Container(
-                                  alignment: Alignment.center,
                                   constraints: const BoxConstraints(
-                                    maxWidth: 100,
-                                    maxHeight: 50,
+                                    maxWidth: 320,
                                   ),
                                   color: _color(benMi),
-                                  child: const Text('ClipRRect', style: style),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(15),
+                                    child: AutoSizeText(
+                                      '321ssdasdasdsdasdasdasdsasdsd',
+                                        style: TextStyle(color: Colors.white,
+                                        ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

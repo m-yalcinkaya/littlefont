@@ -20,7 +20,7 @@ class _BottomNavBarState extends State<BottomNavBar>
     return [
       const AppMainPage(),
       const News(),
-      const ChatScreen(),
+      ChatScreen(persistentController: _controller),
       const ProfilePage(),
     ];
   }
@@ -54,6 +54,7 @@ class _BottomNavBarState extends State<BottomNavBar>
       ),
     ];
   }
+
 
   @override
   Widget build(BuildContext context) {

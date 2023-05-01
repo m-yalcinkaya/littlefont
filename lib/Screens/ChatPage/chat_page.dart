@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:littlefont/Screens/MessageScreen/message_screen.dart';
+import 'package:littlefont/Repository/messages_repository.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+
+
+import '../MessageScreen/message_screen.dart';
+
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  final PersistentTabController persistentController;
+
+  const ChatScreen({Key? key, required this.persistentController})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -11,6 +19,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+
 
   @override
   void initState() {
@@ -32,8 +41,8 @@ class _ChatScreenState extends State<ChatScreen>
         ),
         actions: const [
           IconButton(
-              onPressed: null,
-              icon: Icon(Icons.search),
+            onPressed: null,
+            icon: Icon(Icons.search),
           )
         ],
       ),
@@ -56,8 +65,11 @@ class _ChatScreenState extends State<ChatScreen>
                     ),
                     subtitle: Text('Yarın okula gelecek misin?'),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MessageScreen(),));
+                      PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: MessageScreen(),
+                          withNavBar: false,
+                      );
                     },
                   ),
                   const Divider(
@@ -84,7 +96,8 @@ class _ChatScreenState extends State<ChatScreen>
                     Positioned(
                       top: 22,
                       left: 22,
-                        child: Icon(Icons.add_circle, color: Colors.red, size: 20),
+                      child: Icon(
+                          Icons.add_circle, color: Colors.red, size: 20),
                     ),
                   ],
                 ),

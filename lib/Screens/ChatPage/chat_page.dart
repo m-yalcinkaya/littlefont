@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:littlefont/Repository/messages_repository.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -27,6 +28,15 @@ class _ChatScreenState extends State<ChatScreen>
     _tabController = TabController(vsync: this, length: 2);
   }
 
+  List<String> kisi = [
+    'Zeynep Körük',
+    'Mustafa Yalçınkaya',
+    'Meryem Uzerli',
+    'Kemal Sunal',
+    'Selim Ak',
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,30 +60,63 @@ class _ChatScreenState extends State<ChatScreen>
         controller: _tabController,
         children: [
           ListView.builder(
-            itemCount: 10,
+            itemCount: kisi.length,
             itemBuilder: (context, index) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ListTile(
-                    title: Text('Mustafa Yalçınkaya'),
-                    leading: const CircleAvatar(
-                      backgroundImage:
-                      AssetImage('assets/images/profil_image.jpg'),
-                      radius: 20,
-                      backgroundColor: Colors.blue,
+                  Slidable(
+                    key: UniqueKey(),
+                    // The start action pane is the one at the left or the top side.
+                    startActionPane: ActionPane(
+                      // A motion is a widget used to control how the pane animates.
+                      motion: const ScrollMotion(),
+
+                      // A pane can dismiss the Slidable.
+                      dismissible: DismissiblePane(
+                          onDismissed: () {
+                            setState(() {
+                              kisi.removeAt(index);
+                            });
+                          }),
+
+                      // All actions are defined in the children parameter.
+                      children: const [
+                        // A SlidableAction can have an icon and/or a label.
+                        SlidableAction(
+                          onPressed: null,
+                          backgroundColor: Color(0xFFFE4A49),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
+                        ),
+                      ],
                     ),
-                    subtitle: Text('Yarın okula gelecek misin?'),
-                    onTap: () {
-                      PersistentNavBarNavigator.pushNewScreen(
-                          context,
-                          screen: MessageScreen(),
-                          withNavBar: false,
-                      );
-                    },
-                  ),
-                  const Divider(
-                    thickness: 2,
+                    endActionPane: null,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text(kisi[index]),
+                          leading: const CircleAvatar(
+                            backgroundImage:
+                            AssetImage('assets/images/profil_image.jpg'),
+                            radius: 20,
+                            backgroundColor: Colors.blue,
+                          ),
+                          subtitle: Text('Yarın okula gelecek misin?'),
+                          onTap: () {
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: MessageScreen(),
+                              withNavBar: false,
+                            );
+                          },
+                        ),
+                        const Divider(
+                          thickness: 2,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               );

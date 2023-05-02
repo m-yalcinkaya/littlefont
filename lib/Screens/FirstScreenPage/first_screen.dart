@@ -13,12 +13,12 @@ class FirstScreen extends ConsumerStatefulWidget{
 
 class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderStateMixin{
   
-  late AnimationController controller;
-  late Animation<double> animation;
+  late AnimationController animationController;
+  late Animation<double> opacityAnimation;
 
   @override
   void dispose() {
-    controller.dispose();
+    animationController.dispose();
     text1Controller.dispose();
     text2Controller.dispose();
     super.dispose();
@@ -27,22 +27,22 @@ class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderSt
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
+    animationController = AnimationController(
         vsync: this,
         duration: const Duration(seconds: 2),
     );
 
 
-    animation = Tween<double>(
+    opacityAnimation = Tween<double>(
         begin: 0.0,
         end: 1.0,
-    ).animate(controller);
+    ).animate(animationController);
 
 
-    if(controller.status == AnimationStatus.completed){
-      controller.reverse;
+    if(animationController.status == AnimationStatus.completed){
+      animationController.reverse;
     }else {
-      controller.forward();
+      animationController.forward();
     }
   }
 
@@ -72,10 +72,10 @@ class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderSt
             Container(
               alignment: Alignment.topCenter,
               child: AnimatedBuilder(
-                animation: animation,
+                animation: opacityAnimation,
                 builder: (BuildContext context, Widget? child) {
                   return Opacity(
-                      opacity: animation.value,
+                      opacity: opacityAnimation.value,
                     child: Column(
                       children: [
                         const Padding(

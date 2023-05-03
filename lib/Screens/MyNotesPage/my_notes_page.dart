@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import 'my_notes_page_index.dart';
 
@@ -112,14 +113,15 @@ class MyNotes extends ConsumerWidget {
                               .add(ref.read(notesProvider).notes[index]);
                           final interValue =
                               ref.read(notesProvider).notes[index];
-                          ref.read(notesProvider).notes.remove(interValue);
+                          ref.read(notesProvider).removeNoteWithValue(interValue, ref.read(notesProvider).notes);
                         }
                       } else if (value == 'edit') {
                         final note =
-                            await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => EditPage(
-                              note: ref.read(notesProvider).notes[index]),
-                        ));
+                            await PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: EditPage(note: ref.read(notesProvider).notes[index]),
+                              withNavBar: false,
+                            );
                         note != null
                             ? ref.read(notesProvider).notes[index] = note
                             : null;

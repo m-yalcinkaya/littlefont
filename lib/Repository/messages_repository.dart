@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessagesRepository extends ChangeNotifier{
 
+/*
 final List<Message> _messages = [
     Message(
       text: 'Hi there!',
@@ -22,6 +23,7 @@ final List<Message> _messages = [
     ),
 
   ];
+*/
 
 
 bool isNavBarVisible = true;

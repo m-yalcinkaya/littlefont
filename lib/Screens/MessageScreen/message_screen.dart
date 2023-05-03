@@ -2,11 +2,15 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-class MessageScreen extends StatelessWidget {
-  MessageScreen({Key? key}) : super(key: key);
+class MessageScreen extends StatefulWidget {
+  const MessageScreen({Key? key}) : super(key: key);
 
+  @override
+  State<MessageScreen> createState() => _MessageScreenState();
+}
+
+class _MessageScreenState extends State<MessageScreen> {
   late bool benMi;
 
   bool _isMe() {
@@ -46,15 +50,11 @@ class MessageScreen extends StatelessWidget {
         ]),
         actions: [
           IconButton(
-              onPressed: () {
-                print('call with face to face');
-              },
+              onPressed: () {},
               icon: const Icon(Icons.videocam),
           ),
           IconButton(
-            onPressed: () {
-              print('call with face to face');
-            },
+            onPressed: () {},
             icon: const Icon(Icons.call),
           ),
         ],
@@ -83,7 +83,7 @@ class MessageScreen extends StatelessWidget {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: Padding(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(30.0),
                                 child: Container(
@@ -108,7 +108,7 @@ class MessageScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Row(

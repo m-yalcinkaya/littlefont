@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:littlefont/Screens/AppMainPage/app_main_page.dart';
 import 'package:littlefont/Screens/ChatPage/chat_page.dart';
 import 'package:littlefont/Screens/NewsPage/news.dart';
-import 'package:littlefont/Screens/Profile_page.dart';
+import 'package:littlefont/Screens/ProfilPage/profile_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class BottomNavBar extends StatefulWidget {

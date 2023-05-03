@@ -62,34 +62,17 @@ class AppDrawer extends ConsumerWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 100,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    const CircleAvatar(
-                      maxRadius: 20,
-                      child: Icon(
-                        Icons.account_circle_rounded,
-                        size: 40,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '$name $surname',
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
+              ListTile(
+                leading: const CircleAvatar(
+                  maxRadius: 20,
+                  child: Icon(
+                    Icons.account_circle_rounded,
+                    size: 40,
+                  ),
                 ),
+                title: Text('$name $surname'),
               ),
-              const ColoredBox(
-                  color: Colors.black45, child: Divider(thickness: 15)),
+              const Divider(thickness: 5),
               ListTile(
                 leading: const Icon(Icons.notes),
                 title: const Text('Notlarım'),
@@ -101,6 +84,7 @@ class AppDrawer extends ConsumerWidget {
                   ));
                 },
               ),
+
               ListTile(
                 leading: const Icon(Icons.category),
                 title: const Text('Kategoriler'),

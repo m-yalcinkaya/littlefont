@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:littlefont/Repository/messages_repository.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 
@@ -41,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('LittleFont Chats'),
+        title: const Text('LittleFont Chats'),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -103,11 +102,11 @@ class _ChatScreenState extends State<ChatScreen>
                             radius: 20,
                             backgroundColor: Colors.blue,
                           ),
-                          subtitle: Text('Yarın okula gelecek misin?'),
+                          subtitle: const Text('Yarın okula gelecek misin?'),
                           onTap: () {
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
-                              screen: MessageScreen(),
+                              screen: const MessageScreen(),
                               withNavBar: false,
                             );
                           },
@@ -127,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen>
               const SizedBox(height: 15,),
               ListTile(
                 title: const Text('My Status'),
-                subtitle: Text('Tap to add status update'),
+                subtitle: const Text('Tap to add status update'),
                 leading: Stack(
                   children: const [
                     CircleAvatar(
@@ -145,7 +144,7 @@ class _ChatScreenState extends State<ChatScreen>
                   ],
                 ),
               ),
-              Divider(thickness: 2,),
+              const Divider(thickness: 2,),
             ],
           ),
         ],

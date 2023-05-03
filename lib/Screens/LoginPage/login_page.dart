@@ -108,7 +108,7 @@ class _LoginState extends ConsumerState<Login> {
                               surname = account?.surname;
 
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>  BottomNavBar(),
+                                builder: (context) =>  const BottomNavBar(),
                                     /*AppMainPage(name: name, surname: surname),*/
                               ));
                             }

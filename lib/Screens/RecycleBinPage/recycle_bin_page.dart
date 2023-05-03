@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'recycle_bin_page_index.dart';
 
 class RecycleBin extends ConsumerWidget {
-
-  const RecycleBin({Key? key, }) : super(key: key);
+  const RecycleBin({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -12,7 +13,7 @@ class RecycleBin extends ConsumerWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-              Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -71,15 +72,12 @@ class RecycleBin extends ConsumerWidget {
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ShowNote(
-                    index: index),
+                builder: (context) => ShowNote(index: index),
               ));
             },
             onLongPress: () {
-              ref.read(notesProvider).notes
-                  .add(ref.read(notesProvider).recycle[index]);
-              final interValue = ref.read(notesProvider).recycle[index];
-              ref.read(notesProvider).recycle.remove(interValue);            },
+              ref.read(notesProvider).removeNoteFromRecycle(index);
+            },
             child: Column(children: [
               const Spacer(),
               Expanded(

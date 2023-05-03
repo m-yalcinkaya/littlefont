@@ -21,8 +21,8 @@ class ShowCategory extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add_circle),
             color: Colors.white,
-            onPressed: () async {
-              await Navigator.push(
+            onPressed: () {
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
@@ -72,20 +72,15 @@ class ShowCategory extends ConsumerWidget {
                       builder: (context) => AlertDialog(
                         title: const Text('Uyarı'),
                         content: const Text(
-                            'Bu kategoriyi silmek istediğinize emin misiniz?'),
+                            'Bu notu kategoriden kaldırmak istediğinize emin misiniz?'),
                         actions: [
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              ref
-                                  .read(categoryProvider)
-                                  .category[indexCategory]
-                                  .notes
-                                  .remove(ref
-                                      .read(categoryProvider)
-                                      .category[indexCategory]
-                                      .notes[index]);
-                            },
+
+                              final note = ref.read(categoryProvider).category[indexCategory].notes[index];
+                              ref.read(categoryProvider).removeNoteFromCategory(indexCategory, note);
+                              },
                             child: const Text('Sil'),
                           ),
                           TextButton(

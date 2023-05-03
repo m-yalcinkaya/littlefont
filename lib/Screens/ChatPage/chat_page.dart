@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-
 import '../MessageScreen/message_screen.dart';
-
 
 class ChatScreen extends StatefulWidget {
   final PersistentTabController persistentController;
@@ -20,7 +18,6 @@ class _ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-
   @override
   void initState() {
     super.initState();
@@ -34,7 +31,6 @@ class _ChatScreenState extends State<ChatScreen>
     'Kemal Sunal',
     'Selim Ak',
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +68,11 @@ class _ChatScreenState extends State<ChatScreen>
                       motion: const ScrollMotion(),
 
                       // A pane can dismiss the Slidable.
-                      dismissible: DismissiblePane(
-                          onDismissed: () {
-                            setState(() {
-                              kisi.removeAt(index);
-                            });
-                          }),
+                      dismissible: DismissiblePane(onDismissed: () {
+                        setState(() {
+                          kisi.removeAt(index);
+                        });
+                      }),
 
                       // All actions are defined in the children parameter.
                       children: const [
@@ -98,7 +93,7 @@ class _ChatScreenState extends State<ChatScreen>
                           title: Text(kisi[index]),
                           leading: const CircleAvatar(
                             backgroundImage:
-                            AssetImage('assets/images/profil_image.jpg'),
+                                AssetImage('assets/images/profil_image.jpg'),
                             radius: 20,
                             backgroundColor: Colors.blue,
                           ),
@@ -123,7 +118,9 @@ class _ChatScreenState extends State<ChatScreen>
           ),
           Column(
             children: [
-              const SizedBox(height: 15,),
+              const SizedBox(
+                height: 15,
+              ),
               ListTile(
                 title: const Text('My Status'),
                 subtitle: const Text('Tap to add status update'),
@@ -131,25 +128,26 @@ class _ChatScreenState extends State<ChatScreen>
                   children: const [
                     CircleAvatar(
                       backgroundImage:
-                      AssetImage('assets/images/profil_image.jpg'),
+                          AssetImage('assets/images/profil_image.jpg'),
                       radius: 20,
                       backgroundColor: Colors.blue,
                     ),
                     Positioned(
                       top: 22,
                       left: 22,
-                      child: Icon(
-                          Icons.add_circle, color: Colors.red, size: 20),
+                      child:
+                          Icon(Icons.add_circle, color: Colors.red, size: 20),
                     ),
                   ],
                 ),
               ),
-              const Divider(thickness: 2,),
+              const Divider(
+                thickness: 2,
+              ),
             ],
           ),
         ],
       ),
-
     );
   }
 }

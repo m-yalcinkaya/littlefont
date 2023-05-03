@@ -56,13 +56,7 @@ class AddToCategory extends ConsumerWidget {
                   child: IconButton(
                     onPressed: () {
                         final value = ref.read(notesProvider).notes[index];
-                        final category = ref.read(categoryProvider).category[indexCategory];
-
-                        if (category.notes.contains(value)) {
-                          category.removeNote(value, category.notes);
-                        } else {
-                          category.addNote(value, category.notes);
-                        }
+                        ref.read(categoryProvider).noteOperation(indexCategory, value);
                     },
                     icon: ref.watch(categoryProvider).category[indexCategory].notes.contains(ref.watch(notesProvider).notes[index])
                         ? const Icon(Icons.add_box_rounded)

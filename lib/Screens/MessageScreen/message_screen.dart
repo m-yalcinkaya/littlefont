@@ -1,22 +1,12 @@
-import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MessageScreen extends StatefulWidget {
+import '../../Repository/messages_repository.dart';
+
+class MessageScreen extends ConsumerWidget {
   const MessageScreen({Key? key}) : super(key: key);
 
-  @override
-  State<MessageScreen> createState() => _MessageScreenState();
-}
-
-class _MessageScreenState extends State<MessageScreen> {
-  late bool benMi;
-
-  bool _isMe() {
-    benMi = Random().nextInt(1000).isEven;
-    return benMi;
-  }
 
   Color _color(bool isMe) {
     if (isMe == true) {
@@ -26,8 +16,8 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    TextEditingController controller = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -75,28 +65,29 @@ class _MessageScreenState extends State<MessageScreen> {
                 Expanded(
                   child: ListView.builder(
                     reverse: true,
+                    itemCount: ref.watch(messageProvider).messages.length,
                     itemBuilder: (context, index) {
-                      return Column(
+                      return  Column(
                         children: [
                           Align(
-                            alignment: _isMe()
+                            alignment: ref.watch(messageProvider).messages[ref.watch(messageProvider).messages.length-index-1].isMe
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: Padding(
                               padding: const EdgeInsets.all(5),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30.0),
+                                borderRadius: BorderRadius.circular(15.0),
                                 child: Container(
                                   constraints: const BoxConstraints(
                                     maxWidth: 320,
                                   ),
-                                  color: _color(benMi),
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(15),
+                                  color: _color(ref.watch(messageProvider).messages[ref.watch(messageProvider).messages.length-index-1].isMe),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15),
                                     child: AutoSizeText(
-                                      '321ssdasdasdsdasdasdasdsasdsd',
-                                        style: TextStyle(color: Colors.white,
-                                        ),
+                                      ref.watch(messageProvider).messages[ref.watch(messageProvider).messages.length-index-1].text,
+                                      style: const TextStyle(color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -118,6 +109,7 @@ class _MessageScreenState extends State<MessageScreen> {
                       height: 60,
                       width: 350,
                       child: TextField(
+                        controller: controller,
                         decoration: InputDecoration(
                           filled: true,
                             fillColor: Colors.white,
@@ -128,10 +120,13 @@ class _MessageScreenState extends State<MessageScreen> {
                       ),
                     ),
                     const Spacer(),
-                    const IconButton(
-                      padding: EdgeInsets.only(bottom: 10),
-                      onPressed: null,
-                      icon: Icon(Icons.send, color: Colors.blue),
+                    IconButton(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      onPressed: () {
+                        final message = Message(text: controller.text,isMe: true,time: DateTime.now(),);
+                        ref.read(messageProvider).addMessage(message, ref.read(messageProvider).messages);
+                      },
+                      icon: const Icon(Icons.send, color: Colors.blue),
                     ),
                     const Spacer(),
                   ],

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'notes_repository.dart';
 
 class CategoryRepository extends ChangeNotifier {
-
   List<Category> category = [
     Category(categoryName: 'İş'),
     Category(categoryName: 'Okul'),
@@ -16,32 +15,41 @@ class CategoryRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeCategory(int index){
+  void removeCategory(int index) {
     category.removeAt(index);
     notifyListeners();
   }
 
-  void removeNote (Category category, Notes note) {
+  void removeNote(Category category, Notes note) {
     category.notes.remove(note);
     notifyListeners();
   }
 
-  void addNote (Category category, Notes note) {
+  void addNote(Category category, Notes note) {
     category.notes.add(note);
     notifyListeners();
   }
 
-}
+  void noteOperation(int indexCategory, Notes value) {
+    if (category[indexCategory].notes.contains(value)) {
+      removeNote(category[indexCategory], value);
+    } else {
+      addNote(category[indexCategory], value);
+    }
+    notifyListeners();
+  }
 
+  void removeNoteFromCategory(int indexCategory, Notes value) {
+    category[indexCategory].notes.remove(value);
+    notifyListeners();
+  }
+}
 
 final categoryProvider = ChangeNotifierProvider((ref) {
   return CategoryRepository();
 });
 
-
-
-class Category extends ChangeNotifier{
-
+class Category extends ChangeNotifier {
   String categoryName;
 
   List<Notes> notes = [];

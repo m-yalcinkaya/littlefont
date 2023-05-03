@@ -1,3 +1,5 @@
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+
 import 'app_main_index.dart';
 
 class AppMainPage extends ConsumerWidget {
@@ -155,15 +157,18 @@ class AppMainPage extends ConsumerWidget {
           icon: const Icon(Icons.add),
           onSelected: (value) async {
             if (value == 'note') {
-              final note = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const CreateNote(),
-              ));
+              final note = await PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const CreateNote(),
+                withNavBar: false,
+              );
               ref.read(notesProvider).addNote(note,ref.read(notesProvider).notes);
             } else if (value == 'category') {
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    const AddCategory(),
-              ));
+              await PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const AddCategory(),
+                withNavBar: false,
+              );
             }
           },
           itemBuilder: (context) {

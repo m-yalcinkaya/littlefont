@@ -35,6 +35,12 @@ class NotesRepository extends ChangeNotifier{
     list.remove(note);
     notifyListeners();
   }
+
+  void updateNote(int index, Notes newNode){
+    notes[index] = newNode;
+    notifyListeners();
+  }
+
 }
 
 final notesProvider = ChangeNotifierProvider((ref) {

@@ -123,7 +123,7 @@ class MyNotes extends ConsumerWidget {
                               withNavBar: false,
                             );
                         note != null
-                            ? ref.read(notesProvider).notes[index] = note
+                            ? ref.watch(notesProvider).updateNote(index, note)
                             : null;
                       } else if (value == 'share') {
                         await FlutterShare.share(

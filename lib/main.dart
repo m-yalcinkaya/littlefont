@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'screens/first_screen_page/first_screen.dart';
+import 'screens/first_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

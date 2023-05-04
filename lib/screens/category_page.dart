@@ -1,4 +1,8 @@
-import 'category_index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../repository/category_repository.dart';
+import 'package:littlefont/screens/add_category.dart';
+import 'package:littlefont/screens/show_category_notes.dart';
 
 class CategoryPage extends ConsumerWidget {
   const CategoryPage({

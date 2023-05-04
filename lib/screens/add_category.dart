@@ -1,4 +1,8 @@
-import 'add_category_index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:littlefont/screens/category_page.dart';
+import '../repository/category_repository.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   const AddCategory({

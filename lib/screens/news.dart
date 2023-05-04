@@ -1,4 +1,5 @@
-import 'news_page_index.dart';
+import 'package:flutter/material.dart';
+
 
 class News extends StatelessWidget {
   const News({Key? key}) : super(key: key);

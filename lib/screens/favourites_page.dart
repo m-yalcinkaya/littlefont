@@ -1,4 +1,7 @@
-import 'favourites_page_index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont/repository/notes_repository.dart';
+import 'package:littlefont/screens/view_note_page.dart';
 
 class FavouritesPage extends ConsumerWidget {
   const FavouritesPage({Key? key}) : super(key: key);

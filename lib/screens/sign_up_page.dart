@@ -1,4 +1,9 @@
-import 'sign_up_page_index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont/items/button.dart';
+import 'package:littlefont/repository/accounts_repository.dart';
+import 'package:littlefont/screens/login_page.dart';
+import 'package:littlefont/modals/account.dart';
 
 class SignUp extends ConsumerWidget {
   final GlobalKey<FormState> formKeySignUp = GlobalKey<FormState>();

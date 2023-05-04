@@ -1,4 +1,9 @@
-import 'message_screen_index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../repository/messages_repository.dart';
+import 'package:littlefont/modals/message.dart';
+
 
 class MessageScreen extends ConsumerWidget {
   MessageScreen({Key? key}) : super(key: key);
@@ -42,7 +47,9 @@ class MessageScreen extends ConsumerWidget {
             icon: const Icon(Icons.videocam),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              messageReadRepo.download();
+            },
             icon: const Icon(Icons.call),
           ),
         ],
@@ -146,7 +153,6 @@ class MessageScreen extends ConsumerWidget {
                         final message = Message(
                           text: controller.text,
                           isMe: true,
-                          time: DateTime.now(),
                         );
                         messageReadRepo.addMessage(
                             message, messageReadRepo.messages);

@@ -1,4 +1,5 @@
-import 'edit_page_index.dart';
+import 'package:flutter/material.dart';
+import 'package:littlefont/modals/note.dart';
 
 class EditPage extends StatefulWidget {
   final Notes note;

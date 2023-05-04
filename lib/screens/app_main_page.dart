@@ -1,4 +1,15 @@
-import 'app_main_index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:littlefont/repository/notes_repository.dart';
+import 'package:littlefont/repository/accounts_repository.dart';
+import '../repository/category_repository.dart';
+import 'package:littlefont/items/app_drawer.dart';
+import 'package:littlefont/screens/add_category.dart';
+import 'package:littlefont/screens/category_page.dart';
+import 'package:littlefont/screens/my_notes_page.dart';
+import 'package:littlefont/screens/show_category_notes.dart';
+import 'package:littlefont/screens/create_note_page.dart';
 
 class AppMainPage extends ConsumerWidget {
   const AppMainPage({

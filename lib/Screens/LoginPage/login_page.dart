@@ -1,10 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/Items/bottom_nav_bar.dart';
-
 import 'login_page_index.dart';
 
 class Login extends ConsumerStatefulWidget {
-
   const Login({
     super.key,
   });
@@ -14,29 +10,32 @@ class Login extends ConsumerStatefulWidget {
 }
 
 class _LoginState extends ConsumerState<Login> {
-  final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
+  final _formKeyLogin = GlobalKey<FormState>();
 
-  late String? name;
-  late String? surname;
-
-
-  TextEditingController text1Controller = TextEditingController();
-  TextEditingController text2Controller = TextEditingController();
-
+  final _text1Controller = TextEditingController();
+  final _text2Controller = TextEditingController();
 
   @override
   void dispose() {
-    text1Controller.dispose();
-    text2Controller.dispose();
+    _text1Controller.dispose();
+    _text2Controller.dispose();
     super.dispose();
+  }
+
+  void _findManager() {
+    final accountRepo = ref.read(accountProvider);
+    for (Account a in accountRepo.accounts) {
+      if (a.email == _text1Controller.text) {
+        accountRepo.manager = a;
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Form(
-        key: formKeyLogin,
+        key: _formKeyLogin,
         child: Container(
           color: Colors.blue.shade100,
           child: Column(
@@ -64,8 +63,7 @@ class _LoginState extends ConsumerState<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField1(
-                          formKey: formKeyLogin,
-                          text1Controller: text1Controller,
+                          text1Controller: _text1Controller,
                         ),
                       ),
                     ),
@@ -79,8 +77,7 @@ class _LoginState extends ConsumerState<Login> {
                         height: 75,
                         alignment: Alignment.center,
                         child: TextField2(
-                          formKey: formKeyLogin,
-                          text2Controller: text2Controller,
+                          text2Controller: _text2Controller,
                         ),
                       ),
                     ),
@@ -92,24 +89,13 @@ class _LoginState extends ConsumerState<Login> {
                           height: 35,
                           text: 'Giriş Yap',
                           onPressedOperations: () {
-                            const isSuitable = true;
-                                // widget.formKeyLogin.currentState?.validate();
+                            final isSuitable =
+                                _formKeyLogin.currentState?.validate();
 
                             if (isSuitable == true) {
-                              Account? account;
-
-                              for (Account a
-                                  in ref.read(loginProvider).accounts) {
-                                if (a.email == text1Controller.text) {
-                                  account = a;
-                                }
-                              }
-                              name = account?.name;
-                              surname = account?.surname;
-
+                              _findManager();
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>  const BottomNavBar(),
-                                    /*AppMainPage(name: name, surname: surname),*/
+                                builder: (context) => const BottomNavBar(),
                               ));
                             }
                           },
@@ -141,12 +127,10 @@ class _LoginState extends ConsumerState<Login> {
 class TextField1 extends ConsumerStatefulWidget {
   const TextField1({
     super.key,
-    required this.text1Controller,
-    required this.formKey,
-  });
+    required TextEditingController text1Controller,
+  }) : _textController = text1Controller;
 
-  final GlobalKey<FormState> formKey;
-  final TextEditingController text1Controller;
+  final TextEditingController _textController;
 
   @override
   ConsumerState<TextField1> createState() => _TextField1State();
@@ -157,6 +141,7 @@ class _TextField1State extends ConsumerState<TextField1> {
 
   @override
   Widget build(BuildContext context) {
+    final accountRepo = ref.read(accountProvider);
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
@@ -176,8 +161,8 @@ class _TextField1State extends ConsumerState<TextField1> {
         bool isFounded = false;
 
         if (isMailSymbol && value.contains('.com')) {
-          for (int i = 0; i < ref.read(loginProvider).accounts.length; i++) {
-            if (ref.read(loginProvider).accounts[i].email == value) {
+          for (int i = 0; i < accountRepo.accounts.length; i++) {
+            if (accountRepo.accounts[i].email == value) {
               isFounded = true;
             }
           }
@@ -187,7 +172,7 @@ class _TextField1State extends ConsumerState<TextField1> {
           return 'Geçersiz E-posta';
         }
       },
-      controller: widget.text1Controller,
+      controller: widget._textController,
       decoration: InputDecoration(
         labelText: 'E-Posta',
         hintText: 'E-Postanızı giriniz',
@@ -205,12 +190,10 @@ class _TextField1State extends ConsumerState<TextField1> {
 class TextField2 extends ConsumerStatefulWidget {
   const TextField2({
     super.key,
-    required this.text2Controller,
-    required this.formKey,
-  });
+    required TextEditingController text2Controller,
+  }) : _textController = text2Controller;
 
-  final GlobalKey<FormState> formKey;
-  final TextEditingController text2Controller;
+  final TextEditingController _textController;
 
   @override
   ConsumerState<TextField2> createState() => _TextField2State();
@@ -221,6 +204,7 @@ class _TextField2State extends ConsumerState<TextField2> {
 
   @override
   Widget build(BuildContext context) {
+    final accountRepo = ref.read(accountProvider);
     return TextFormField(
       keyboardType: TextInputType.text,
       onChanged: (value) {
@@ -230,8 +214,8 @@ class _TextField2State extends ConsumerState<TextField2> {
       },
       validator: (value) {
         bool isFounded = false;
-        for (int i = 0; i < ref.read(loginProvider).accounts.length; i++) {
-          if (ref.read(loginProvider).accounts[i].password == value) {
+        for (int i = 0; i < accountRepo.accounts.length; i++) {
+          if (accountRepo.accounts[i].password == value) {
             isFounded = true;
             break;
           }
@@ -239,7 +223,7 @@ class _TextField2State extends ConsumerState<TextField2> {
 
         return isFounded ? null : 'Geçersiz Şifre';
       },
-      controller: widget.text2Controller,
+      controller: widget._textController,
       obscureText: true,
       decoration: InputDecoration(
         labelText: 'Şifre',

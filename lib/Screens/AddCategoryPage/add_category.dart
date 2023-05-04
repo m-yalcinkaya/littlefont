@@ -1,8 +1,6 @@
-import '../../Repository/category_repository.dart';
 import 'add_category_index.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
-
   const AddCategory({
     Key? key,
   }) : super(key: key);
@@ -12,19 +10,31 @@ class AddCategory extends ConsumerStatefulWidget {
 }
 
 class _AddCategoryState extends ConsumerState<AddCategory> {
-  final formKey = GlobalKey<FormState>();
-  final controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _controller = TextEditingController();
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  bool? _isFounded(CategoryRepository categoryRepo, String? value) {
+    for (int i = 0; i < categoryRepo.category.length;) {
+      if (categoryRepo.category[i].categoryName == value) {
+        return true;
+      }
+      return false;
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final categoryRepo = ref.read(categoryProvider);
+
     return Form(
-      key: formKey,
+      key: _formKey,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Kategori Ekle'),
@@ -36,20 +46,11 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
               padding: const EdgeInsets.all(50),
               child: TextFormField(
                 maxLength: 50,
-                controller: controller,
+                controller: _controller,
                 validator: (value) {
-                  bool isFounded = false;
-                  for (int i = 0;
-                      i < ref.read(categoryProvider).category.length;) {
-                    if (ref.read(categoryProvider).category[i].categoryName ==
-                        value) {
-                      isFounded = true;
-                    }
-                    return isFounded
-                        ? 'Aynı isimde bir kategori zaten var!!'
-                        : null;
-                  }
-                  return null;
+                  return _isFounded(categoryRepo, value)!
+                      ? 'Aynı isimde bir kategori zaten var!!'
+                      : null;
                 },
                 style: const TextStyle(
                   fontSize: 20,
@@ -60,9 +61,9 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
             ),
             ElevatedButton(
               onPressed: () {
-                final isSuitable = formKey.currentState?.validate();
+                final isSuitable = _formKey.currentState?.validate();
                 if (isSuitable == true) {
-                  ref.read(categoryProvider).addCategory(controller.text);
+                  categoryRepo.addCategory(_controller.text);
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

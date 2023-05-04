@@ -1,6 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-
 import 'my_notes_page_index.dart';
 
 class MyNotes extends ConsumerWidget {
@@ -18,12 +15,15 @@ class MyNotes extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final note = await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CreateNote(),
-          ));
+          final noteReadRepo = ref.read(notesProvider);
+          final note = await PersistentNavBarNavigator.pushNewScreen(
+            context,
+            screen: const CreateNote(),
+            withNavBar: false,
+          );
           if (note != null) {
-            ref.read(notesProvider).addNote(note, ref.read(notesProvider).notes);
-          }else {
+            noteReadRepo.addNote(note, noteReadRepo.notes);
+          } else {
             return;
           }
         },
@@ -33,7 +33,30 @@ class MyNotes extends ConsumerWidget {
     );
   }
 
+  void isContain(NotesRepository noteReadRepo, int index) {
+    final value = noteReadRepo.notes[index];
+    if (noteReadRepo.favourites.contains(value)) {
+      noteReadRepo.removeNoteWithValue(value, noteReadRepo.favourites);
+    } else {
+      noteReadRepo.addNote(value, noteReadRepo.favourites);
+    }
+  }
+
+  void delete(NotesRepository noteReadRepo, int index, context, WidgetRef ref) {
+    if (noteReadRepo.favourites.contains(noteReadRepo.notes[index])) {
+      showDialog(
+          context: context,
+          builder: (context) => buildAlertDialog(context, index, ref: ref));
+    } else {
+      noteReadRepo.recycle.add(noteReadRepo.notes[index]);
+      final interValue = noteReadRepo.notes[index];
+      noteReadRepo.removeNoteWithValue(interValue, noteReadRepo.notes);
+    }
+  }
+
   GridView buildGridView({required WidgetRef ref}) {
+    final noteReadRepo = ref.read(notesProvider);
+    final noteWatchRepo = ref.watch(notesProvider);
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -41,10 +64,10 @@ class MyNotes extends ConsumerWidget {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount: ref.watch(notesProvider).notes.length,
+      itemCount: noteWatchRepo.notes.length,
       itemBuilder: (context, index) {
         return Card(
-          color: ref.watch(notesProvider).notes[index].color,
+          color: noteWatchRepo.notes[index].color,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -57,15 +80,12 @@ class MyNotes extends ConsumerWidget {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      final value = ref.read(notesProvider).notes[index];
-                      if (ref.read(notesProvider).favourites.contains(value)) {
-                        ref.read(notesProvider).removeNoteWithValue(value, ref.read(notesProvider).favourites);
-                      } else {
-                        ref.read(notesProvider).addNote(value, ref.read(notesProvider).favourites);
-                      }
+                      isContain(noteReadRepo, index);
                     },
-                    icon: ref.watch(notesProvider).favourites.contains(ref.watch(notesProvider).notes[index])
-                        ? const Icon(Icons.star) : const Icon(Icons.star_border),
+                    icon: noteWatchRepo.favourites
+                            .contains(noteWatchRepo.notes[index])
+                        ? const Icon(Icons.star)
+                        : const Icon(Icons.star_border),
                   ),
                 ),
               ),
@@ -73,7 +93,7 @@ class MyNotes extends ConsumerWidget {
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  ref.watch(notesProvider).notes[index].title,
+                  noteWatchRepo.notes[index].title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -87,7 +107,7 @@ class MyNotes extends ConsumerWidget {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      ref.watch(notesProvider).notes[index].content,
+                      noteWatchRepo.notes[index].content,
                     ),
                   ),
                 ),
@@ -98,38 +118,22 @@ class MyNotes extends ConsumerWidget {
                   child: PopupMenuButton(
                     onSelected: (value) async {
                       if (value == 'delete') {
-                        if (ref
-                            .read(notesProvider)
-                            .favourites
-                            .contains(ref.read(notesProvider).notes[index])) {
-                          showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  buildAlertDialog(context, index, ref: ref));
-                        } else {
-                          ref
-                              .read(notesProvider)
-                              .recycle
-                              .add(ref.read(notesProvider).notes[index]);
-                          final interValue =
-                              ref.read(notesProvider).notes[index];
-                          ref.read(notesProvider).removeNoteWithValue(interValue, ref.read(notesProvider).notes);
-                        }
+                        delete(noteReadRepo, index, context, ref);
                       } else if (value == 'edit') {
                         final note =
                             await PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: EditPage(note: ref.read(notesProvider).notes[index]),
-                              withNavBar: false,
-                            );
+                          context,
+                          screen: EditPage(note: noteReadRepo.notes[index]),
+                          withNavBar: false,
+                        );
                         note != null
-                            ? ref.watch(notesProvider).updateNote(index, note)
+                            ? noteWatchRepo.updateNote(index, note)
                             : null;
                       } else if (value == 'share') {
                         await FlutterShare.share(
                           title: 'Notunu Paylaş',
                           text:
-                              '${ref.read(notesProvider).notes[index].title}\n\n${ref.read(notesProvider).notes[index].content}',
+                              '${noteReadRepo.notes[index].title}\n\n${noteReadRepo.notes[index].content}',
                         );
                       }
                     },
@@ -161,6 +165,7 @@ class MyNotes extends ConsumerWidget {
 
   AlertDialog buildAlertDialog(BuildContext context, int index,
       {required WidgetRef ref}) {
+    final noteReadRepo = ref.read(notesProvider);
     return AlertDialog(
       title: const Text('Uyarı Mesajı'),
       content: const Text(
@@ -169,11 +174,8 @@ class MyNotes extends ConsumerWidget {
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            ref
-                .read(notesProvider)
-                .recycle
-                .add(ref.read(notesProvider).notes[index]);
-            final noteRepo = ref.read(notesProvider);
+            noteReadRepo.recycle.add(noteReadRepo.notes[index]);
+            final noteRepo = noteReadRepo;
             noteRepo.removeNote(index, noteRepo.notes);
             noteRepo.removeNote(index, noteRepo.notes);
           },

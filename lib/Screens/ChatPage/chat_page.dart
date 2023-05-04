@@ -1,20 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'chat_page_index.dart';
 
-import '../MessageScreen/message_screen.dart';
-
-class ChatScreen extends StatefulWidget {
-  final PersistentTabController persistentController;
-
-  const ChatScreen({Key? key, required this.persistentController})
-      : super(key: key);
+class ChatScreen extends ConsumerStatefulWidget {
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  ConsumerState<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen>
+class _ChatScreenState extends ConsumerState<ChatScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -24,7 +17,7 @@ class _ChatScreenState extends State<ChatScreen>
     _tabController = TabController(vsync: this, length: 2);
   }
 
-  List<String> kisi = [
+  final List<String> _kisi = [
     'Zeynep Körük',
     'Mustafa Yalçınkaya',
     'Meryem Uzerli',
@@ -55,28 +48,21 @@ class _ChatScreenState extends State<ChatScreen>
         controller: _tabController,
         children: [
           ListView.builder(
-            itemCount: kisi.length,
+            itemCount: _kisi.length,
             itemBuilder: (context, index) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Slidable(
                     key: UniqueKey(),
-                    // The start action pane is the one at the left or the top side.
                     startActionPane: ActionPane(
-                      // A motion is a widget used to control how the pane animates.
                       motion: const ScrollMotion(),
-
-                      // A pane can dismiss the Slidable.
                       dismissible: DismissiblePane(onDismissed: () {
                         setState(() {
-                          kisi.removeAt(index);
+                          _kisi.removeAt(index);
                         });
                       }),
-
-                      // All actions are defined in the children parameter.
                       children: const [
-                        // A SlidableAction can have an icon and/or a label.
                         SlidableAction(
                           onPressed: null,
                           backgroundColor: Color(0xFFFE4A49),
@@ -90,18 +76,19 @@ class _ChatScreenState extends State<ChatScreen>
                     child: Column(
                       children: [
                         ListTile(
-                          title: Text(kisi[index]),
+                          title: Text(_kisi[index]),
                           leading: const CircleAvatar(
                             backgroundImage:
                                 AssetImage('assets/images/profil_image.jpg'),
                             radius: 20,
                             backgroundColor: Colors.blue,
                           ),
-                          subtitle: const Text('Yarın okula gelecek misin?'),
+                          subtitle: Text(
+                              ref.watch(messageProvider).messages.last.text),
                           onTap: () {
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
-                              screen: const MessageScreen(),
+                              screen: MessageScreen(),
                               withNavBar: false,
                             );
                           },

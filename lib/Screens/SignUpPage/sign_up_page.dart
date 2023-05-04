@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'sign_up_page_index.dart';
 
 class SignUp extends ConsumerWidget {
@@ -9,18 +7,46 @@ class SignUp extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  final FocusNode nameFocusNode = FocusNode();
-  final FocusNode surnameFocusNode = FocusNode();
-  final FocusNode mailFocusNode = FocusNode();
-  final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode _surnameFocusNode = FocusNode();
+  final FocusNode _mailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   late final String _name;
   late final String _surname;
   late final String _email;
   late final String _password;
 
+  bool? _isNumeric(String? value) {
+    for (int i = 0; i < value!.length; i++) {
+      int? number = int.tryParse(value[i]);
+      if (number != null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool? isMailSymbol(String? value) {
+    for (var i = 0; i < value!.length; i++) {
+      if (value[i] == '@') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool? isFounded(String? value, AccountRepository accountRepo) {
+    for (int i = 0; i < accountRepo.accounts.length; i++) {
+      if (accountRepo.accounts[i].email == value) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final accountRepo = ref.read(accountProvider);
     return Form(
       key: formKeySignUp,
       child: Scaffold(
@@ -70,7 +96,6 @@ class SignUp extends ConsumerWidget {
                                 color: Colors.black,
                               ),
                             ),
-                            //Divider(thickness: 4, color: Colors.black, indent: 0, endIndent: 150),
                             Text('veya'),
                             SizedBox(
                               width: 150,
@@ -88,24 +113,18 @@ class SignUp extends ConsumerWidget {
                           height: 20,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
                             onEditingComplete: () {
                               FocusScope.of(context)
-                                  .requestFocus(surnameFocusNode);
+                                  .requestFocus(_surnameFocusNode);
                             },
                             validator: (value) {
-                              bool isNumeric = false;
-                              for (int i = 0; i < value!.length; i++) {
-                                int? number = int.tryParse(value[i]);
-                                if (number != null) {
-                                  isNumeric = true;
-                                  break;
-                                }
-                              }
-
-                              return isNumeric ? 'İsim rakam içeremez' : null;
+                              return _isNumeric(value)!
+                                  ? 'İsim rakam içeremez'
+                                  : null;
                             },
                             onSaved: (newValue) {
                               _name = newValue!;
@@ -125,21 +144,13 @@ class SignUp extends ConsumerWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
-                            focusNode: surnameFocusNode,
+                            focusNode: _surnameFocusNode,
                             validator: (value) {
-                              bool isNumeric = false;
-                              for (int i = 0; i < value!.length; i++) {
-                                int? number = int.tryParse(value[i]);
-                                if (number != null) {
-                                  isNumeric = true;
-                                  break;
-                                }
-                              }
-
-                              return isNumeric
+                              return _isNumeric(value)!
                                   ? 'Soyisim rakam içeremez'
                                   : null;
                             },
@@ -148,7 +159,7 @@ class SignUp extends ConsumerWidget {
                             },
                             onEditingComplete: () {
                               FocusScope.of(context)
-                                  .requestFocus(mailFocusNode);
+                                  .requestFocus(_mailFocusNode);
                             },
                             decoration: const InputDecoration(
                               contentPadding: EdgeInsets.all(10),
@@ -165,31 +176,15 @@ class SignUp extends ConsumerWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
-                            focusNode: mailFocusNode,
+                            focusNode: _mailFocusNode,
                             validator: (value) {
-                              bool isMailSymbol = false;
-                              bool isFounded = true;
-                              for (var i = 0; i < value!.length; i++) {
-                                if (value[i] == '@') {
-                                  isMailSymbol = true;
-                                  break;
-                                }
-
-                                for (int i = 0;
-                                    i < ref.read(loginProvider).accounts.length;
-                                    i++) {
-                                  if (ref.read(loginProvider).accounts[i].email ==
-                                      value) {
-                                    isFounded = false;
-                                  }
-                                }
-                              }
-                              return (isMailSymbol &&
-                                          value.contains('.com')) &&
-                                      isFounded
+                              return (isMailSymbol(value)! &&
+                                          value!.contains('.com')) &&
+                                      isFounded(value, accountRepo)!
                                   ? null
                                   : 'Geçersiz E-posta';
                             },
@@ -198,7 +193,7 @@ class SignUp extends ConsumerWidget {
                             },
                             onEditingComplete: () {
                               FocusScope.of(context)
-                                  .requestFocus(passwordFocusNode);
+                                  .requestFocus(_passwordFocusNode);
                             },
                             decoration: const InputDecoration(
                               contentPadding: EdgeInsets.all(10),
@@ -215,25 +210,19 @@ class SignUp extends ConsumerWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
-                            focusNode: passwordFocusNode,
+                            focusNode: _passwordFocusNode,
                             obscureText: true,
                             validator: (value) {
                               if (value != null) {
-                                bool isNumeric = false;
-                                for (var i = 0; i < value.length; i++) {
-                                  int? number = int.tryParse(value[i]);
-                                  if (number != null) {
-                                    isNumeric = true;
-                                    break;
-                                  }
-                                }
+                                _isNumeric(value);
 
                                 return value != value.toUpperCase() &&
                                         value != value.toLowerCase() &&
-                                        isNumeric
+                                        _isNumeric(value)!
                                     ? null
                                     : 'Şifre küçük-büyük karakter ve en az bir tane rakam içermelidir';
                               }
@@ -265,7 +254,7 @@ class SignUp extends ConsumerWidget {
                             if (isSuitable == true) {
                               formKeySignUp.currentState?.save();
 
-                              ref.read(loginProvider).accounts.add(Account(
+                              accountRepo.accounts.add(Account(
                                 name: _name,
                                 surname: _surname,
                                 email: _email,
@@ -275,8 +264,7 @@ class SignUp extends ConsumerWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Login(
-                                    ),
+                                    builder: (context) => const Login(),
                                   ));
                             }
                           },
@@ -288,8 +276,7 @@ class SignUp extends ConsumerWidget {
                           onPressed: () {
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
-                              builder: (context) => const Login(
-                              ),
+                              builder: (context) => const Login(),
                             ));
                           },
                           child: const Text('Hesabın var mu? Giriş yap'),

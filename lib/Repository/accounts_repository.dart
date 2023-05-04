@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/Screens/AboutPage/about_page_index.dart';
 
-class LoginRepository extends ChangeNotifier{
+class AccountRepository extends ChangeNotifier{
+
+  late Account manager;
+
   List<Account> accounts = [
     Account(
         name: 'Ahmet',
@@ -16,8 +19,9 @@ class LoginRepository extends ChangeNotifier{
   ];
 }
 
-final loginProvider = ChangeNotifierProvider((ref) {
-  return LoginRepository();
+
+final accountProvider = ChangeNotifierProvider((ref) {
+  return AccountRepository();
 });
 
 class Account {

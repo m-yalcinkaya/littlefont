@@ -8,22 +8,21 @@ class CreateNote extends StatefulWidget {
 }
 
 class _CreateNoteState extends State<CreateNote> {
-  final headController = TextEditingController();
-  final textController = TextEditingController();
-  bool isError = false;
-  final formKey = GlobalKey<FormState>();
+  final _headController = TextEditingController();
+  final _textController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    headController.dispose();
-    textController.dispose();
+    _headController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: _formKey,
       child: Scaffold(
           appBar: AppBar(
             actions: [
@@ -43,7 +42,7 @@ class _CreateNoteState extends State<CreateNote> {
                 padding: const EdgeInsets.only(right: 10),
                 child: IconButton(
                   onPressed: () {
-                    final isSuitable = formKey.currentState?.validate();
+                    final isSuitable = _formKey.currentState?.validate();
 
                     isSuitable!
                         ? showDialog(
@@ -58,8 +57,8 @@ class _CreateNoteState extends State<CreateNote> {
                                     Navigator.pop(context);
                                     Navigator.of(context).pop(
                                       Notes(
-                                          title: headController.text,
-                                          content: textController.text),
+                                          title: _headController.text,
+                                          content: _textController.text),
                                     );
                                   },
                                   child: const Text('Kaydet'),
@@ -67,7 +66,7 @@ class _CreateNoteState extends State<CreateNote> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    Navigator.pop(context,null);
+                                    Navigator.pop(context, null);
                                   },
                                   child: const Text('Kaydetmeden çık'),
                                 ),
@@ -102,7 +101,7 @@ class _CreateNoteState extends State<CreateNote> {
                       },
                       textInputAction: TextInputAction.newline,
                       maxLines: null,
-                      controller: headController,
+                      controller: _headController,
                       style: const TextStyle(
                         fontSize: 40,
                       ),
@@ -113,7 +112,7 @@ class _CreateNoteState extends State<CreateNote> {
                       height: 20,
                     ),
                     TextFormField(
-                      controller: textController,
+                      controller: _textController,
                       style: const TextStyle(
                         fontSize: 20,
                       ),

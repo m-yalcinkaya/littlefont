@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'recycle_bin_page_index.dart';
 
 class RecycleBin extends ConsumerWidget {
@@ -9,6 +7,7 @@ class RecycleBin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final noteRepo = ref.watch(notesProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -19,7 +18,7 @@ class RecycleBin extends ConsumerWidget {
         ),
         title: const Text('Çöp Kutusu'),
       ),
-      body: ref.watch(notesProvider).recycle.isEmpty
+      body: noteRepo.recycle.isEmpty
           ? Center(
               child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +37,7 @@ class RecycleBin extends ConsumerWidget {
                     left: 85,
                   ),
                   child: Text(
-                    ref.watch(notesProvider).recyleInfo,
+                    noteRepo.recyleInfo,
                     style: const TextStyle(fontSize: 17),
                   ),
                 ),
@@ -49,7 +48,7 @@ class RecycleBin extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 20) +
                     const EdgeInsets.only(left: 15),
                 child: Text(
-                  ref.watch(notesProvider).recyleInfo,
+                  noteRepo.recyleInfo,
                 ),
               ),
               Expanded(child: buildGridView(ref: ref)),
@@ -58,6 +57,8 @@ class RecycleBin extends ConsumerWidget {
   }
 
   GridView buildGridView({required WidgetRef ref}) {
+    final noteRepo = ref.watch(notesProvider);
+    final noteReadRepo = ref.read(notesProvider);
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -65,10 +66,10 @@ class RecycleBin extends ConsumerWidget {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount: ref.watch(notesProvider).recycle.length,
+      itemCount: noteRepo.recycle.length,
       itemBuilder: (context, index) {
         return Card(
-          color: ref.watch(notesProvider).recycle[index].color,
+          color: noteRepo.recycle[index].color,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -76,7 +77,7 @@ class RecycleBin extends ConsumerWidget {
               ));
             },
             onLongPress: () {
-              ref.read(notesProvider).removeNoteFromRecycle(index);
+              noteReadRepo.removeNoteFromRecycle(index);
             },
             child: Column(children: [
               const Spacer(),
@@ -84,7 +85,7 @@ class RecycleBin extends ConsumerWidget {
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  ref.watch(notesProvider).recycle[index].title,
+                  noteRepo.recycle[index].title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -98,7 +99,7 @@ class RecycleBin extends ConsumerWidget {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      ref.watch(notesProvider).recycle[index].content,
+                      noteRepo.recycle[index].content,
                     ),
                   ),
                 ),

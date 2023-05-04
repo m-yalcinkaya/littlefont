@@ -1,10 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../Repository/category_repository.dart';
 import 'category_index.dart';
 
 class CategoryPage extends ConsumerWidget {
-
   const CategoryPage({
     Key? key,
   }) : super(key: key);
@@ -18,8 +14,7 @@ class CategoryPage extends ConsumerWidget {
           IconButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) =>
-                    const AddCategory(),
+                builder: (context) => const AddCategory(),
               ));
             },
             icon: const Icon(Icons.add_circle, color: Colors.white),
@@ -39,7 +34,7 @@ class CategoryPage extends ConsumerWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        childAspectRatio: 3/2,
+        childAspectRatio: 3 / 2,
       ),
       itemCount: ref.watch(categoryProvider).category.length,
       itemBuilder: (context, index) {
@@ -48,7 +43,9 @@ class CategoryPage extends ConsumerWidget {
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ShowCategory(indexCategory: index,),
+                builder: (context) => ShowCategory(
+                  indexCategory: index,
+                ),
               ));
             },
             child: Column(children: [
@@ -56,8 +53,8 @@ class CategoryPage extends ConsumerWidget {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   icon: const Icon(Icons.remove_circle_outline),
-                  onPressed: () async {
-                    await showDialog(
+                  onPressed: () {
+                    showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('Uyarı'),

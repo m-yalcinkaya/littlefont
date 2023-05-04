@@ -1,55 +1,49 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'first_screen_index.dart';
 
-class FirstScreen extends ConsumerStatefulWidget{
+class FirstScreen extends StatefulWidget {
   const FirstScreen({
     super.key,
   });
 
   @override
-  ConsumerState<FirstScreen> createState() => _FirstScreenState();
+  State<FirstScreen> createState() => _FirstScreenState();
 }
 
-class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderStateMixin{
-  
-  late AnimationController animationController;
-  late Animation<double> opacityAnimation;
+class _FirstScreenState extends State<FirstScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _opacityAnimation;
+
+  final _text1Controller = TextEditingController();
+  final _text2Controller = TextEditingController();
 
   @override
   void dispose() {
-    animationController.dispose();
-    text1Controller.dispose();
-    text2Controller.dispose();
+    _animationController.dispose();
+    _text1Controller.dispose();
+    _text2Controller.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        vsync: this,
-        duration: const Duration(seconds: 2),
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
     );
 
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_animationController);
 
-    opacityAnimation = Tween<double>(
-        begin: 0.0,
-        end: 1.0,
-    ).animate(animationController);
-
-
-    if(animationController.status == AnimationStatus.completed){
-      animationController.reverse;
-    }else {
-      animationController.forward();
+    if (_animationController.status == AnimationStatus.completed) {
+      _animationController.reverse;
+    } else {
+      _animationController.forward();
     }
   }
-
-  final text1Controller = TextEditingController();
-
-  final text2Controller = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +66,10 @@ class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderSt
             Container(
               alignment: Alignment.topCenter,
               child: AnimatedBuilder(
-                animation: opacityAnimation,
+                animation: _opacityAnimation,
                 builder: (BuildContext context, Widget? child) {
                   return Opacity(
-                      opacity: opacityAnimation.value,
+                    opacity: _opacityAnimation.value,
                     child: Column(
                       children: [
                         const Padding(
@@ -100,7 +94,6 @@ class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderSt
                     ),
                   );
                 },
-
               ),
             ),
             const SizedBox(
@@ -111,8 +104,8 @@ class _FirstScreenState extends ConsumerState<FirstScreen> with TickerProviderSt
               text: 'Giriş Yap',
               color: Colors.red,
               onPressedOperations: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const Login()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const Login()));
               },
               width: 200,
               height: 20,

@@ -1,13 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../Repository/category_repository.dart';
 import 'view_note_page_index.dart';
 
 class ShowNote extends ConsumerWidget {
   final int index;
 
-  const ShowNote({Key? key, required this.index})
-      : super(key: key);
+  const ShowNote({Key? key, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,7 +64,11 @@ class ShowCategoryNote extends ConsumerWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    ref.watch(categoryProvider).category[indexCategory].notes[index].title,
+                    ref
+                        .watch(categoryProvider)
+                        .category[indexCategory]
+                        .notes[index]
+                        .title,
                     style: const TextStyle(
                       fontSize: 30,
                     ),
@@ -78,7 +78,11 @@ class ShowCategoryNote extends ConsumerWidget {
               SizedBox(
                 width: 350,
                 child: Text(
-                  ref.watch(categoryProvider).category[indexCategory].notes[index].title,
+                  ref
+                      .watch(categoryProvider)
+                      .category[indexCategory]
+                      .notes[index]
+                      .title,
                 ),
               ),
             ],

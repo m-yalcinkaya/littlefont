@@ -1,23 +1,21 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../Repository/messages_repository.dart';
+import 'message_screen_index.dart';
 
 class MessageScreen extends ConsumerWidget {
-  const MessageScreen({Key? key}) : super(key: key);
+  MessageScreen({Key? key}) : super(key: key);
 
+  final controller = TextEditingController();
 
   Color _color(bool isMe) {
     if (isMe == true) {
       return Colors.blue;
     }
-    return Colors.red;
+    return Colors.blueGrey;
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    TextEditingController controller = TextEditingController();
+    final messageReadRepo = ref.read(messageProvider);
+    final messageWatchRepo = ref.watch(messageProvider);
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -40,8 +38,8 @@ class MessageScreen extends ConsumerWidget {
         ]),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.videocam),
+            onPressed: () {},
+            icon: const Icon(Icons.videocam),
           ),
           IconButton(
             onPressed: () {},
@@ -55,22 +53,26 @@ class MessageScreen extends ConsumerWidget {
             Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image:
+                image:
                     AssetImage('assets/images/whatsapp-duvar-kagitlari-8.jpg'),
-                    fit: BoxFit.cover,
-                  )),
+                fit: BoxFit.cover,
+              )),
             ),
             Column(
               children: [
                 Expanded(
                   child: ListView.builder(
                     reverse: true,
-                    itemCount: ref.watch(messageProvider).messages.length,
+                    itemCount: messageWatchRepo.messages.length,
                     itemBuilder: (context, index) {
-                      return  Column(
+                      return Column(
                         children: [
                           Align(
-                            alignment: ref.watch(messageProvider).messages[ref.watch(messageProvider).messages.length-index-1].isMe
+                            alignment: messageWatchRepo
+                                    .messages[messageWatchRepo.messages.length -
+                                        index -
+                                        1]
+                                    .isMe
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: Padding(
@@ -81,12 +83,23 @@ class MessageScreen extends ConsumerWidget {
                                   constraints: const BoxConstraints(
                                     maxWidth: 320,
                                   ),
-                                  color: _color(ref.watch(messageProvider).messages[ref.watch(messageProvider).messages.length-index-1].isMe),
+                                  color: _color(messageWatchRepo
+                                      .messages[
+                                          messageWatchRepo.messages.length -
+                                              index -
+                                              1]
+                                      .isMe),
                                   child: Padding(
                                     padding: const EdgeInsets.all(15),
                                     child: AutoSizeText(
-                                      ref.watch(messageProvider).messages[ref.watch(messageProvider).messages.length-index-1].text,
-                                      style: const TextStyle(color: Colors.white,
+                                      messageWatchRepo
+                                          .messages[
+                                              messageWatchRepo.messages.length -
+                                                  index -
+                                                  1]
+                                          .text,
+                                      style: const TextStyle(
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -111,9 +124,16 @@ class MessageScreen extends ConsumerWidget {
                       child: TextField(
                         controller: controller,
                         decoration: InputDecoration(
-                          filled: true,
+                            filled: true,
                             fillColor: Colors.white,
                             contentPadding: const EdgeInsets.all(15),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                                width: 2, // etkin olmadığında kenarlık rengi
+                              ),
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                             )),
@@ -123,8 +143,13 @@ class MessageScreen extends ConsumerWidget {
                     IconButton(
                       padding: const EdgeInsets.only(bottom: 10),
                       onPressed: () {
-                        final message = Message(text: controller.text,isMe: true,time: DateTime.now(),);
-                        ref.read(messageProvider).addMessage(message, ref.read(messageProvider).messages);
+                        final message = Message(
+                          text: controller.text,
+                          isMe: true,
+                          time: DateTime.now(),
+                        );
+                        messageReadRepo.addMessage(
+                            message, messageReadRepo.messages);
                       },
                       icon: const Icon(Icons.send, color: Colors.blue),
                     ),

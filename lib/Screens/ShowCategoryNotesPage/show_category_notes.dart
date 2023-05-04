@@ -1,6 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../Repository/category_repository.dart';
 import 'show_category_notes_page_index.dart';
 
 class ShowCategory extends ConsumerWidget {
@@ -40,6 +37,8 @@ class ShowCategory extends ConsumerWidget {
   }
 
   GridView buildGridView({required WidgetRef ref}) {
+    final categoryRepo = ref.read(categoryProvider);
+    final categoryWatchRepo = ref.watch(categoryProvider);
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -47,8 +46,7 @@ class ShowCategory extends ConsumerWidget {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount:
-          ref.watch(categoryProvider).category[indexCategory].notes.length,
+      itemCount: categoryWatchRepo.category[indexCategory].notes.length,
       itemBuilder: (context, index) {
         return Card(
           color: const Color.fromARGB(200, 220, 200, 210),
@@ -66,8 +64,8 @@ class ShowCategory extends ConsumerWidget {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   icon: const Icon(Icons.remove_circle_outline),
-                  onPressed: () async {
-                    await showDialog(
+                  onPressed: () {
+                    showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('Uyarı'),
@@ -78,9 +76,11 @@ class ShowCategory extends ConsumerWidget {
                             onPressed: () {
                               Navigator.pop(context);
 
-                              final note = ref.read(categoryProvider).category[indexCategory].notes[index];
-                              ref.read(categoryProvider).removeNoteFromCategory(indexCategory, note);
-                              },
+                              final note = categoryRepo
+                                  .category[indexCategory].notes[index];
+                              categoryRepo.removeNoteFromCategory(
+                                  indexCategory, note);
+                            },
                             child: const Text('Sil'),
                           ),
                           TextButton(
@@ -99,11 +99,7 @@ class ShowCategory extends ConsumerWidget {
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  ref
-                      .watch(categoryProvider)
-                      .category[indexCategory]
-                      .notes[index]
-                      .title,
+                  categoryWatchRepo.category[indexCategory].notes[index].title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -117,11 +113,8 @@ class ShowCategory extends ConsumerWidget {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      ref
-                          .watch(categoryProvider)
-                          .category[indexCategory]
-                          .notes[index]
-                          .content,
+                      categoryWatchRepo
+                          .category[indexCategory].notes[index].content,
                     ),
                   ),
                 ),
@@ -134,7 +127,7 @@ class ShowCategory extends ConsumerWidget {
                       await FlutterShare.share(
                         title: 'Notunu Paylaş',
                         text:
-                            '${ref.read(categoryProvider).category[indexCategory].notes[index].title}\n\n${ref.read(categoryProvider).category[indexCategory].notes[index].content}',
+                            '${categoryRepo.category[indexCategory].notes[index].title}\n\n${categoryRepo.category[indexCategory].notes[index].content}',
                       );
                     },
                     icon: const Icon(Icons.share),

@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'favourites_page_index.dart';
 
 class FavouritesPage extends ConsumerWidget {
@@ -27,6 +25,8 @@ class FavouritesPage extends ConsumerWidget {
   }
 
   GridView buildGridView({required WidgetRef ref}) {
+    final noteReadRepo = ref.read(notesProvider);
+    final noteWatchRepo = ref.watch(notesProvider);
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -34,10 +34,10 @@ class FavouritesPage extends ConsumerWidget {
         crossAxisSpacing: 8,
         childAspectRatio: 1,
       ),
-      itemCount: ref.watch(notesProvider).favourites.length,
+      itemCount: noteWatchRepo.favourites.length,
       itemBuilder: (context, index) {
         return Card(
-          color: ref.watch(notesProvider).favourites[index].color,
+          color: noteWatchRepo.favourites[index].color,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -50,9 +50,8 @@ class FavouritesPage extends ConsumerWidget {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      ref.read(notesProvider).removeNote(
-                          index, ref.read(notesProvider).favourites);
-                      },
+                      noteReadRepo.removeNote(index, noteReadRepo.favourites);
+                    },
                     icon: const Icon(Icons.star),
                   ),
                 ),
@@ -61,7 +60,7 @@ class FavouritesPage extends ConsumerWidget {
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  ref.read(notesProvider).favourites[index].title,
+                  noteReadRepo.favourites[index].title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -75,7 +74,7 @@ class FavouritesPage extends ConsumerWidget {
                     child: Text(
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      ref.read(notesProvider).favourites[index].content,
+                      noteReadRepo.favourites[index].content,
                     ),
                   ),
                 ),

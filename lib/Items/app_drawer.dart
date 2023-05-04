@@ -1,25 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:littlefont/Screens/AboutPage/about_page.dart';
-import 'package:littlefont/Screens/CategoryPage/category_page.dart';
-import 'package:littlefont/Screens/FavouritesPage/favourites_page.dart';
-import 'package:littlefont/Screens/FirstScreenPage/first_screen.dart';
-import 'package:littlefont/Screens/MyNotesPage/my_notes_page.dart';
-import 'package:littlefont/Screens/RecycleBinPage/recycle_bin_page.dart';
+import 'package:littlefont/Repository/accounts_repository.dart';
 
-class AppDrawer extends ConsumerWidget {
-  final String? name;
-  final String? surname;
+import 'app_drawer_index.dart';
 
+class AppDrawer extends ConsumerWidget{
   const AppDrawer({
     Key? key,
-    this.name,
-    required this.surname,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final accountRepo = ref.read(accountProvider);
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         bottomRight: Radius.circular(50),
@@ -70,7 +60,7 @@ class AppDrawer extends ConsumerWidget {
                     size: 40,
                   ),
                 ),
-                title: Text('$name $surname'),
+                title: Text('${accountRepo.manager.name} ${accountRepo.manager.surname}'),
               ),
               const Divider(thickness: 5),
               ListTile(

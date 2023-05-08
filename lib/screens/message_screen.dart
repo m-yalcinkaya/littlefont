@@ -4,10 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../repository/messages_repository.dart';
 import 'package:littlefont/modals/message.dart';
 
+class MessageScreen extends ConsumerStatefulWidget {
+  const MessageScreen({Key? key}) : super(key: key);
 
-class MessageScreen extends ConsumerWidget {
-  MessageScreen({Key? key}) : super(key: key);
+  @override
+  ConsumerState<MessageScreen> createState() => _MessageScreenState();
+}
 
+class _MessageScreenState extends ConsumerState<MessageScreen> {
   final controller = TextEditingController();
 
   Color _color(bool isMe) {
@@ -18,7 +22,13 @@ class MessageScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    Future.delayed(Duration.zero,() => ref.read(messageProvider).downloadAsList());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final messageReadRepo = ref.read(messageProvider);
     final messageWatchRepo = ref.watch(messageProvider);
     return Scaffold(
@@ -46,12 +56,7 @@ class MessageScreen extends ConsumerWidget {
             onPressed: () {},
             icon: const Icon(Icons.videocam),
           ),
-          IconButton(
-            onPressed: () {
-              messageReadRepo.download();
-            },
-            icon: const Icon(Icons.call),
-          ),
+          HttpIconButton(messageReadRepo: messageReadRepo),
         ],
       ),
       body: SafeArea(
@@ -154,8 +159,7 @@ class MessageScreen extends ConsumerWidget {
                           text: controller.text,
                           isMe: true,
                         );
-                        messageReadRepo.addMessage(
-                            message, messageReadRepo.messages);
+                        messageReadRepo.sendMessage(message);
                         controller.text = '';
                       },
                       icon: const Icon(Icons.send, color: Colors.blue),
@@ -169,5 +173,47 @@ class MessageScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class HttpIconButton extends ConsumerStatefulWidget {
+  const HttpIconButton({
+    super.key,
+    required this.messageReadRepo,
+  });
+
+  final MessagesRepository messageReadRepo;
+
+  @override
+  ConsumerState<HttpIconButton> createState() => _HttpIconButtonState();
+}
+
+class _HttpIconButtonState extends ConsumerState<HttpIconButton> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? const CircularProgressIndicator(
+            color: Colors.white,
+          )
+        : IconButton(
+            onPressed: () async {
+              try {
+                setState(() {
+                  isLoading = true;
+                });
+                await widget.messageReadRepo.downloadAsList();
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error : ${e.toString()}')));
+              } finally {
+                setState(() {
+                  isLoading = false;
+                });
+              }
+            },
+            icon: const Icon(Icons.call),
+          );
   }
 }

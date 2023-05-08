@@ -1,39 +1,30 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/modals/message.dart';
+import 'package:littlefont/services/message_service.dart';
 
 class MessagesRepository extends ChangeNotifier {
-  List<Message> messages = [
-    Message(
-      text: 'Hi Mustafa!',
-      isMe: false,
-    ),
-    Message(
-      text: 'Hi Kemal!',
-      isMe: true,
-    ),
-    Message(
-      text: 'How are you!',
-      isMe: false,
-    ),
-    Message(
-      text: 'I\'m fine and you?',
-      isMe: true,
-    ),
-  ];
+  final MessageService dataService;
 
-  void download() {
-    const j = """{
-  "text": "My name is Ali",
-  "isMe": false
-    }""";
+  MessagesRepository(this.dataService);
 
-    final m = jsonDecode(j);
+  List<Message> messages = [Message(text: 'Message', isMe: false)];
 
-    final mesaj = Message.fromJson(m);
-    messages.add(mesaj);
+  Future<void> download() async {
+    Message message = await dataService.getMessage();
+    messages.add(message);
+    notifyListeners();
+  }
+  Future<void> downloadAsList() async {
+    final result = await dataService.getMessageFromList();
+    messages.addAll(result);
+    notifyListeners();
+  }
+
+  Future<void> sendMessage(Message message) async {
+    final result = await dataService.sendMessage(message);
+    messages = [];
+    messages.addAll(result);
     notifyListeners();
   }
 
@@ -44,5 +35,5 @@ class MessagesRepository extends ChangeNotifier {
 }
 
 final messageProvider = ChangeNotifierProvider((ref) {
-  return MessagesRepository();
+  return MessagesRepository(ref.watch(messageServiceProvider));
 });

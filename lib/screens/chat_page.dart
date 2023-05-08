@@ -93,7 +93,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                           onTap: () {
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
-                              screen: MessageScreen(),
+                              screen: const MessageScreen(),
                               withNavBar: false,
                             );
                           },

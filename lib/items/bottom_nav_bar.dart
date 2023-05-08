@@ -14,7 +14,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   List<Widget> _buildScreens() {
     return [
       const AppMainPage(),
-      const News(),
+      const NewsPage(),
       const ChatScreen(),
       const ProfilePage(),
     ];

@@ -1,4 +1,9 @@
-import 'bottom_nav_bar_index.dart';
+import 'package:flutter/material.dart';
+import 'package:littlefont/screens/app_main_page.dart';
+import 'package:littlefont/screens/chat_page.dart';
+import 'package:littlefont/screens/news_page.dart';
+import 'package:littlefont/screens/profile_page.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -13,7 +18,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   List<Widget> _buildScreens() {
     return [
-      const AppMainPage(),
+      AppMainPage(),
       const NewsPage(),
       const ChatScreen(),
       const ProfilePage(),

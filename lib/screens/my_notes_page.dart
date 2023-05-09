@@ -73,97 +73,100 @@ class MyNotes extends ConsumerWidget {
       ),
       itemCount: noteWatchRepo.notes.length,
       itemBuilder: (context, index) {
-        return Card(
-          color: noteWatchRepo.notes[index].color,
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ShowNote(index: index),
-              ));
-            },
-            child: Column(children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    onPressed: () {
-                      isContain(noteReadRepo, index);
-                    },
-                    icon: noteWatchRepo.favourites
-                            .contains(noteWatchRepo.notes[index])
-                        ? const Icon(Icons.star)
-                        : const Icon(Icons.star_border),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  noteWatchRepo.notes[index].title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      noteWatchRepo.notes[index].content,
+        return ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(30)),
+          child: Card(
+            color: noteWatchRepo.notes[index].color,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ShowNote(index: index),
+                ));
+              },
+              child: Column(children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        isContain(noteReadRepo, index);
+                      },
+                      icon: noteWatchRepo.favourites
+                              .contains(noteWatchRepo.notes[index])
+                          ? const Icon(Icons.star)
+                          : const Icon(Icons.star_border),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: PopupMenuButton(
-                    onSelected: (value) async {
-                      if (value == 'delete') {
-                        delete(noteReadRepo, index, context, ref);
-                      } else if (value == 'edit') {
-                        final note =
-                            await PersistentNavBarNavigator.pushNewScreen(
-                          context,
-                          screen: EditPage(note: noteReadRepo.notes[index]),
-                          withNavBar: false,
-                        );
-                        note != null
-                            ? noteWatchRepo.updateNote(index, note)
-                            : null;
-                      } else if (value == 'share') {
-                        await FlutterShare.share(
-                          title: 'Share your note',
-                          text:
-                              '${noteReadRepo.notes[index].title}\n\n${noteReadRepo.notes[index].content}',
-                        );
-                      }
-                    },
-                    itemBuilder: (context) {
-                      return [
-                        const PopupMenuItem<String>(
-                          value: 'delete',
-                          child: Text('Delete'),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'edit',
-                          child: Text('Edit'),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'share',
-                          child: Text('Share'),
-                        )
-                      ];
-                    },
+                Expanded(
+                  child: Text(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    noteWatchRepo.notes[index].title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              )
-            ]),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        noteWatchRepo.notes[index].content,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: PopupMenuButton(
+                      onSelected: (value) async {
+                        if (value == 'delete') {
+                          delete(noteReadRepo, index, context, ref);
+                        } else if (value == 'edit') {
+                          final note =
+                              await PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: EditPage(note: noteReadRepo.notes[index]),
+                            withNavBar: false,
+                          );
+                          note != null
+                              ? noteWatchRepo.updateNote(index, note)
+                              : null;
+                        } else if (value == 'share') {
+                          await FlutterShare.share(
+                            title: 'Share your note',
+                            text:
+                                '${noteReadRepo.notes[index].title}\n\n${noteReadRepo.notes[index].content}',
+                          );
+                        }
+                      },
+                      itemBuilder: (context) {
+                        return [
+                          const PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Text('Delete'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'edit',
+                            child: Text('Edit'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'share',
+                            child: Text('Share'),
+                          )
+                        ];
+                      },
+                    ),
+                  ),
+                )
+              ]),
+            ),
           ),
         );
       },

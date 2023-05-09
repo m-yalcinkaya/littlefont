@@ -41,6 +41,7 @@ dependencies:
   auto_size_text: ^3.0.0
   flutter_slidable: ^3.0.0
   http: ^0.13.6
+  carousel_slider: ^4.2.1
 
 
 

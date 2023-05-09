@@ -1,6 +1,15 @@
-import 'app_drawer_index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:littlefont/repository/accounts_repository.dart';
+import 'package:littlefont/screens/about_page.dart';
+import 'package:littlefont/screens/category_page.dart';
+import 'package:littlefont/screens/favourites_page.dart';
+import 'package:littlefont/screens/first_screen.dart';
+import 'package:littlefont/screens/my_notes_page.dart';
+import 'package:littlefont/screens/recycle_bin_page.dart';
 
-class AppDrawer extends ConsumerWidget{
+class AppDrawer extends ConsumerWidget {
   const AppDrawer({
     Key? key,
   }) : super(key: key);
@@ -58,7 +67,8 @@ class AppDrawer extends ConsumerWidget{
                     size: 40,
                   ),
                 ),
-                title: Text('${accountRepo.manager.name} ${accountRepo.manager.surname}'),
+                title: Text(
+                    '${accountRepo.manager.name} ${accountRepo.manager.surname}'),
               ),
               const Divider(thickness: 5),
               ListTile(
@@ -67,20 +77,17 @@ class AppDrawer extends ConsumerWidget{
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        const MyNotes(),
+                    builder: (context) => const MyNotes(),
                   ));
                 },
               ),
-
               ListTile(
                 leading: const Icon(Icons.category),
                 title: const Text('Categories'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        const CategoryPage(),
+                    builder: (context) => const CategoryPage(),
                   ));
                 },
               ),
@@ -90,8 +97,7 @@ class AppDrawer extends ConsumerWidget{
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        const FavouritesPage(),
+                    builder: (context) => const FavouritesPage(),
                   ));
                 },
               ),
@@ -101,8 +107,7 @@ class AppDrawer extends ConsumerWidget{
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        const RecycleBin(),
+                    builder: (context) => const RecycleBin(),
                   ));
                 },
               ),
@@ -122,7 +127,8 @@ class AppDrawer extends ConsumerWidget{
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const FirstScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const FirstScreen()),
                     (Route<dynamic> route) => false,
                   );
                 },

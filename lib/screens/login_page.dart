@@ -29,7 +29,7 @@ class _LoginState extends ConsumerState<Login> {
     super.dispose();
   }
 
-  void _findManager() {
+    void _findManager()  {
     final accountRepo = ref.read(accountProvider);
     for (Account a in accountRepo.accounts) {
       if (a.email == _text1Controller.text) {

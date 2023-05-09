@@ -1,5 +1,5 @@
-import 'package:littlefont/items/app_drawer_index.dart';
-import 'package:littlefont/items/bottom_nav_bar_index.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
 
 class NewsPage extends ConsumerStatefulWidget {
@@ -17,27 +17,6 @@ class _NewsPageState extends ConsumerState<NewsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('LittleFont News'),
-        actions: [
-          isLoading
-              ? const CircularProgressIndicator()
-              : IconButton(
-                  onPressed: () async {
-                    try {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await ref.read(newsProvider).showNews();
-                    } catch (e) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(e.toString())));
-                    } finally {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.send))
-        ],
       ),
       body: ListView.builder(
         itemCount: ref.watch(newsProvider).news.length,

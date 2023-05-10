@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
+import 'package:littlefont/screens/view_news_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:littlefont/repository/notes_repository.dart';
 import 'package:littlefont/repository/accounts_repository.dart';
@@ -14,7 +15,7 @@ import 'package:littlefont/screens/show_category_notes.dart';
 import 'package:littlefont/screens/create_note_page.dart';
 
 class AppMainPage extends ConsumerStatefulWidget {
-  AppMainPage({
+  const AppMainPage({
     Key? key,
   }) : super(key: key);
 
@@ -90,38 +91,46 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                       itemBuilder: (BuildContext context, int index) {
                         return SizedBox(
                           width: 265,
-                          child: Card(
-                            child: Stack(
-                              children: [
-                                Image.network(
-                                  ref
-                                      .watch(newsProvider)
-                                      .news[index]
-                                      .urlToImage,
-                                  fit: BoxFit.cover,
-                                ),
-                                Column(children: [
-                                  const Expanded(flex: 4, child: SizedBox()),
-                                  Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        color: Colors.black38,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Center(
-                                            child: AutoSizeText(
-                                                ref
-                                                    .watch(newsProvider)
-                                                    .news[index]
-                                                    .title,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                )),
+                          child: InkWell(
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: ViewNewsPage(indexNews: index),
+                              );
+                            },
+                            child: Card(
+                              child: Stack(
+                                children: [
+                                  Image.network(
+                                    ref
+                                        .watch(newsProvider)
+                                        .news[index]
+                                        .urlToImage ?? 'https://cdn.pixabay.com/photo/2014/06/16/23/39/black-370118_960_720.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                  Column(children: [
+                                    const Expanded(flex: 4, child: SizedBox()),
+                                    Expanded(
+                                        flex: 3,
+                                        child: Container(
+                                          color: Colors.black38,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Center(
+                                              child: AutoSizeText(
+                                                  ref
+                                                      .watch(newsProvider)
+                                                      .news[index]
+                                                      .title,
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                  )),
+                                            ),
                                           ),
-                                        ),
-                                      )),
-                                ]),
-                              ],
+                                        )),
+                                  ]),
+                                ],
+                              ),
                             ),
                           ),
                         );

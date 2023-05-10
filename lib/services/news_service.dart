@@ -6,7 +6,7 @@ import '../modals/news.dart';
 
 class NewsService {
   final String url =
-      'https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=28275833cd7b49c09e7a3b111248cbc4';
+      'https://newsapi.org/v2/everything?q=bitcoin&apiKey=28275833cd7b49c09e7a3b111248cbc4';
 
   Future<List<News>> getNews() async {
     final response = await http.get(Uri.parse(url));

@@ -27,27 +27,12 @@ class AppMainPage extends ConsumerStatefulWidget {
 
 class _AppMainPageState extends ConsumerState<AppMainPage> {
   bool isLoading = false;
+  late Future<void> _future;
 
   @override
   void initState() {
-    try {
-      ref.read(newsServiceProvider).selectCategory('general');
-      ref.read(newsProvider).showGeneralNews();
-      ref.read(newsServiceProvider).selectCategory('health');
-      ref.read(newsProvider).showHealthNews();
-      ref.read(newsServiceProvider).selectCategory('entertainment');
-      ref.read(newsProvider).showEntertainmentNews();
-      ref.read(newsServiceProvider).selectCategory('sports');
-      ref.read(newsProvider).showSportNews();
-      ref.read(newsServiceProvider).selectCategory('business');
-      ref.read(newsProvider).showBusinessNews();
-      ref.read(newsServiceProvider).selectCategory('science');
-      ref.read(newsProvider).showScienceNews();
-      ref.read(newsServiceProvider).selectCategory('technology');
-      ref.read(newsProvider).showTechnologyNews();
-    } catch (e) {
-      throw Exception('couldn\'t was downloaded news : AppMainPage.initstate : $e');
-    }
+    ref.read(newsServiceProvider).selectCategory('general');
+    _future = ref.read(newsProvider).getNewsByCategory(ref.read(newsProvider).generalNews);
     super.initState();
   }
 
@@ -103,60 +88,68 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 150,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: newsRepoWatch.generalNews.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          width: 265,
-                          child: InkWell(
-                            onTap: () {
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: ViewNewsPage(indexNews: index, list: newsRepoRead.generalNews),
-                              );
-                            },
-                            child: Card(
-                              child: Stack(
-                                children: [
-                                  Image.network(
-                                    newsRepoWatch.generalNews[index].urlToImage ??
-                                        'https://cdn.pixabay.com/photo/2014/06/16/23/39/black-370118_960_720.png',
-                                    fit: BoxFit.cover,
-                                    height: 142,
-                                    width: 257,
-                                  ),
-                                  Column(children: [
-                                    const Expanded(flex: 4, child: SizedBox()),
-                                    Expanded(
-                                        flex: 3,
-                                        child: Container(
-                                          color: Colors.black38,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10),
-                                            child: Center(
-                                              child: AutoSizeText(
-                                                newsRepoWatch.generalNews[index].title ?? 'title: null',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                    child: FutureBuilder(
+                  future: _future,
+                  builder: (context, snapshot) {
+                    if(snapshot.hasError){
+                      return Text('An error occurred while loading the news ${snapshot.error}');
+                    }else{
+                      return SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: newsRepoWatch.generalNews.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              width: 265,
+                              child: InkWell(
+                                onTap: () {
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: ViewNewsPage(indexNews: index, list: newsRepoRead.generalNews),
+                                  );
+                                },
+                                child: Card(
+                                  child: Stack(
+                                    children: [
+                                      Image.network(
+                                        newsRepoWatch.generalNews[index].urlToImage ??
+                                            'https://cdn.pixabay.com/photo/2014/06/16/23/39/black-370118_960_720.png',
+                                        fit: BoxFit.cover,
+                                        height: 142,
+                                        width: 257,
+                                      ),
+                                      Column(children: [
+                                        const Expanded(flex: 4, child: SizedBox()),
+                                        Expanded(
+                                            flex: 3,
+                                            child: Container(
+                                              color: Colors.black38,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(10),
+                                                child: Center(
+                                                  child: AutoSizeText(
+                                                    newsRepoWatch.generalNews[index].title ?? 'title: null',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        )),
-                                  ]),
-                                ],
+                                            )),
+                                      ]),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
+                )),
                 SliverToBoxAdapter(
                   child: Row(
                     children: [

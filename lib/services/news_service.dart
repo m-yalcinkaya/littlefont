@@ -9,10 +9,11 @@ class NewsService {
 
   void selectCategory(String category) {
     url =
-        'https://newsapi.org/v2/top-headlines?country=us&category=$category&apiKey=ae803744a76646c38f5755aa7e399a0c';
+        'https://newsapi.org/v2/top-headlines?country=us&category=$category&apiKey=b8bb19f553514c5fb4ed8727df8749b7';
   }
 
   Future<List<News>> getNews() async {
+    print(url);
     final response = await http.get(Uri.parse(url));
     final result = jsonDecode(response.body);
     List<News> j = [];

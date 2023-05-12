@@ -21,52 +21,41 @@ class NewsRepository extends ChangeNotifier {
   List<News> technologyNews = [];
 
 
-  Future<void> showGeneralNews() async {
-    final item = await newsService.getNews();
-    generalNews = [];
-    generalNews.addAll(item);
-    notifyListeners();
-  }
 
-  Future<void> showHealthNews() async {
-    final item = await newsService.getNews();
-    healthNews = [];
-    healthNews.addAll(item);
-    notifyListeners();
-  }
-
-  Future<void> showEntertainmentNews() async {
-    final item = await newsService.getNews();
-    entertainmentNews = [];
-    entertainmentNews.addAll(item);
-    notifyListeners();
-  }
-
-  Future<void> showSportNews() async {
-    final item = await newsService.getNews();
-    sportsNews = [];
-    sportsNews.addAll(item);
-    notifyListeners();
-  }
-
-  Future<void> showBusinessNews() async {
-    final item = await newsService.getNews();
-    businessNews = [];
-    businessNews.addAll(item);
-    notifyListeners();
-  }
-
-  Future<void> showScienceNews() async {
-    final item = await newsService.getNews();
-    scienceNews = [];
-    scienceNews.addAll(item);
-    notifyListeners();
-  }
-
-  Future<void> showTechnologyNews() async {
-    final item = await newsService.getNews();
-    technologyNews = [];
-    technologyNews.addAll(item);
+  Future<void> getNewsByCategory(List<News> newsList) async {
+    if (newsList == generalNews) {
+      generalNews = [];
+      final item = await newsService.getNews();
+      generalNews.addAll(item);
+    } else if (newsList == healthNews) {
+      healthNews = [];
+      final item = await newsService.getNews();
+      healthNews.addAll(item);
+    } else if (newsList == entertainmentNews) {
+      entertainmentNews = [];
+      final item = await newsService.getNews();
+      entertainmentNews.addAll(item);
+    } else if (newsList == sportsNews) {
+      sportsNews = [];
+      final item = await newsService.getNews();
+      sportsNews.addAll(item);
+    } else if (newsList == businessNews) {
+      businessNews = [];
+      final item = await newsService.getNews();
+      businessNews.addAll(item);
+    } else if (newsList == scienceNews) {
+      scienceNews = [];
+      final item = await newsService.getNews();
+      scienceNews.addAll(item);
+    } else if (newsList == technologyNews) {
+      technologyNews = [];
+      final item = await newsService.getNews();
+      technologyNews.addAll(item);
+    } else {
+      generalNews = [];
+      final item = await newsService.getNews();
+      generalNews.addAll(item);
+    }
     notifyListeners();
   }
 }

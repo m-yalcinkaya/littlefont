@@ -1,17 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/items/button.dart';
 import 'package:littlefont/modals/news.dart';
 import 'package:littlefont/items/web_view.dart';
 
-class ViewNewsPage extends ConsumerWidget {
+class ViewNewsPage extends StatelessWidget {
   final int indexNews;
   final List<News> list;
   const ViewNewsPage({Key? key, required this.indexNews, required this.list}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[

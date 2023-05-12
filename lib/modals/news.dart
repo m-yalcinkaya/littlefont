@@ -1,8 +1,8 @@
 class News {
-  final String title;
-  final String content;
+  final String? title;
+  final String? content;
   final String? urlToImage;
-  final String author;
+  final String? author;
   final String? url;
 
   News({

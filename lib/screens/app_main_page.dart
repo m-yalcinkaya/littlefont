@@ -14,6 +14,8 @@ import 'package:littlefont/screens/my_notes_page.dart';
 import 'package:littlefont/screens/show_category_notes.dart';
 import 'package:littlefont/screens/create_note_page.dart';
 
+import '../services/news_service.dart';
+
 class AppMainPage extends ConsumerStatefulWidget {
   const AppMainPage({
     Key? key,
@@ -28,12 +30,31 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
 
   @override
   void initState() {
-    ref.read(newsProvider).showNews();
+    try {
+      ref.read(newsServiceProvider).selectCategory('general');
+      ref.read(newsProvider).showGeneralNews();
+      ref.read(newsServiceProvider).selectCategory('health');
+      ref.read(newsProvider).showHealthNews();
+      ref.read(newsServiceProvider).selectCategory('entertainment');
+      ref.read(newsProvider).showEntertainmentNews();
+      ref.read(newsServiceProvider).selectCategory('sports');
+      ref.read(newsProvider).showSportNews();
+      ref.read(newsServiceProvider).selectCategory('business');
+      ref.read(newsProvider).showBusinessNews();
+      ref.read(newsServiceProvider).selectCategory('science');
+      ref.read(newsProvider).showScienceNews();
+      ref.read(newsServiceProvider).selectCategory('technology');
+      ref.read(newsProvider).showTechnologyNews();
+    } catch (e) {
+      throw Exception('couldn\'t was downloaded news : AppMainPage.initstate : $e');
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final newsRepoWatch = ref.watch(newsProvider);
+    final newsRepoRead = ref.read(newsProvider);
     final noteRepo = ref.watch(notesProvider);
     final categoryRepo = ref.watch(categoryProvider);
     final noteReadRepo = ref.read(notesProvider);
@@ -87,26 +108,26 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       scrollDirection: Axis.horizontal,
-                      itemCount: ref.watch(newsProvider).news.length,
+                      itemCount: newsRepoWatch.generalNews.length,
                       itemBuilder: (BuildContext context, int index) {
                         return SizedBox(
                           width: 265,
                           child: InkWell(
                             onTap: () {
                               PersistentNavBarNavigator.pushNewScreen(
-                                  context,
-                                  screen: ViewNewsPage(indexNews: index),
+                                context,
+                                screen: ViewNewsPage(indexNews: index, list: newsRepoRead.generalNews),
                               );
                             },
                             child: Card(
                               child: Stack(
                                 children: [
                                   Image.network(
-                                    ref
-                                        .watch(newsProvider)
-                                        .news[index]
-                                        .urlToImage ?? 'https://cdn.pixabay.com/photo/2014/06/16/23/39/black-370118_960_720.png',
+                                    newsRepoWatch.generalNews[index].urlToImage ??
+                                        'https://cdn.pixabay.com/photo/2014/06/16/23/39/black-370118_960_720.png',
                                     fit: BoxFit.cover,
+                                    height: 142,
+                                    width: 257,
                                   ),
                                   Column(children: [
                                     const Expanded(flex: 4, child: SizedBox()),
@@ -118,13 +139,11 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                                             padding: const EdgeInsets.all(10),
                                             child: Center(
                                               child: AutoSizeText(
-                                                  ref
-                                                      .watch(newsProvider)
-                                                      .news[index]
-                                                      .title,
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                  )),
+                                                newsRepoWatch.generalNews[index].title ?? 'title: null',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         )),

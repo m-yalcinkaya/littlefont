@@ -5,8 +5,12 @@ import 'package:http/http.dart' as http;
 import '../modals/news.dart';
 
 class NewsService {
-  final String url =
-      'https://newsapi.org/v2/everything?q=bitcoin&apiKey=28275833cd7b49c09e7a3b111248cbc4';
+  late String url;
+
+  void selectCategory(String category) {
+    url =
+        'https://newsapi.org/v2/top-headlines?country=us&category=$category&apiKey=ae803744a76646c38f5755aa7e399a0c';
+  }
 
   Future<List<News>> getNews() async {
     final response = await http.get(Uri.parse(url));
@@ -19,7 +23,7 @@ class NewsService {
       }
       return j;
     } else {
-      throw Exception('Haber indirilemedi!!');
+      throw Exception('Couldn\'t was downloaded news!! : getNews()');
     }
   }
 }
@@ -27,4 +31,3 @@ class NewsService {
 final newsServiceProvider = Provider((ref) {
   return NewsService();
 });
-

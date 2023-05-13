@@ -1,5 +1,4 @@
 
-
 class Account {
   final String name;
   final String surname;

@@ -10,7 +10,7 @@ class MessageService {
   Future<Message> getMessage() async {
     final response = await http.get(Uri.parse('$baseUrl/Message/1'));
     if (response.statusCode == 200) {
-      return Message.fromMap(jsonDecode(response.body));
+      return Message.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Mesaj indirilemedi : ${response.statusCode}');
     }
@@ -22,7 +22,7 @@ class MessageService {
     final result = jsonDecode(response.body);
     if (response.statusCode == 200) {
       for (Map<String, dynamic> a in result) {
-        messages.add(Message.fromMap(a));
+        messages.add(Message.fromJson(a));
       }
       return messages;
     } else {

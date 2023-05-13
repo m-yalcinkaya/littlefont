@@ -13,7 +13,6 @@ class NewsService {
   }
 
   Future<List<News>> getNews() async {
-    print(url);
     final response = await http.get(Uri.parse(url));
     final result = jsonDecode(response.body);
     List<News> j = [];
@@ -24,7 +23,7 @@ class NewsService {
       }
       return j;
     } else {
-      throw Exception('Couldn\'t was downloaded news!! : getNews()');
+      throw Exception('Couldn\'t was downloaded news');
     }
   }
 }

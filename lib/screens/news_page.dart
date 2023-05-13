@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
 import 'package:littlefont/services/news_service.dart';
 
 import '../items/my_grid_view.dart';
+import '../modals/news.dart';
 
 class NewsPage extends ConsumerStatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
@@ -13,146 +15,141 @@ class NewsPage extends ConsumerStatefulWidget {
 }
 
 class _NewsPageState extends ConsumerState<NewsPage> {
-  bool isLoading = false;
-  late Future<void> _future;
-
-  List<String> newsCategories = [
-    'general',
-    'health',
-    'entertainment',
-    'sports',
-    'business',
-    'science',
-    'technology'
-  ];
-
-  void findCategoryList() {
-    final refRead = ref.read(newsProvider);
-    switch (refRead.selectedValue) {
-      case 'general':
-        ref.read(newsServiceProvider).selectCategory('general');
-        _future = refRead.getNewsByCategory(refRead.generalNews);
-        refRead.list = refRead.generalNews;
-        break;
-      case 'health':
-        ref.read(newsServiceProvider).selectCategory('health');
-        _future = refRead.getNewsByCategory(refRead.healthNews);
-        refRead.list = refRead.healthNews;
-        break;
-      case 'entertainment':
-        ref.read(newsServiceProvider).selectCategory('entertainment');
-        _future = refRead.getNewsByCategory(refRead.entertainmentNews);
-        refRead.list = refRead.entertainmentNews;
-        break;
-      case 'sports':
-        ref.read(newsServiceProvider).selectCategory('sports');
-        _future = refRead.getNewsByCategory(refRead.sportsNews);
-        refRead.list = refRead.sportsNews;
-        break;
-      case 'business':
-        ref.read(newsServiceProvider).selectCategory('business');
-        _future = refRead.getNewsByCategory(refRead.businessNews);
-        refRead.list = refRead.businessNews;
-        break;
-      case 'science':
-        ref.read(newsServiceProvider).selectCategory('science');
-        _future = refRead.getNewsByCategory(refRead.scienceNews);
-        refRead.list = refRead.scienceNews;
-        break;
-      case 'technology':
-        ref.read(newsServiceProvider).selectCategory('technology');
-        _future = refRead.getNewsByCategory(refRead.technologyNews);
-        refRead.list = refRead.technologyNews;
-        break;
-    }
-  }
+  late Future<List<News>?> _future;
+  late String categoryTitle;
+  late String _selectedValue;
 
   @override
   void initState() {
-    ref.read(newsProvider).selectedValue = 'general';
-    findCategoryList();
+    _selectedValue = 'general';
+    categoryTitle = 'General';
+    ref.read(newsServiceProvider).selectCategory('general');
+    _future = ref
+        .read(newsProvider)
+        .getNewsByCategory(ref.read(newsProvider).generalNews);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final newsRepo = ref.watch(newsProvider);
-    final newsRepoRead = ref.read(newsProvider);
-
+    final newsRepo = ref.read(newsProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LittleFont News'),
-
+        title: Text(categoryTitle != 'General'
+            ? 'LittleFont News | $categoryTitle'
+            : 'LittleFont News'),
         actions: [
-          buildDropdownButton(newsRepo, newsRepoRead),
+          IconButton(
+              onPressed: () async {
+                showMenu(
+                  context: context,
+                  position: const RelativeRect.fromLTRB(25.0, 25.0, 0.0, 0.0),
+                  items: [
+                    PopupMenuItem(
+                      value: 'general',
+                      child: const Text('General'),
+                      onTap: () {
+                        categoryTitle = 'General';
+                        ref.read(newsServiceProvider).selectCategory('general');
+                        _future =
+                            newsRepo.getNewsByCategory(newsRepo.generalNews);
+                      },
+                    ),
+                    PopupMenuItem(
+                      value: 'health',
+                      child: const Text('Health'),
+                      onTap: () {
+                        categoryTitle = 'Health';
+                        ref.read(newsServiceProvider).selectCategory('health');
+                        _future =
+                            newsRepo.getNewsByCategory(newsRepo.healthNews);
+                      },
+                    ),
+                    PopupMenuItem(
+                      value: 'entertainment',
+                      child: const Text('Entertainment'),
+                      onTap: () {
+                        categoryTitle = 'Entertainment';
+                        ref
+                            .read(newsServiceProvider)
+                            .selectCategory('entertainment');
+                        _future = newsRepo
+                            .getNewsByCategory(newsRepo.entertainmentNews);
+                      },
+                    ),
+                    PopupMenuItem(
+                      value: 'sports',
+                      child: const Text('Sports'),
+                      onTap: () {
+                        categoryTitle = 'Sports';
+                        ref.read(newsServiceProvider).selectCategory('sports');
+                        _future =
+                            newsRepo.getNewsByCategory(newsRepo.sportsNews);
+                      },
+                    ),
+                    PopupMenuItem(
+                      value: 'business',
+                      child: const Text('Business'),
+                      onTap: () {
+                        categoryTitle = 'Business';
+                        ref
+                            .read(newsServiceProvider)
+                            .selectCategory('business');
+                        _future =
+                            newsRepo.getNewsByCategory(newsRepo.businessNews);
+                      },
+                    ),
+                    PopupMenuItem(
+                      value: 'science',
+                      child: const Text('Science'),
+                      onTap: () {
+                        categoryTitle = 'Science';
+                        ref.read(newsServiceProvider).selectCategory('science');
+                        _future =
+                            newsRepo.getNewsByCategory(newsRepo.scienceNews);
+                      },
+                    ),
+                    PopupMenuItem(
+                      value: 'technology',
+                      child: const Text('Technology'),
+                      onTap: () {
+                        categoryTitle = 'Technology';
+                        ref
+                            .read(newsServiceProvider)
+                            .selectCategory('technology');
+                        _future =
+                            newsRepo.getNewsByCategory(newsRepo.technologyNews);
+                      },
+                    ),
+                  ],
+                ).then((value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedValue = value;
+                    });
+                  }
+                });
+              },
+              icon: const Icon(Icons.filter_alt)),
         ],
       ),
       body: Column(
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20) +
-                    const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                    'Total Results: ${newsRepo.list.length}')),
-          ),
           Expanded(
               child: FutureBuilder(
             future: _future,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text(
-                    'Couldn\'t was downloaded news : NewsPage ${snapshot.error}');
+                return Text('${snapshot.error}');
+              } else if (snapshot.hasData) {
+                return MyGridView(list: snapshot.data!);
               } else {
-                return const MyGridView();
+                return const Center(child: CircularProgressIndicator());
               }
             },
           )),
         ],
       ),
     );
-  }
-
-  DropdownButton<String> buildDropdownButton(NewsRepository newsRepo, NewsRepository newsRepoRead) {
-    return DropdownButton(
-          value: newsRepo.selectedValue,
-          items: [
-            DropdownMenuItem(
-              value: newsCategories[0],
-              child: const Text('General'),
-            ),
-            DropdownMenuItem(
-              value: newsCategories[1],
-              child: const Text('Health'),
-            ),
-            DropdownMenuItem(
-              value: newsCategories[2],
-              child: const Text('Entertainment'),
-            ),
-            DropdownMenuItem(
-              value: newsCategories[3],
-              child: const Text('Sports'),
-            ),
-            DropdownMenuItem(
-              value: newsCategories[4],
-              child: const Text('Business'),
-            ),
-            DropdownMenuItem(
-              value: newsCategories[5],
-              child: const Text("Science"),
-            ),
-            DropdownMenuItem(
-              value: newsCategories[6],
-              child: const Text('Technology'),
-            ),
-          ],
-          onChanged: (value) {
-            setState(() {
-              newsRepoRead.selectedValue = value!;
-              findCategoryList();
-            });
-          },
-        );
   }
 }

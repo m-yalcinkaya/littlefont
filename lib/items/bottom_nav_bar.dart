@@ -30,27 +30,27 @@ class _BottomNavBarState extends State<BottomNavBar>
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.home),
         title: ("Home"),
-        activeColorPrimary: Colors.deepOrange,
-        activeColorSecondary: Colors.grey,
+        activeColorPrimary: Colors.red,
+        activeColorSecondary: Colors.black,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.newspaper),
         title: ("News"),
-        activeColorPrimary: Colors.deepOrange,
-        activeColorSecondary: Colors.grey,
+        activeColorPrimary: Colors.red,
+        activeColorSecondary: Colors.black,
       ),
 
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.chat_bubble),
         title: ("Chats"),
         activeColorPrimary: Colors.red,
-        activeColorSecondary: Colors.grey,
+        activeColorSecondary: Colors.black,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.person),
         title: ("Profile"),
         activeColorPrimary: Colors.red,
-        activeColorSecondary: Colors.grey,
+        activeColorSecondary: Colors.black,
       ),
     ];
   }

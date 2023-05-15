@@ -47,7 +47,7 @@ class _BottomNavBarState extends State<BottomNavBar>
         activeColorSecondary: Colors.black,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.person),
+        icon: const Icon(Icons.account_circle),
         title: ("Profile"),
         activeColorPrimary: Colors.red,
         activeColorSecondary: Colors.black,

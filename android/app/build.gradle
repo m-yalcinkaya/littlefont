@@ -22,6 +22,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -68,14 +69,16 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
 }
 
 android {
     // diğer ayarlar...
     defaultConfig {
-        applicationId "com.example.myapp"
+        applicationId "com.example.littlefont"
         minSdkVersion 19
         targetSdkVersion 33
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         // diğer ayarlar...

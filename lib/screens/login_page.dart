@@ -1,13 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/items/bottom_nav_bar.dart';
-import 'package:littlefont/repository/accounts_repository.dart';
-import 'package:littlefont/items/button.dart';
+import 'package:littlefont/widgets/bottom_nav_bar.dart';
+import 'package:littlefont/widgets/button.dart';
+import 'package:littlefont/screens/first_screen.dart';
 import 'package:littlefont/screens/sign_up_page.dart';
-import 'package:littlefont/modals/account.dart';
+
+import '../utilities/google_sign_in.dart';
 
 class Login extends ConsumerStatefulWidget {
-
   const Login({
     super.key,
   });
@@ -15,6 +16,7 @@ class Login extends ConsumerStatefulWidget {
   @override
   ConsumerState<Login> createState() => _LoginState();
 }
+
 
 class _LoginState extends ConsumerState<Login> {
   final _formKeyLogin = GlobalKey<FormState>();
@@ -29,15 +31,6 @@ class _LoginState extends ConsumerState<Login> {
     super.dispose();
   }
 
-    void _findManager()  {
-    final accountRepo = ref.read(accountProvider);
-    for (Account a in accountRepo.accounts) {
-      if (a.email == _text1Controller.text) {
-        accountRepo.manager = a;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +40,7 @@ class _LoginState extends ConsumerState<Login> {
           color: Colors.blue.shade100,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.max,
             children: [
               PhysicalModel(
@@ -55,13 +49,67 @@ class _LoginState extends ConsumerState<Login> {
                 elevation: 10,
                 child: Column(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Icon(
-                        Icons.people,
-                        color: Colors.black,
-                        size: 70,
-                      ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Button(
+                      text: 'Log in with Google',
+                      textColor: Colors.black,
+                      color: Colors.white,
+                      height: 50,
+                      width: 300,
+                      image: 'assets/images/google.png',
+                      onPressedOperations: () async {
+                        try {
+                          await signInWithGoogle();
+                          if(FirebaseAuth.instance.currentUser != null){
+                            await Future.microtask(() {
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavBar(),));
+                            },);
+                          }else {
+                            await Future.microtask(() {
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FirstScreen(),));
+                            },);
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Log in with Google Error! please try to log in normally')));
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                          width: 150,
+                          height: 10,
+                          child: Divider(
+                            thickness: 1,
+                            indent: 0,
+                            endIndent: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text('Or'),
+                        SizedBox(
+                          width: 150,
+                          height: 10,
+                          child: Divider(
+                            thickness: 1,
+                            indent: 20,
+                            endIndent: 0,
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     Center(
                       child: Container(
@@ -93,20 +141,18 @@ class _LoginState extends ConsumerState<Login> {
                       child: Container(
                         alignment: Alignment.topCenter,
                         child: Button(
-                          height: 35,
+                          height: 50,
+                          width: 120,
                           text: 'Log in',
                           onPressedOperations: () {
                             final isSuitable =
                                 _formKeyLogin.currentState?.validate();
-
                             if (isSuitable == true) {
-                              _findManager();
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const BottomNavBar(),
                               ));
                             }
                           },
-                          width: 100,
                           color: Colors.red,
                           textColor: Colors.white,
                         ),
@@ -115,7 +161,7 @@ class _LoginState extends ConsumerState<Login> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => SignUp(),
+                          builder: (context) => const SignUp(),
                         ));
                       },
                       child: const Text('Don\'t have an account? register now'),
@@ -148,7 +194,6 @@ class _TextField1State extends ConsumerState<TextField1> {
 
   @override
   Widget build(BuildContext context) {
-    final accountRepo = ref.read(accountProvider);
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
@@ -164,20 +209,7 @@ class _TextField1State extends ConsumerState<TextField1> {
             break;
           }
         }
-
-        bool isFounded = false;
-
-        if (isMailSymbol && value.contains('.com')) {
-          for (int i = 0; i < accountRepo.accounts.length; i++) {
-            if (accountRepo.accounts[i].email == value) {
-              isFounded = true;
-            }
-          }
-
-          return isFounded ? null : 'Wrong email';
-        } else {
-          return 'Invalid email';
-        }
+        return !isMailSymbol ? 'Invalid Email' : null;
       },
       controller: widget._textController,
       decoration: InputDecoration(
@@ -211,7 +243,6 @@ class _TextField2State extends ConsumerState<TextField2> {
 
   @override
   Widget build(BuildContext context) {
-    final accountRepo = ref.read(accountProvider);
     return TextFormField(
       keyboardType: TextInputType.text,
       onChanged: (value) {
@@ -220,15 +251,7 @@ class _TextField2State extends ConsumerState<TextField2> {
         });
       },
       validator: (value) {
-        bool isFounded = false;
-        for (int i = 0; i < accountRepo.accounts.length; i++) {
-          if (accountRepo.accounts[i].password == value) {
-            isFounded = true;
-            break;
-          }
-        }
-
-        return isFounded ? null : 'Invalid password';
+        return null;
       },
       controller: widget._textController,
       obscureText: true,

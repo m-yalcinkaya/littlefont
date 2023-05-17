@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:littlefont/items/button.dart';
+import 'package:littlefont/widgets/button.dart';
 import 'package:littlefont/modals/news.dart';
-import 'package:littlefont/items/web_view.dart';
+import 'package:littlefont/widgets/web_view.dart';
 
 class ViewNewsPage extends StatelessWidget {
   final int indexNews;

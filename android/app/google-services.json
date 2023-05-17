@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:300282932986:android:78f642a29410ec8f54a343",
+        "mobilesdk_app_id": "1:300282932986:android:3265ef8f96b66c4154a343",
         "android_client_info": {
-          "package_name": "com.littlefont"
+          "package_name": "com.example.littlefont"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "300282932986-i8olcjg0kvqdfj3ra78gc06pj3ijp6h3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.littlefont",
+            "certificate_hash": "4fdf9b638480a02a914a82b708ee1a0d1d3d1143"
+          }
+        },
         {
           "client_id": "300282932986-hr7jmdaecjhvg2ionjhlkbl3n0816pmk.apps.googleusercontent.com",
           "client_type": 3
@@ -31,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "300282932986-9kgr04qrjraleoahdd5r3b0asoson2oe.apps.googleusercontent.com",
+              "client_id": "300282932986-763moi77vkbaia9bt33vr8kqpndajiju.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.littlefont"
+                "bundle_id": "com.example.littlefont"
               }
             }
           ]

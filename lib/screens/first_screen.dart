@@ -1,7 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:littlefont/screens/sign_up_page.dart';
-import '../items/button.dart';
+import '../widgets/button.dart';
 import 'login_page.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -51,24 +52,23 @@ class _FirstScreenState extends State<FirstScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/pexels-photo-1723637.webp'),
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
           ),
         ),
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 80,
-            ),
-            Container(
-              alignment: Alignment.topCenter,
+            const Spacer(flex: 9,),
+            Expanded(
+              flex: 5,
               child: AnimatedBuilder(
                 animation: _opacityAnimation,
                 builder: (BuildContext context, Widget? child) {
@@ -84,15 +84,15 @@ class _FirstScreenState extends State<FirstScreen>
                             size: 100,
                           ),
                         ),
-                        Text(
+                        AutoSizeText(
                           'LittleFont',
                           style: GoogleFonts.akshar(
                             textStyle: const TextStyle(
                               color: Colors.white,
-                              fontSize: 24,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
+                          minFontSize: 24,
                         ),
                       ],
                     ),
@@ -100,31 +100,37 @@ class _FirstScreenState extends State<FirstScreen>
                 },
               ),
             ),
-            const SizedBox(
-              height: 70,
-            ),
-            Button(
-              textColor: Colors.white,
-              text: 'Log in',
-              color: Colors.red,
-              onPressedOperations: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-              width: 200,
-              height: 20,
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SignUp(),
-              )),
-              child: const Text(
-                'New to the app? register now',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+            const Spacer(flex: 2,),
+            Expanded(
+              flex: 4,
+              child: Column(
+                children: [
+                  Button(
+                    textColor: Colors.white,
+                    text: 'Log in',
+                    color: Colors.red,
+                    onPressedOperations: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const Login()));
+                    },
+                    width: screenSize.width/2,
+                    height: screenSize.width/8,
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const SignUp(),
+                    )),
+                    child: const Text(
+                      'New to the app? register now',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+            const Spacer(flex: 8,),
           ],
         ),
       ),

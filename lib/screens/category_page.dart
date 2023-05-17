@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../items/category_gridview.dart';
+import '../widgets/category_gridview.dart';
 import 'package:littlefont/screens/add_category.dart';
 
 class CategoryPage extends ConsumerWidget {

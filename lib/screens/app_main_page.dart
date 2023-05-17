@@ -1,13 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
-import 'package:littlefont/repository/accounts_repository.dart';
-import '../items/category_sliver_grid.dart';
-import '../items/floating_main_page.dart';
-import '../items/news_listview.dart';
-import '../items/notes_listview.dart';
+import '../widgets/category_sliver_grid.dart';
+import '../widgets/floating_main_page.dart';
+import '../widgets/news_listview.dart';
+import '../widgets/notes_listview.dart';
 import '../modals/news.dart';
-import 'package:littlefont/items/app_drawer.dart';
+import 'package:littlefont/widgets/app_drawer.dart';
 import 'package:littlefont/screens/category_page.dart';
 import 'package:littlefont/screens/my_notes_page.dart';
 
@@ -24,6 +24,19 @@ class AppMainPage extends ConsumerStatefulWidget {
 
 class _AppMainPageState extends ConsumerState<AppMainPage> {
   late Future<List<News>?> _future;
+
+  String? name(){
+    String? fullName = FirebaseAuth.instance.currentUser!.displayName;
+    String name = '';
+    for(int i=0;i<fullName!.length; i++){
+      if(fullName[i] != ' '){
+        name = name + fullName[i];
+      }else {
+        break;
+      }
+   }
+    return name;
+  }
 
   @override
   void initState() {
@@ -46,7 +59,7 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
               collapseMode: CollapseMode.parallax,
               expandedTitleScale: 1.5,
               title: Text(
-                'Hi, ${ref.watch(accountProvider).manager.name}!',
+                'Hi, ${name()}!',
                 style: const TextStyle(
                   color: Colors.white,
                 ),

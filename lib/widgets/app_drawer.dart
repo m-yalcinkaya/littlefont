@@ -1,12 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:littlefont/repository/accounts_repository.dart';
 import 'package:littlefont/screens/about_page.dart';
 import 'package:littlefont/screens/category_page.dart';
 import 'package:littlefont/screens/favourites_page.dart';
 import 'package:littlefont/screens/first_screen.dart';
 import 'package:littlefont/screens/my_notes_page.dart';
+import 'package:littlefont/screens/profile_page.dart';
 import 'package:littlefont/screens/recycle_bin_page.dart';
 
 class AppDrawer extends ConsumerWidget {
@@ -14,16 +15,24 @@ class AppDrawer extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
+  String profilImage() {
+    final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
+    if (photoUrl != null) {
+      return photoUrl;
+    }
+    return 'https://pixabay.com/tr/vectors/bo%c5%9f-profil-resmi-gizemli-adam-avatar-973460/';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountRepo = ref.read(accountProvider);
+    Size screenSize = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         bottomRight: Radius.circular(50),
         topRight: Radius.circular(50),
       ),
       child: SizedBox(
-        width: 200,
+        width: screenSize.width * 3 / 4,
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -39,38 +48,43 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   color: Colors.red,
                 ),
-                child: Column(
-                  children: [
-                    const Icon(
-                      Icons.access_time_filled,
-                      color: Colors.white,
-                      size: 80,
-                    ),
-                    Text(
-                      'LittleFont',
-                      style: GoogleFonts.akshar(
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w800,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfilePage(),
+                          ));
+                    },
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50),
+                      ),
+                      child: Container(
+                        color: Colors.white70,
+                        child: ListTile(
+                          leading: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.red, width: 5),
+                            ),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(profilImage()),
+                              maxRadius: 20,
+                            ),
+                          ),
+                          title: AutoSizeText(
+                              '${FirebaseAuth.instance.currentUser?.displayName}'),
+                          subtitle: AutoSizeText(
+                              FirebaseAuth.instance.currentUser?.email ?? ''),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              ListTile(
-                leading: const CircleAvatar(
-                  maxRadius: 20,
-                  child: Icon(
-                    Icons.account_circle_rounded,
-                    size: 40,
                   ),
                 ),
-                title: Text(
-                    '${accountRepo.manager.name} ${accountRepo.manager.surname}'),
               ),
-              const Divider(thickness: 5),
               ListTile(
                 leading: const Icon(Icons.notes),
                 title: const Text('My Notes'),

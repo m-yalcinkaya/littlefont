@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
 import 'package:littlefont/services/news_service.dart';
 
-import '../items/my_grid_view.dart';
+import '../widgets/my_grid_view.dart';
 import '../modals/news.dart';
 
 class NewsPage extends ConsumerStatefulWidget {

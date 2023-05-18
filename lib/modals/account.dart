@@ -1,13 +1,8 @@
-
 class Account {
-  final String name;
-  final String surname;
-  final String email;
-  final String password;
+  late final String firstName;
+  late final String lastName;
+  late final String email;
+  late final String password;
 
-  Account(
-      {required this.name,
-        required this.surname,
-        required this.email,
-        required this.password});
+  Account({required this.firstName, required this.lastName, required this.email, required this.password});
 }

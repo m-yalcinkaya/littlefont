@@ -108,16 +108,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               );
             },
           ),
-          Column(
+          const Column(
             children: [
-              const SizedBox(
+              SizedBox(
                 height: 15,
               ),
               ListTile(
-                title: const Text('My Status'),
-                subtitle: const Text('Tap to add status update'),
+                title: Text('My Status'),
+                subtitle: Text('Tap to add status update'),
                 leading: Stack(
-                  children: const [
+                  children: [
                     CircleAvatar(
                       backgroundImage:
                           AssetImage('assets/images/profil_image.jpg'),
@@ -133,7 +133,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   ],
                 ),
               ),
-              const Divider(
+              Divider(
                 thickness: 2,
               ),
             ],

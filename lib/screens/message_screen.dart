@@ -37,9 +37,9 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Row(
+          child: const Row(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               Icon(Icons.arrow_back),
               CircleAvatar(
                 radius: 16.0,
@@ -48,7 +48,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
             ],
           ),
         ),
-        title: Row(children: const [
+        title: const Row(children: [
           Text('Mustafa Yalçınkaya'),
         ]),
         actions: [

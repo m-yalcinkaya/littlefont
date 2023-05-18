@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:littlefont/widgets/bottom_nav_bar.dart';
 
 import 'app_main_page.dart';
 import 'first_screen.dart';
@@ -28,9 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  Widget goToAppScreen(){
+  Widget goToAppScreen() {
     if(FirebaseAuth.instance.currentUser != null){
-      return const AppMainPage();
+      return const BottomNavBar();
     }else {
       return const FirstScreen();
     }

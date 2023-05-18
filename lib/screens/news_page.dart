@@ -17,6 +17,7 @@ class NewsPage extends ConsumerStatefulWidget {
 class _NewsPageState extends ConsumerState<NewsPage> {
   late Future<List<News>?> _future;
   late String categoryTitle;
+  // ignore: unused_field
   late String _selectedValue;
 
   @override

@@ -9,18 +9,19 @@ import 'package:littlefont/screens/first_screen.dart';
 import 'package:littlefont/screens/my_notes_page.dart';
 import 'package:littlefont/screens/profile_page.dart';
 import 'package:littlefont/screens/recycle_bin_page.dart';
+import 'package:littlefont/services/auth_service.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({
     Key? key,
   }) : super(key: key);
 
-  String profilImage() {
+  ImageProvider profilImage() {
     final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
     if (photoUrl != null) {
-      return photoUrl;
+      return NetworkImage(photoUrl);
     }
-    return 'https://pixabay.com/tr/vectors/bo%c5%9f-profil-resmi-gizemli-adam-avatar-973460/';
+    return const AssetImage('assets/images/kuslar.jpg');
   }
 
   @override
@@ -71,7 +72,7 @@ class AppDrawer extends ConsumerWidget {
                               border: Border.all(color: Colors.red, width: 5),
                             ),
                             child: CircleAvatar(
-                              backgroundImage: NetworkImage(profilImage()),
+                              backgroundImage: profilImage(),
                               maxRadius: 20,
                             ),
                           ),
@@ -138,13 +139,10 @@ class AppDrawer extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('Log out'),
-                onTap: () {
+                onTap: () async {
                   Navigator.pop(context);
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => const FirstScreen()),
-                    (Route<dynamic> route) => false,
-                  );
+                  await signOut(context);
+
                 },
               ),
             ],

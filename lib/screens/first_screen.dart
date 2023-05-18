@@ -66,7 +66,7 @@ class _FirstScreenState extends State<FirstScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Spacer(flex: 9,),
+            const Spacer(flex: 8,),
             Expanded(
               flex: 5,
               child: AnimatedBuilder(

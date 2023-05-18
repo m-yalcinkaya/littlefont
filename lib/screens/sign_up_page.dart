@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont/services/auth_service.dart';
 import 'package:littlefont/widgets/button.dart';
 import 'package:littlefont/screens/login_page.dart';
+
+import '../modals/account.dart';
 
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({
     Key? key,
   }) : super(key: key);
-
 
   @override
   ConsumerState<SignUp> createState() => _SignUpState();
@@ -16,13 +18,14 @@ class SignUp extends ConsumerStatefulWidget {
 class _SignUpState extends ConsumerState<SignUp> {
   final GlobalKey<FormState> formKeySignUp = GlobalKey<FormState>();
 
-
   final FocusNode _surnameFocusNode = FocusNode();
   final FocusNode _mailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
-  late String emailAddress;
-  late String password;
+  late String _firstName;
+  late String _lastName;
+  late String _email;
+  late String _password;
 
   bool? _isNumeric(String? value) {
     for (int i = 0; i < value!.length; i++) {
@@ -61,20 +64,21 @@ class _SignUpState extends ConsumerState<SignUp> {
                   height: 20,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 5, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: TextFormField(
                     textAlignVertical: TextAlignVertical.center,
                     onEditingComplete: () {
-                      FocusScope.of(context)
-                          .requestFocus(_surnameFocusNode);
+                      FocusScope.of(context).requestFocus(_surnameFocusNode);
                     },
                     validator: (value) {
                       return _isNumeric(value)!
                           ? 'Name cannot contain numbers'
                           : null;
                     },
-                    onSaved: (newValue) {},
+                    onSaved: (newValue) {
+                      _firstName = newValue!;
+                    },
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10),
                       filled: true,
@@ -90,8 +94,8 @@ class _SignUpState extends ConsumerState<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 5, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: TextFormField(
                     textAlignVertical: TextAlignVertical.center,
                     focusNode: _surnameFocusNode,
@@ -100,10 +104,11 @@ class _SignUpState extends ConsumerState<SignUp> {
                           ? 'Surname cannot contain numbers'
                           : null;
                     },
-                    onSaved: (newValue) {},
+                    onSaved: (newValue) {
+                      _lastName = newValue!;
+                    },
                     onEditingComplete: () {
-                      FocusScope.of(context)
-                          .requestFocus(_mailFocusNode);
+                      FocusScope.of(context).requestFocus(_mailFocusNode);
                     },
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10),
@@ -120,21 +125,21 @@ class _SignUpState extends ConsumerState<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 5, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: TextFormField(
                     textAlignVertical: TextAlignVertical.center,
                     focusNode: _mailFocusNode,
                     validator: (value) {
-                      return (isMailSymbol(value)! &&
-                              value!.contains('.com'))
+                      return (isMailSymbol(value)! && value!.contains('.com'))
                           ? null
                           : 'Invalid email';
                     },
-                    onSaved: (newValue) {},
+                    onSaved: (newValue) {
+                      _email = newValue!;
+                    },
                     onEditingComplete: () {
-                      FocusScope.of(context)
-                          .requestFocus(_passwordFocusNode);
+                      FocusScope.of(context).requestFocus(_passwordFocusNode);
                     },
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10),
@@ -151,8 +156,8 @@ class _SignUpState extends ConsumerState<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 5, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: TextFormField(
                     textAlignVertical: TextAlignVertical.center,
                     focusNode: _passwordFocusNode,
@@ -169,7 +174,9 @@ class _SignUpState extends ConsumerState<SignUp> {
                       }
                       return null;
                     },
-                    onSaved: (newValue) {},
+                    onSaved: (newValue) {
+                      _password = newValue!;
+                    },
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10),
                       filled: true,
@@ -187,16 +194,21 @@ class _SignUpState extends ConsumerState<SignUp> {
                 Button(
                   text: 'Register',
                   color: Colors.blue.shade400,
-                  onPressedOperations: () {
-                    final isSuitable =
-                        formKeySignUp.currentState?.validate();
+                  onPressedOperations: () async {
+                    final isSuitable = formKeySignUp.currentState?.validate();
                     if (isSuitable == true) {
                       formKeySignUp.currentState?.save();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Login(),
-                          ));
+                      final account = Account(firstName: _firstName, lastName: _lastName, email: _email, password: _password);
+                      await createUser(context, account: account);
+                      await Future.microtask(
+                        () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
+                              ));
+                        },
+                      );
                     }
                   },
                   width: 150,
@@ -205,8 +217,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => const Login(),
                     ));
                   },

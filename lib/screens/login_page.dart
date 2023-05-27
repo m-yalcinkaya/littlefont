@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/services/auth_service.dart';
-import 'package:littlefont/widgets/bottom_nav_bar.dart';
 import 'package:littlefont/widgets/button.dart';
 import 'package:littlefont/screens/first_screen.dart';
 import 'package:littlefont/screens/sign_up_page.dart';
@@ -68,22 +67,21 @@ class _LoginState extends ConsumerState<Login> {
                           if (FirebaseAuth.instance.currentUser != null) {
                             await Future.microtask(
                               () {
-                                Navigator.pushReplacement(
-                                    context,
+                                Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const BottomNavBar(),
-                                    ));
+                                      builder: (context) => const FirstScreen(),
+                                    ),
+                                        (route) => false);
                               },
                             );
                           } else {
                             await Future.microtask(
                               () {
-                                Navigator.pushReplacement(
-                                    context,
+                                Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                       builder: (context) => const FirstScreen(),
-                                    ));
+                                    ),
+                                    (route) => false);
                               },
                             );
                           }
@@ -156,9 +154,9 @@ class _LoginState extends ConsumerState<Login> {
                             counterText: '$lenghtString1 Character',
                             border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(20),
-                                  right: Radius.circular(20),
-                                )),
+                              left: Radius.circular(20),
+                              right: Radius.circular(20),
+                            )),
                           ),
                         ),
                       ),
@@ -190,9 +188,9 @@ class _LoginState extends ConsumerState<Login> {
                             counterText: '$lenghtString2 Character',
                             border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(20),
-                                  right: Radius.circular(20),
-                                )),
+                              left: Radius.circular(20),
+                              right: Radius.circular(20),
+                            )),
                           ),
                         ),
                       ),
@@ -209,9 +207,13 @@ class _LoginState extends ConsumerState<Login> {
                             final isSuitable =
                                 _formKeyLogin.currentState?.validate();
                             if (isSuitable == true) {
-                              await logInUser(context, _text1Controller.text,
-                                  _text2Controller.text);
-
+                              try {
+                                await logInUser(context, _text1Controller.text,
+                                    _text2Controller.text);
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('$e')));
+                              }
                             }
                           },
                           color: Colors.red,

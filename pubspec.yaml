@@ -41,11 +41,11 @@ dependencies:
   auto_size_text: ^3.0.0
   flutter_slidable: ^3.0.0
   http: ^0.13.6
-  carousel_slider: ^4.2.1
   webview_flutter: ^4.2.0
   firebase_core: ^2.12.0
   firebase_auth: ^4.6.0
   google_sign_in: ^6.1.0
+  cloud_firestore: ^4.7.1
 
 
 

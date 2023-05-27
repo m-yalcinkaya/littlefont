@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/screens/about_page.dart';
 import 'package:littlefont/screens/category_page.dart';
 import 'package:littlefont/screens/favourites_page.dart';
-import 'package:littlefont/screens/first_screen.dart';
 import 'package:littlefont/screens/my_notes_page.dart';
 import 'package:littlefont/screens/profile_page.dart';
 import 'package:littlefont/screens/recycle_bin_page.dart';
@@ -141,8 +140,11 @@ class AppDrawer extends ConsumerWidget {
                 title: const Text('Log out'),
                 onTap: () async {
                   Navigator.pop(context);
-                  await signOut(context);
-
+                  try{
+                    await signOut(context);
+                  }catch(e){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+                  }
                 },
               ),
             ],

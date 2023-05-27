@@ -199,16 +199,20 @@ class _SignUpState extends ConsumerState<SignUp> {
                     if (isSuitable == true) {
                       formKeySignUp.currentState?.save();
                       final account = Account(firstName: _firstName, lastName: _lastName, email: _email, password: _password);
-                      await createUser(context, account: account);
-                      await Future.microtask(
-                        () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Login(),
-                              ));
-                        },
-                      );
+                      try{
+                        await createUser(account: account);
+                        await Future.microtask(
+                              () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ));
+                          },
+                        );
+                      } catch(e){
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+                      }
                     }
                   },
                   width: 150,

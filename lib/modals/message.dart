@@ -8,7 +8,6 @@ class Message {
       : this(text: m["text"], isMe: m["isMe"]);
 
   Map<String, dynamic> toJson() {
-    final map = {"text": text, "isMe": isMe};
-    return map;
+    return {"text": text, "isMe": isMe};
   }
 }

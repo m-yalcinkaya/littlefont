@@ -10,6 +10,8 @@ import 'package:littlefont/screens/profile_page.dart';
 import 'package:littlefont/screens/recycle_bin_page.dart';
 import 'package:littlefont/services/auth_service.dart';
 
+import '../screens/first_screen.dart';
+
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({
     Key? key,
@@ -142,6 +144,18 @@ class AppDrawer extends ConsumerWidget {
                   Navigator.pop(context);
                   try{
                     await signOut(context);
+                    await Future.microtask(
+                          () {
+                        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const FirstScreen();
+                            },
+                          ),
+                              (_) => false,
+                        );
+                      },
+                    );
                   }catch(e){
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
                   }

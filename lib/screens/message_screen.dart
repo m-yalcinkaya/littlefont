@@ -1,11 +1,14 @@
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont/services/message_service.dart';
 import '../repository/messages_repository.dart';
 import 'package:littlefont/modals/message.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
-  const MessageScreen({Key? key}) : super(key: key);
+  final String email;
+  const MessageScreen({Key? key, required this.email}) : super(key: key);
 
   @override
   ConsumerState<MessageScreen> createState() => _MessageScreenState();
@@ -14,6 +17,8 @@ class MessageScreen extends ConsumerStatefulWidget {
 class _MessageScreenState extends ConsumerState<MessageScreen> {
   final controller = TextEditingController();
 
+  bool isDocumentNull = false;
+
   Color _color(bool isMe) {
     if (isMe == true) {
       return Colors.blue;
@@ -21,15 +26,10 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     return Colors.blueGrey;
   }
 
-  @override
-  void initState() {
-    Future.delayed(Duration.zero,() => ref.read(messageProvider).downloadAsList());
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    final messageReadRepo = ref.read(messageProvider);
     final messageWatchRepo = ref.watch(messageProvider);
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +56,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
             onPressed: () {},
             icon: const Icon(Icons.videocam),
           ),
-          HttpIconButton(messageReadRepo: messageReadRepo),
+          // HttpIconButton(messageReadRepo: messageReadRepo),
         ],
       ),
       body: SafeArea(
@@ -65,61 +65,82 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
             Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                image:
+                    image:
                     AssetImage('assets/images/whatsapp-duvar-kagitlari-8.jpg'),
-                fit: BoxFit.cover,
-              )),
+                    fit: BoxFit.cover,
+                  )),
             ),
             Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
-                    reverse: true,
-                    itemCount: messageWatchRepo.messages.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Align(
-                            alignment: messageWatchRepo
-                                    .messages[messageWatchRepo.messages.length -
-                                        index -
-                                        1]
+                  child: StreamBuilder(
+                    stream: ref.watch(messageServiceProvider).selectCollection(widget.email, true).snapshots(),
+                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                      if (snapshot.hasError) {
+                        return const Center(child: Text('Something went wrong'));
+                      } else if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      Map<String, dynamic>? documentData = snapshot.data!.data();
+
+                      List<dynamic>? listData = documentData?['messages'];
+                      ref.watch(messageProvider).messages = [];
+                      List<dynamic> list = listData ?? [];
+                      for(Map<String, dynamic> messages in list){
+                        Message message = Message(text: messages['msg'], isMe: messages['isMe']);
+                        messageWatchRepo.messages.add(message);
+                      }
+
+                      return ListView.builder(
+                        reverse: true,
+                        itemCount: ref.watch(messageProvider).messages.length,
+                        itemBuilder: (BuildContext context, int index) {
+
+                          return Column(
+                            children: [
+                              Align(
+                                alignment: messageWatchRepo.messages
+                                [messageWatchRepo.messages.length -
+                                    index - 1]
                                     .isMe
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15.0),
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 320,
-                                  ),
-                                  color: _color(messageWatchRepo
-                                      .messages[
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    child: Container(
+                                      constraints: const BoxConstraints(
+                                        maxWidth: 320,
+                                      ),
+                                      color: _color(messageWatchRepo
+                                          .messages[
+                                      messageWatchRepo.messages.length -
+                                          index -
+                                          1]
+                                          .isMe),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15),
+                                        child: AutoSizeText(
+                                          messageWatchRepo
+                                              .messages[
                                           messageWatchRepo.messages.length -
                                               index -
                                               1]
-                                      .isMe),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15),
-                                    child: AutoSizeText(
-                                      messageWatchRepo
-                                          .messages[
-                                              messageWatchRepo.messages.length -
-                                                  index -
-                                                  1]
-                                          .text,
-                                      style: const TextStyle(
-                                        color: Colors.white,
+                                              .text,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ],
+                            ],
+                          );
+                        },
                       );
                     },
                   ),
@@ -154,12 +175,12 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                     const Spacer(),
                     IconButton(
                       padding: const EdgeInsets.only(bottom: 10),
-                      onPressed: () {
-                        final message = Message(
-                          text: controller.text,
-                          isMe: true,
-                        );
-                        messageReadRepo.sendMessage(message);
+                      onPressed: () async {
+                        try{
+                          await ref.read(messageProvider).sendMessage(widget.email, controller.text);
+                        } catch(e){
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+                        }
                         controller.text = '';
                       },
                       icon: const Icon(Icons.send, color: Colors.blue),
@@ -176,44 +197,3 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
   }
 }
 
-class HttpIconButton extends ConsumerStatefulWidget {
-  const HttpIconButton({
-    super.key,
-    required this.messageReadRepo,
-  });
-
-  final MessagesRepository messageReadRepo;
-
-  @override
-  ConsumerState<HttpIconButton> createState() => _HttpIconButtonState();
-}
-
-class _HttpIconButtonState extends ConsumerState<HttpIconButton> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return isLoading
-        ? const CircularProgressIndicator(
-            color: Colors.white,
-          )
-        : IconButton(
-            onPressed: () async {
-              try {
-                setState(() {
-                  isLoading = true;
-                });
-                await widget.messageReadRepo.downloadAsList();
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error : ${e.toString()}')));
-              } finally {
-                setState(() {
-                  isLoading = false;
-                });
-              }
-            },
-            icon: const Icon(Icons.call),
-          );
-  }
-}

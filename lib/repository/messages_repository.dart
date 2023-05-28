@@ -8,31 +8,17 @@ class MessagesRepository extends ChangeNotifier {
 
   MessagesRepository(this.dataService);
 
-  List<Message> messages = [Message(text: 'Message', isMe: false)];
+  List<Message> messages = [];
 
-  Future<void> download() async {
-    Message message = await dataService.getMessage();
-    messages.add(message);
-    notifyListeners();
-  }
-  Future<void> downloadAsList() async {
-    final result = await dataService.getMessageFromList();
-    messages.addAll(result);
-    notifyListeners();
-  }
 
-  Future<void> sendMessage(Message message) async {
-    final result = await dataService.sendMessage(message);
-    messages = [];
-    messages.addAll(result);
-    notifyListeners();
+  Future<void> sendMessage(String email, String message) async {
+    try{
+      await dataService.updateJson(email, message, true);
+      await dataService.updateJson(email, message, false);
+    }catch(e){
+      throw Exception('Messages could not be sent \n$e');
+    }
   }
-
-  void addMessage(Message message, List list) {
-    list.add(message);
-    notifyListeners();
-  }
-
 
 }
 

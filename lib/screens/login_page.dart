@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/services/auth_service.dart';
+import 'package:littlefont/widgets/bottom_nav_bar.dart';
 import 'package:littlefont/widgets/button.dart';
 import 'package:littlefont/screens/first_screen.dart';
 import 'package:littlefont/screens/sign_up_page.dart';
@@ -64,27 +65,29 @@ class _LoginState extends ConsumerState<Login> {
                       onPressedOperations: () async {
                         try {
                           await signInWithGoogle();
-                          if (FirebaseAuth.instance.currentUser != null) {
-                            await Future.microtask(
-                              () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                      builder: (context) => const FirstScreen(),
-                                    ),
-                                        (route) => false);
-                              },
-                            );
-                          } else {
-                            await Future.microtask(
-                              () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                      builder: (context) => const FirstScreen(),
-                                    ),
-                                    (route) => false);
-                              },
-                            );
-                          }
+                          await Future.microtask(() async {
+                            if (FirebaseAuth.instance.currentUser != null) {
+                              await Future.microtask(
+                                    () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (context) => const BottomNavBar(),
+                                      ),
+                                          (route) => false);
+                                },
+                              );
+                            } else {
+                              await Future.microtask(
+                                    () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (context) => const FirstScreen(),
+                                      ),
+                                          (route) => false);
+                                },
+                              );
+                            }
+                          },);
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                               content: Text(
@@ -239,45 +242,3 @@ class _LoginState extends ConsumerState<Login> {
     );
   }
 }
-
-/*class TextField1 extends ConsumerStatefulWidget {
-  const TextField1({
-    super.key,
-    required TextEditingController text1Controller,
-  }) : _textController = text1Controller;
-
-  final TextEditingController _textController;
-
-  @override
-  ConsumerState<TextField1> createState() => _TextField1State();
-}
-
-class _TextField1State extends ConsumerState<TextField1> {
-  int lenghtString = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return
-  }
-}*/
-
-/*class TextField2 extends ConsumerStatefulWidget {
-  const TextField2({
-    super.key,
-    required TextEditingController text2Controller,
-  }) : _textController = text2Controller;
-
-  final TextEditingController _textController;
-
-  @override
-  ConsumerState<TextField2> createState() => _TextField2State();
-}
-
-class _TextField2State extends ConsumerState<TextField2> {
-  int lenghtString = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return
-  }
-}*/

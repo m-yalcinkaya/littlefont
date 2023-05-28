@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:littlefont/modals/account.dart';
 
-import '../screens/first_screen.dart';
 import '../widgets/bottom_nav_bar.dart';
 
 
@@ -70,18 +70,8 @@ Future<void> logInUser(
 Future<void> signOut(BuildContext context) async {
   try {
     await FirebaseAuth.instance.signOut();
-    await Future.microtask(
-      () {
-        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return const FirstScreen();
-            },
-          ),
-          (_) => false,
-        );
-      },
-    );
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
   } catch (e) {
     throw Exception('An Error Occurred While Logging Out');
   }

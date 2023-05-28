@@ -5,7 +5,6 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import 'message_screen.dart';
 
-
 class SearchAccount extends ConsumerStatefulWidget {
   const SearchAccount({Key? key}) : super(key: key);
 
@@ -14,7 +13,6 @@ class SearchAccount extends ConsumerStatefulWidget {
 }
 
 class _SearchAccountState extends ConsumerState<SearchAccount> {
-
   late TextEditingController _textController;
 
   @override
@@ -23,40 +21,44 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
     super.initState();
   }
 
-
   @override
   void dispose() {
     _textController.dispose();
     super.dispose();
   }
 
-  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('users').snapshots();
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('users').snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        /*title: TextField(
+          /*title: TextField(
           controller: _textController,
           onChanged: (value) {
             null;
           },
         ),*/
-      ),
+          ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _usersStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const Text('Something went wrong');
+            return const Center(child: Text('Something went wrong'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Loading');
+            return const Center(child: CircularProgressIndicator());
           }
 
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+          List<DocumentSnapshot> documents = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: documents.length,
+            itemBuilder: (BuildContext context, int index) {
+              Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
+
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -74,7 +76,7 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
                         onTap: () {
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: const MessageScreen(),
+                            screen: MessageScreen(email: data['email']),
                             withNavBar: false,
                           );
                         },
@@ -86,11 +88,8 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
                   ),
                 ],
               );
-              /*return ListTile(
-                title: Text('${data['firstName']} ${data['lastName']}'),
-                subtitle: Text(data['email']),
-              );*/
-            }).toList(),
+
+            },
           );
         },
       ),

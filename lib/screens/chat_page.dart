@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:littlefont/screens/search_account.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/screens/message_screen.dart';
-import 'package:littlefont/repository/messages_repository.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -23,6 +21,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
   }
+
+  final _usersStream = FirebaseFirestore.instance
+      .collection('users')
+      .snapshots();
 
 
   @override
@@ -48,73 +50,49 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         controller: _tabController,
         children: [
           StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .snapshots(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            stream: _usersStream,
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
                 return const Center(child: Text('Something went wrong'));
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return ListView(
-                children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                  Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+              List<DocumentSnapshot> documents = snapshot.data!.docs;
+
+              return ListView.builder(
+                itemCount: documents.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Slidable(
-                        key: UniqueKey(),
-                        startActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          dismissible: DismissiblePane(onDismissed: () {
-                            setState(() {
-                              /*_kisi.removeAt(index);*/
-                            });
-                          }),
-                          children: const [
-                            SlidableAction(
-                              onPressed: null,
-                              backgroundColor: Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Delete',
+                      Column(
+                        children: [
+                          ListTile(
+                            title: Text('${data['firstName']} ${data['lastName']}'),
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage('${data['photoUrl']}'),
+                              radius: 20,
+                              backgroundColor: Colors.blue,
                             ),
-                          ],
-                        ),
-                        endActionPane: null,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text(data['name']),
-                              leading: const CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    'assets/images/profil_image.jpg'),
-                                radius: 20,
-                                backgroundColor: Colors.blue,
-                              ),
-                              subtitle: Text(ref
-                                  .watch(messageProvider)
-                                  .messages
-                                  .last
-                                  .text),
-                              onTap: () {
-                                PersistentNavBarNavigator.pushNewScreen(
-                                  context,
-                                  screen: const MessageScreen(),
-                                  withNavBar: false,
-                                );
-                              },
-                            ),
-                            const Divider(
-                              thickness: 2,
-                            ),
-                          ],
-                        ),
+                            subtitle: Text(data['email']),
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: MessageScreen(email: data['email']),
+                                withNavBar: false,
+                              );
+                            },
+                          ),
+                          const Divider(
+                            thickness: 2,
+                          ),
+                        ],
                       ),
                     ],
                   );
-                }).toList(),
+                },
               );
             },
           ),
@@ -151,6 +129,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'ChatFltButton',
         onPressed: () {
           PersistentNavBarNavigator.pushNewScreen(
             context,

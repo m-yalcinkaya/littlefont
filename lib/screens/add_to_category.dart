@@ -44,7 +44,7 @@ class AddToCategory extends ConsumerWidget {
       itemCount: noteRepo.notes.length,
       itemBuilder: (context, index) {
         return Card(
-          color: Colors.white,
+          color: Colors.blue.shade200,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(

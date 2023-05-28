@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -33,14 +34,7 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          /*title: TextField(
-          controller: _textController,
-          onChanged: (value) {
-            null;
-          },
-        ),*/
-          ),
+      appBar: AppBar(),
       body: StreamBuilder<QuerySnapshot>(
         stream: _usersStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -53,11 +47,19 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
           }
 
           List<DocumentSnapshot> documents = snapshot.data!.docs;
+          List<DocumentSnapshot> listData = [];
+
+          for(DocumentSnapshot document in documents){
+            if(document['email'] != FirebaseAuth.instance.currentUser!.email){
+              listData.add(document);
+            }
+          }
 
           return ListView.builder(
-            itemCount: documents.length,
+            itemCount: listData.length,
             itemBuilder: (BuildContext context, int index) {
-              Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
+              Map<String, dynamic> data = listData[index].data() as Map<String, dynamic>;
+
 
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -88,7 +90,6 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
                   ),
                 ],
               );
-
             },
           );
         },

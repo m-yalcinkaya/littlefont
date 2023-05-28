@@ -1,6 +1,9 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:littlefont/screens/search_account.dart';
+import 'package:littlefont/services/message_service.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/screens/message_screen.dart';
@@ -22,10 +25,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     _tabController = TabController(vsync: this, length: 2);
   }
 
-  final _usersStream = FirebaseFirestore.instance
-      .collection('users')
-      .snapshots();
-
+  final _usersStream =
+      FirebaseFirestore.instance.collection('users').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -51,32 +52,70 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         children: [
           StreamBuilder(
             stream: _usersStream,
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return const Center(child: Text('Something went wrong'));
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(child: Text('Something went wrong'));
+                  } else if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (!snapshot.hasData) {
+                    return const Center(child: Text('No data available'));
+                  }
 
               List<DocumentSnapshot> documents = snapshot.data!.docs;
+                  List<DocumentSnapshot> listData = [];
+
+                  for(DocumentSnapshot document in documents){
+                    if(document['email'] != FirebaseAuth.instance.currentUser!.email){
+                      listData.add(document);
+                    }
+                  }
 
               return ListView.builder(
-                itemCount: documents.length,
+                itemCount: listData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
+                  Map<String, dynamic> data =
+                      listData[index].data() as Map<String, dynamic>;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Column(
                         children: [
                           ListTile(
-                            title: Text('${data['firstName']} ${data['lastName']}'),
+                            title: Text(
+                                '${data['firstName']} ${data['lastName']}'),
                             leading: CircleAvatar(
-                              backgroundImage: NetworkImage('${data['photoUrl']}'),
+                              backgroundImage:
+                                  NetworkImage('${data['photoUrl']}'),
                               radius: 20,
                               backgroundColor: Colors.blue,
                             ),
-                            subtitle: Text(data['email']),
+                            subtitle: StreamBuilder(
+                              stream: ref
+                                  .watch(messageServiceProvider)
+                                  .selectCollection(data['email'], true)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if(snapshot.hasData){
+                                  Map<String, dynamic>? documentData = snapshot.data!.data();
+
+                                  final lastMessage = documentData?['lastMessage'];
+                                  if(lastMessage == null){
+                                    return const Text("");
+                                  }else{
+                                    final lastMessageText = documentData?['lastMessage']['msg'];
+                                    final isMe = documentData?['lastMessage']['isMe'];
+                                    return Text(isMe==true ? 'You: $lastMessageText' : '$lastMessageText');
+                                  }
+                                }else if(snapshot.hasError){
+                                  return const Text('Error');
+                                }else{
+                                  return const Text('Loading..');
+
+                                }
+                              },
+                            ),
                             onTap: () {
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,

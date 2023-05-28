@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageService {
 
+  // late String email;
 
-  DocumentReference<Map<String, dynamic>> selectCollection(
-      String email, bool isMe) {
+  DocumentReference<Map<String, dynamic>> selectCollection(String email, bool isMe) {
     if (isMe) {
       return FirebaseFirestore.instance
           .collection('messages')
@@ -21,22 +21,24 @@ class MessageService {
 
 
   Future<void> updateJson(String email, String message, bool isMe) async {
-    final snapshot = await selectCollection(email, isMe).get();
+    final snapshot = await selectCollection(email ,isMe).get();
 
     if(snapshot.exists){
       final data = snapshot.data();
       List<dynamic> listData = data?['messages'] ?? [];
-      final map = {'msg': message, 'isMe': isMe};
+      Map<String, dynamic> map = {'msg': message, 'isMe': isMe};
       listData.add(map);
-      await selectCollection(email, isMe).set({
+      await selectCollection(email ,isMe).set({
         'messages': listData,
+        'lastMessage': map,
       });
     } else{
-      List<dynamic> listData = [];
-      final map = {'msg': message, 'isMe': isMe};
+      List<dynamic>? listData = [];
+      Map<String, dynamic> map = {'msg': message, 'isMe': isMe};
       listData.add(map);
       await selectCollection(email, isMe).set({
         'messages': listData,
+        'lastMessage': map,
       });
     }
   }

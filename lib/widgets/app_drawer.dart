@@ -28,141 +28,135 @@ class AppDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Size screenSize = MediaQuery.of(context).size;
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomRight: Radius.circular(50),
-        topRight: Radius.circular(50),
-      ),
-      child: SizedBox(
-        width: screenSize.width * 3 / 4,
-        child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                curve: Curves.ease,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/pexels-photo-1563356.jpg',
-                    ),
-                    fit: BoxFit.fill,
+    return SizedBox(
+      width: screenSize.width * 3 / 4,
+      child: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              curve: Curves.ease,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/pexels-photo-1563356.jpg',
                   ),
-                  color: Colors.red,
+                  fit: BoxFit.fill,
                 ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProfilePage(),
-                          ));
-                    },
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50),
-                      ),
-                      child: Container(
-                        color: Colors.white70,
-                        child: ListTile(
-                          leading: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.red, width: 5),
-                            ),
-                            child: CircleAvatar(
-                              backgroundImage: profilImage(),
-                              maxRadius: 20,
-                            ),
+                color: Colors.red,
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfilePage(),
+                        ));
+                  },
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50),
+                    ),
+                    child: Container(
+                      color: Colors.white70,
+                      child: ListTile(
+                        leading: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.red, width: 5),
                           ),
-                          title: AutoSizeText(
-                              '${FirebaseAuth.instance.currentUser?.displayName}'),
-                          subtitle: AutoSizeText(
-                              FirebaseAuth.instance.currentUser?.email ?? ''),
+                          child: CircleAvatar(
+                            backgroundImage: profilImage(),
+                            maxRadius: 20,
+                          ),
                         ),
+                        title: AutoSizeText(
+                            '${FirebaseAuth.instance.currentUser?.displayName}'),
+                        subtitle: AutoSizeText(
+                            FirebaseAuth.instance.currentUser?.email ?? ''),
                       ),
                     ),
                   ),
                 ),
               ),
-              ListTile(
-                leading: const Icon(Icons.notes),
-                title: const Text('My Notes'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MyNotes(),
-                  ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.category),
-                title: const Text('Categories'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const CategoryPage(),
-                  ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.star),
-                title: const Text('Favourites'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const FavouritesPage(),
-                  ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text('Recycle Bin'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const RecycleBin(),
-                  ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.info),
-                title: const Text('About'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const AboutPage(),
-                  ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Log out'),
-                onTap: () async {
-                  Navigator.pop(context);
-                  try{
-                    await signOut(context);
-                    await Future.microtask(
-                          () {
-                        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const FirstScreen();
-                            },
-                          ),
-                              (_) => false,
-                        );
-                      },
-                    );
-                  }catch(e){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
-                  }
-                },
-              ),
-            ],
-          ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.notes),
+              title: const Text('My Notes'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const MyNotes(),
+                ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.category),
+              title: const Text('Categories'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const CategoryPage(),
+                ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.star),
+              title: const Text('Favourites'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const FavouritesPage(),
+                ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Recycle Bin'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const RecycleBin(),
+                ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info),
+              title: const Text('About'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AboutPage(),
+                ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Log out'),
+              onTap: () async {
+                Navigator.pop(context);
+                try{
+                  await signOut(context);
+                  await Future.microtask(
+                        () {
+                      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return const FirstScreen();
+                          },
+                        ),
+                            (_) => false,
+                      );
+                    },
+                  );
+                }catch(e){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

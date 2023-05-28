@@ -26,8 +26,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     return Colors.blueGrey;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final messageWatchRepo = ref.watch(messageProvider);

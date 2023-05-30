@@ -7,8 +7,7 @@ import '../repository/messages_repository.dart';
 import 'package:littlefont/modals/message.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
-  final String email;
-  const MessageScreen({Key? key, required this.email}) : super(key: key);
+  const MessageScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<MessageScreen> createState() => _MessageScreenState();
@@ -26,6 +25,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     return Colors.blueGrey;
   }
 
+
   @override
   Widget build(BuildContext context) {
     final messageWatchRepo = ref.watch(messageProvider);
@@ -35,19 +35,19 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.arrow_back),
+              const Icon(Icons.arrow_back),
               CircleAvatar(
                 radius: 16.0,
-                backgroundImage: AssetImage('assets/images/profil_image.jpg'),
+                backgroundImage: NetworkImage('${ref.watch(messageProvider).data['photoUrl']}'),
               ),
             ],
           ),
         ),
-        title: const Row(children: [
-          Text('Mustafa Yalçınkaya'),
+        title: Row(children: [
+          Text('${ref.watch(messageProvider).data['firstName']} ${ref.watch(messageProvider).data['lastName']}'),
         ]),
         actions: [
           IconButton(
@@ -72,7 +72,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
               children: [
                 Expanded(
                   child: StreamBuilder(
-                    stream: ref.watch(messageServiceProvider).selectCollection(widget.email, true).snapshots(),
+                    stream: ref.watch(messageServiceProvider).selectCollection(ref.watch(messageProvider).data['email'], true).snapshots(),
                     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasError) {
                         return const Center(child: Text('Something went wrong'));
@@ -175,7 +175,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                       padding: const EdgeInsets.only(bottom: 10),
                       onPressed: () async {
                         try{
-                          await ref.read(messageProvider).sendMessage(widget.email, controller.text);
+                          await ref.read(messageProvider).sendMessage(ref.read(messageProvider).data['email'], controller.text);
                         } catch(e){
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
                         }

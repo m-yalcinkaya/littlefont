@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:littlefont/repository/messages_repository.dart';
 import 'package:littlefont/screens/search_account.dart';
 import 'package:littlefont/services/message_service.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -24,6 +25,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
   }
+
+
+  ImageProvider profilImage() {
+    final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
+    if (photoUrl != null) {
+      return NetworkImage(photoUrl);
+    }
+    return const AssetImage('assets/images/kuslar.jpg');
+  }
+
+
 
   final _usersStream =
       FirebaseFirestore.instance.collection('users').snapshots();
@@ -54,28 +66,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             stream: _usersStream,
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Center(child: Text('Something went wrong'));
-                  } else if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (!snapshot.hasData) {
-                    return const Center(child: Text('No data available'));
-                  }
+              if (snapshot.hasError) {
+                return const Center(child: Text('Something went wrong'));
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (!snapshot.hasData) {
+                return const Center(child: Text('No data available'));
+              }
 
               List<DocumentSnapshot> documents = snapshot.data!.docs;
-                  List<DocumentSnapshot> listData = [];
+              ref.watch(messageProvider).chatListData = [];
 
-                  for(DocumentSnapshot document in documents){
-                    if(document['email'] != FirebaseAuth.instance.currentUser!.email){
-                      listData.add(document);
-                    }
-                  }
+
+              for (DocumentSnapshot document in documents) {
+                if (document['email'] !=
+                    FirebaseAuth.instance.currentUser!.email) {
+                  ref.watch(messageProvider).chatListData.add(document);
+                }
+              }
+
 
               return ListView.builder(
-                itemCount: listData.length,
+                itemCount: ref.watch(messageProvider).chatListData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  Map<String, dynamic> data =
-                      listData[index].data() as Map<String, dynamic>;
+                  ref.watch(messageProvider).data =
+                  ref.watch(messageProvider).chatListData[index].data() as Map<String, dynamic>;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -83,43 +98,50 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         children: [
                           ListTile(
                             title: Text(
-                                '${data['firstName']} ${data['lastName']}'),
+                                '${ref.watch(messageProvider).data['firstName']} ${ref.watch(messageProvider).data['lastName']}'),
                             leading: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage('${data['photoUrl']}'),
+                              backgroundImage: NetworkImage(
+                                  '${ref.watch(messageProvider).data['photoUrl']}'),
                               radius: 20,
                               backgroundColor: Colors.blue,
                             ),
                             subtitle: StreamBuilder(
                               stream: ref
                                   .watch(messageServiceProvider)
-                                  .selectCollection(data['email'], true)
+                                  .selectCollection(
+                                      ref.watch(messageProvider).data['email'],
+                                      true)
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<dynamic> snapshot) {
-                                if(snapshot.hasData){
-                                  Map<String, dynamic>? documentData = snapshot.data!.data();
+                                if (snapshot.hasData) {
+                                  Map<String, dynamic>? documentData =
+                                      snapshot.data!.data();
 
-                                  final lastMessage = documentData?['lastMessage'];
-                                  if(lastMessage == null){
+                                  final lastMessage =
+                                      documentData?['lastMessage'];
+                                  if (lastMessage == null) {
                                     return const Text("");
-                                  }else{
-                                    final lastMessageText = documentData?['lastMessage']['msg'];
-                                    final isMe = documentData?['lastMessage']['isMe'];
-                                    return Text(isMe==true ? 'You: $lastMessageText' : '$lastMessageText');
+                                  } else {
+                                    final lastMessageText =
+                                        documentData?['lastMessage']['msg'];
+                                    final isMe =
+                                        documentData?['lastMessage']['isMe'];
+                                    return Text(isMe == true
+                                        ? 'You: $lastMessageText'
+                                        : '$lastMessageText');
                                   }
-                                }else if(snapshot.hasError){
+                                } else if (snapshot.hasError) {
                                   return const Text('Error');
-                                }else{
+                                } else {
                                   return const Text('Loading..');
-
                                 }
                               },
                             ),
                             onTap: () {
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
-                                screen: MessageScreen(email: data['email']),
+                                screen: const MessageScreen(),
                                 withNavBar: false,
                               );
                             },
@@ -135,23 +157,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               );
             },
           ),
-          const Column(
+          Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               ListTile(
-                title: Text('My Status'),
-                subtitle: Text('Tap to add status update'),
+                title: const Text('My Status'),
+                subtitle: const Text('Tap to add status update'),
                 leading: Stack(
                   children: [
                     CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/profil_image.jpg'),
+                      backgroundImage: profilImage(),
                       radius: 20,
                       backgroundColor: Colors.blue,
                     ),
-                    Positioned(
+                    const Positioned(
                       top: 22,
                       left: 22,
                       child:
@@ -160,7 +181,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   ],
                 ),
               ),
-              Divider(
+              const Divider(
                 thickness: 2,
               ),
             ],

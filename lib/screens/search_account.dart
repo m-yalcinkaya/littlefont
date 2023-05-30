@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../repository/messages_repository.dart';
 import 'message_screen.dart';
 
 class SearchAccount extends ConsumerStatefulWidget {
@@ -58,7 +59,7 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
           return ListView.builder(
             itemCount: listData.length,
             itemBuilder: (BuildContext context, int index) {
-              Map<String, dynamic> data = listData[index].data() as Map<String, dynamic>;
+              ref.watch(messageProvider).data = listData[index].data() as Map<String, dynamic>;
 
 
               return Column(
@@ -67,18 +68,18 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
                   Column(
                     children: [
                       ListTile(
-                        title: Text('${data['firstName']} ${data['lastName']}'),
+                        title: Text('${ref.watch(messageProvider).data['firstName']} ${ref.watch(messageProvider).data['lastName']}'),
                         leading: CircleAvatar(
                           backgroundImage:
-                          NetworkImage('${data['photoUrl']}'),
+                          NetworkImage('${ref.watch(messageProvider).data['photoUrl']}'),
                           radius: 20,
                           backgroundColor: Colors.blue,
                         ),
-                        subtitle: Text(data['email']),
+                        subtitle: Text(ref.watch(messageProvider).data['email']),
                         onTap: () {
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: MessageScreen(email: data['email']),
+                            screen: const MessageScreen(),
                             withNavBar: false,
                           );
                         },

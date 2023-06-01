@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageService {
 
-  // late String email;
 
   DocumentReference<Map<String, dynamic>> selectCollection(String email, bool isMe) {
     if (isMe) {

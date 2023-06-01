@@ -11,8 +11,6 @@ import 'package:littlefont/widgets/app_drawer.dart';
 import 'package:littlefont/screens/category_page.dart';
 import 'package:littlefont/screens/my_notes_page.dart';
 
-import '../services/news_service.dart';
-
 class AppMainPage extends ConsumerStatefulWidget {
   const AppMainPage({
     Key? key,
@@ -25,25 +23,24 @@ class AppMainPage extends ConsumerStatefulWidget {
 class _AppMainPageState extends ConsumerState<AppMainPage> {
   late Future<List<News>?> _future;
 
-  String? name(){
+  String? name() {
     String? fullName = FirebaseAuth.instance.currentUser!.displayName;
     String name = '';
-    for(int i=0;i<fullName!.length; i++){
-      if(fullName[i] != ' '){
+    for (int i = 0; i < fullName!.length; i++) {
+      if (fullName[i] != ' ') {
         name = name + fullName[i];
-      }else {
+      } else {
         break;
       }
-   }
+    }
     return name;
   }
 
   @override
   void initState() {
-    ref.read(newsServiceProvider).selectCategory('general');
     _future = ref
         .read(newsProvider)
-        .getNewsByCategory(ref.read(newsProvider).generalNews!);
+        .getNewsByCategory('general', ref.read(newsProvider).generalNews!);
     super.initState();
   }
 

@@ -19,40 +19,40 @@ class NewsRepository extends ChangeNotifier {
 
 
 
-  Future<List<News>?> getNewsByCategory(List<News>? newsList) async {
+  Future<List<News>?> getNewsByCategory(String category, List<News>? newsList) async {
     if (newsList == generalNews) {
       generalNews = [];
-      final item = await newsService.getNews();
+      final item = await newsService.getNews(category);
       generalNews!.addAll(item);
       return generalNews;
     } else if (newsList == healthNews) {
       healthNews = [];
-      final item = await newsService.getNews();
+      final item = await newsService.getNews(category);
       healthNews!.addAll(item);
       return healthNews;
     } else if (newsList == entertainmentNews) {
       entertainmentNews = [];
-      final item = await newsService.getNews();
+      final item = await newsService.getNews(category);
       entertainmentNews!.addAll(item);
       return entertainmentNews;
     } else if (newsList == sportsNews) {
       sportsNews = [];
-      final item = await newsService.getNews();
+      final item = await newsService.getNews(category);
       sportsNews!.addAll(item);
       return sportsNews;
     } else if (newsList == businessNews) {
       businessNews = [];
-      final item = await newsService.getNews();
+      final item = await newsService.getNews(category);
       businessNews!.addAll(item);
       return businessNews;
     } else if (newsList == scienceNews) {
       scienceNews = [];
-      final item = await newsService.getNews();
+      final item = await newsService.getNews(category);
       scienceNews!.addAll(item);
       return scienceNews;
     } else if (newsList == technologyNews) {
       technologyNews = [];
-      final item = await newsService.getNews();
+      final item = await newsService.getNews(category);
       technologyNews!.addAll(item);
       return technologyNews;
     }

@@ -7,12 +7,13 @@ import '../modals/news.dart';
 class NewsService {
   late String url;
 
-  void selectCategory(String category) {
-    url =
-        'https://newsapi.org/v2/top-headlines?country=us&category=$category&apiKey=b8bb19f553514c5fb4ed8727df8749b7';
-  }
 
-  Future<List<News>> getNews() async {
+  Future<List<News>> getNews(String category) async {
+
+    url =
+    'https://newsapi.org/v2/top-headlines?country=us&category=$category&apiKey=b8bb19f553514c5fb4ed8727df8749b7';
+
+
     final response = await http.get(Uri.parse(url));
     final result = jsonDecode(response.body);
     List<News> j = [];

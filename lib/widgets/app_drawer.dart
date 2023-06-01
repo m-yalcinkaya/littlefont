@@ -17,12 +17,20 @@ class AppDrawer extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  ImageProvider profilImage() {
+  Widget profilImage() {
     final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
+
     if (photoUrl != null) {
-      return NetworkImage(photoUrl);
+      return CircleAvatar(
+        backgroundImage: NetworkImage(photoUrl),
+        maxRadius: 20,
+      );
     }
-    return const AssetImage('assets/images/kuslar.jpg');
+
+    return const CircleAvatar(
+      maxRadius: 20,
+      child: Icon(Icons.person),
+    );
   }
 
   @override
@@ -67,10 +75,7 @@ class AppDrawer extends ConsumerWidget {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.red, width: 5),
                           ),
-                          child: CircleAvatar(
-                            backgroundImage: profilImage(),
-                            maxRadius: 20,
-                          ),
+                          child: profilImage()
                         ),
                         title: AutoSizeText(
                             '${FirebaseAuth.instance.currentUser?.displayName}'),

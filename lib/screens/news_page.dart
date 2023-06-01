@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
-import 'package:littlefont/services/news_service.dart';
 
 import '../widgets/my_grid_view.dart';
 import '../modals/news.dart';
@@ -24,10 +23,9 @@ class _NewsPageState extends ConsumerState<NewsPage> {
   void initState() {
     _selectedValue = 'general';
     categoryTitle = 'General';
-    ref.read(newsServiceProvider).selectCategory('general');
     _future = ref
         .read(newsProvider)
-        .getNewsByCategory(ref.read(newsProvider).generalNews);
+        .getNewsByCategory('general', ref.read(newsProvider).generalNews);
     super.initState();
   }
 
@@ -51,9 +49,8 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('General'),
                       onTap: () {
                         categoryTitle = 'General';
-                        ref.read(newsServiceProvider).selectCategory('general');
                         _future =
-                            newsRepo.getNewsByCategory(newsRepo.generalNews);
+                            newsRepo.getNewsByCategory('general' ,newsRepo.generalNews);
                       },
                     ),
                     PopupMenuItem(
@@ -61,9 +58,8 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('Health'),
                       onTap: () {
                         categoryTitle = 'Health';
-                        ref.read(newsServiceProvider).selectCategory('health');
                         _future =
-                            newsRepo.getNewsByCategory(newsRepo.healthNews);
+                            newsRepo.getNewsByCategory('health' ,newsRepo.healthNews);
                       },
                     ),
                     PopupMenuItem(
@@ -71,11 +67,8 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('Entertainment'),
                       onTap: () {
                         categoryTitle = 'Entertainment';
-                        ref
-                            .read(newsServiceProvider)
-                            .selectCategory('entertainment');
                         _future = newsRepo
-                            .getNewsByCategory(newsRepo.entertainmentNews);
+                            .getNewsByCategory('entertainment', newsRepo.entertainmentNews);
                       },
                     ),
                     PopupMenuItem(
@@ -83,9 +76,8 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('Sports'),
                       onTap: () {
                         categoryTitle = 'Sports';
-                        ref.read(newsServiceProvider).selectCategory('sports');
                         _future =
-                            newsRepo.getNewsByCategory(newsRepo.sportsNews);
+                            newsRepo.getNewsByCategory('sports', newsRepo.sportsNews);
                       },
                     ),
                     PopupMenuItem(
@@ -93,11 +85,8 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('Business'),
                       onTap: () {
                         categoryTitle = 'Business';
-                        ref
-                            .read(newsServiceProvider)
-                            .selectCategory('business');
                         _future =
-                            newsRepo.getNewsByCategory(newsRepo.businessNews);
+                            newsRepo.getNewsByCategory('business',newsRepo.businessNews);
                       },
                     ),
                     PopupMenuItem(
@@ -105,9 +94,8 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('Science'),
                       onTap: () {
                         categoryTitle = 'Science';
-                        ref.read(newsServiceProvider).selectCategory('science');
                         _future =
-                            newsRepo.getNewsByCategory(newsRepo.scienceNews);
+                            newsRepo.getNewsByCategory('science', newsRepo.scienceNews);
                       },
                     ),
                     PopupMenuItem(
@@ -115,11 +103,8 @@ class _NewsPageState extends ConsumerState<NewsPage> {
                       child: const Text('Technology'),
                       onTap: () {
                         categoryTitle = 'Technology';
-                        ref
-                            .read(newsServiceProvider)
-                            .selectCategory('technology');
                         _future =
-                            newsRepo.getNewsByCategory(newsRepo.technologyNews);
+                            newsRepo.getNewsByCategory('technology', newsRepo.technologyNews);
                       },
                     ),
                   ],

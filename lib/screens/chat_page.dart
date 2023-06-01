@@ -27,12 +27,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }
 
 
-  ImageProvider profilImage() {
+  Widget profilImage() {
     final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
+
     if (photoUrl != null) {
-      return NetworkImage(photoUrl);
+      return CircleAvatar(
+        backgroundImage: NetworkImage(photoUrl),
+        maxRadius: 20,
+      );
     }
-    return const AssetImage('assets/images/kuslar.jpg');
+
+    return const CircleAvatar(
+      maxRadius: 20,
+      child: Icon(Icons.person),
+    );
   }
 
 
@@ -55,7 +63,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         actions: const [
           IconButton(
             onPressed: null,
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search)
           )
         ],
       ),
@@ -139,6 +147,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                               },
                             ),
                             onTap: () {
+                              ref.watch(messageProvider).data =
+                              ref.watch(messageProvider).chatListData[index].data() as Map<String, dynamic>;
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
                                 screen: const MessageScreen(),
@@ -167,11 +177,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 subtitle: const Text('Tap to add status update'),
                 leading: Stack(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: profilImage(),
-                      radius: 20,
-                      backgroundColor: Colors.blue,
-                    ),
+                    profilImage(),
                     const Positioned(
                       top: 22,
                       left: 22,

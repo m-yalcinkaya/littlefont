@@ -1,7 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
+import 'package:littlefont/screens/weather_page.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:weather_icons/weather_icons.dart';
 import '../widgets/category_sliver_grid.dart';
 import '../widgets/floating_main_page.dart';
 import '../widgets/news_listview.dart';
@@ -22,14 +26,18 @@ class AppMainPage extends ConsumerStatefulWidget {
 
 class _AppMainPageState extends ConsumerState<AppMainPage> {
   late Future<List<News>?> _future;
+  late int nameLenght;
 
   String? name() {
+    int lenght = 0;
     String? fullName = FirebaseAuth.instance.currentUser!.displayName;
     String name = '';
     for (int i = 0; i < fullName!.length; i++) {
       if (fullName[i] != ' ') {
+        lenght++;
         name = name + fullName[i];
       } else {
+        nameLenght = lenght;
         break;
       }
     }
@@ -44,6 +52,15 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
     super.initState();
   }
 
+  Text spaceText(int nameLenght) {
+    int temp = 12 - nameLenght;
+    String space = '';
+    for (int i = 0; i < temp; i++) {
+      space = '$space ';
+    }
+    return Text(space);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,19 +69,64 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
           SliverAppBar(
             pinned: true,
             expandedHeight: 245.0,
-            flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.parallax,
-              expandedTitleScale: 1.5,
-              title: Text(
-                'Hi, ${name()}!',
-                style: const TextStyle(
-                  color: Colors.white,
+            flexibleSpace: Stack(
+              children: [
+                FlexibleSpaceBar(
+                  collapseMode: CollapseMode.parallax,
+                  expandedTitleScale: 1.5,
+                  title: Row(
+                    children: [
+                      Text(
+                        'Hi, ${name()}!  ',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: InkWell(
+                          onTap: () {
+                            PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const WeatherPage());
+                          },
+                          child: Container(
+                              width: 60,
+                              height: 40,
+                              color: Colors.white60,
+                              child: const Column(children: [
+                                Spacer(),
+                                Padding(
+                                    padding: EdgeInsets.all(2),
+                                    child: Center(
+                                        child: Text(
+                                      'Aydın',
+                                      style: TextStyle(fontSize: 8, color: Colors.black),
+                                    ))),
+                                Spacer(),
+                                Row(children: [
+                                  Spacer(),
+                                  Icon(WeatherIcons.day_sunny, size: 12,),
+                                  Spacer(),
+                                  Center(
+                                      child: Text(
+                                    '27\u00B0C',
+                                    style: TextStyle(fontSize: 12, color: Colors.black),
+                                  )),
+                                  Spacer(),
+                                ]),
+                                Spacer(),
+                              ])),
+                        ),
+                      ),
+                    ],
+                  ),
+                  background: const Image(
+                    image: AssetImage('assets/images/pexels-photo-3225517.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              background: const Image(
-                image: AssetImage('assets/images/pexels-photo-3225517.jpg'),
-                fit: BoxFit.cover,
-              ),
+              ],
             ),
           ),
           SliverToBoxAdapter(

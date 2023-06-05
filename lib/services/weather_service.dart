@@ -12,7 +12,7 @@ class WeatherService {
   Future<Weather?> getWeatherForDaily() async {
     try {
       final response = await http.get(Uri.parse(
-          'https://api.openweathermap.org/data/2.5/weather?q=Aydın&units=metric&APPID=43ea6baaad7663dc17637e22ee6f78f2'));
+          'https://api.openweathermap.org/data/2.5/weather?q=Çİne&units=metric&APPID=43ea6baaad7663dc17637e22ee6f78f2'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> map = jsonDecode(response.body);
         final province = map["name"];

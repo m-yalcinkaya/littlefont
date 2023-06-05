@@ -47,8 +47,28 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
     );
   }
 
+  IconData weatherIcon(String? iconType) {
+    if (iconType == '01d') {return WeatherIcons.day_sunny;}
+    else if(iconType == '01n'){return WeatherIcons.night_clear;}
+    else if(iconType == '02d') {return WeatherIcons.day_cloudy;}
+    else if(iconType == '02n') {return WeatherIcons.night_alt_cloudy;}
+    else if(iconType == '03d') {return WeatherIcons.cloud;}
+    else if (iconType == '03n') {return WeatherIcons.night_alt_cloudy;}
+    else if (iconType == '04d') {return WeatherIcons.cloudy;}
+    else if (iconType == '04n') {return WeatherIcons.night_alt_cloudy;}
+    else if (iconType == '09d') {return WeatherIcons.rain;}
+    else if (iconType == '09n') {return WeatherIcons.night_alt_rain;}
+    else if (iconType == '10d') {return WeatherIcons.day_rain;}
+    else if (iconType == '10n') {return WeatherIcons.night_rain;}
+    else if (iconType == '11d') {return WeatherIcons.lightning;}
+    else if (iconType == '11n') {return WeatherIcons.night_lightning;}
+    else if (iconType == '13d') {return WeatherIcons.snowflake_cold;}
+    else if (iconType == '13n') {return WeatherIcons.night_snow_wind;}
+    else if (iconType == '50d') {return WeatherIcons.fog;}
+    else {return WeatherIcons.night_fog;}
+  }
 
-  Widget weatherSection(screenSize){
+    Widget weatherSection(screenSize){
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -73,7 +93,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(WeatherIcons.sunrise, color: Colors.white,),
+                Icon(weatherIcon(ref.watch(weatherServiceProvider).data?.icon), color: Colors.white,),
                 const SizedBox(width: 10,),
                 Text(
                   '${ref.watch(weatherServiceProvider).data?.currentTemp?.round()}\u00B0C',
@@ -91,39 +111,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
               screen: const WeatherPage());
         },
       ),
-    );/*SizedBox(
-      height: screenSize.height  * 1/9,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(WeatherIcons.sunrise,),
-                  const SizedBox(width: 15,),
-                  Column(
-                    children: [
-                      Text(
-                        '${ref.watch(weatherServiceProvider).data?.currentTemp?.round()}\u00B0C',
-                        style: const TextStyle(fontSize: 20,),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const Spacer(),
-              const Text('few clouds'),
-              const Spacer(),
-            ],
-
-          ),
-
-        ],
-      ),
-    );*/
+    );
   }
 
   Widget buildFutureBuilder(WidgetRef ref, Size screenSize) {

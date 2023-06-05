@@ -5,16 +5,9 @@ import 'package:http/http.dart' as http;
 import '../modals/news.dart';
 
 class NewsService {
-  late String url;
-
 
   Future<List<News>> getNews(String category) async {
-
-    url =
-    'https://newsapi.org/v2/top-headlines?country=us&category=$category&apiKey=b8bb19f553514c5fb4ed8727df8749b7';
-
-
-    final response = await http.get(Uri.parse(url));
+    final response = await http.get(Uri.parse('https://newsapi.org/v2/top-headlines?country=us&category=$category&apiKey=b8bb19f553514c5fb4ed8727df8749b7'));
     final result = jsonDecode(response.body);
     List<News> j = [];
     if (response.statusCode == 200) {

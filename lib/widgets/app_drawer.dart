@@ -8,14 +8,28 @@ import 'package:littlefont/screens/favourites_page.dart';
 import 'package:littlefont/screens/my_notes_page.dart';
 import 'package:littlefont/screens/profile_page.dart';
 import 'package:littlefont/screens/recycle_bin_page.dart';
+import 'package:littlefont/screens/weather_page.dart';
 import 'package:littlefont/services/auth_service.dart';
+import 'package:littlefont/services/weather_service.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 import '../screens/first_screen.dart';
 
-class AppDrawer extends ConsumerWidget {
+class AppDrawer extends ConsumerStatefulWidget {
   const AppDrawer({
     Key? key,
   }) : super(key: key);
+
+
+
+  @override
+  ConsumerState<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends ConsumerState<AppDrawer> {
+  bool isLoading = false;
+
 
   Widget profilImage() {
     final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
@@ -33,8 +47,107 @@ class AppDrawer extends ConsumerWidget {
     );
   }
 
+
+  Widget weatherSection(screenSize){
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+            'https://i.pinimg.com/564x/42/63/08/426308190ad76024b14768444b049de9.jpg'
+          )
+        )
+      ),
+      child: ListTile(
+        titleAlignment: ListTileTitleAlignment.center,
+        leading: const Text(''),
+        trailing: IconButton(onPressed: () {
+          setState(() {
+            isLoading = true;
+          });
+        }, icon: const Icon(WeatherIcons.refresh)),
+        title: Column(
+          children: [
+            const SizedBox(height: 15,),
+            Text(ref.watch(weatherServiceProvider).data?.areaName ?? 'null', style: const TextStyle(color: Colors.white),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(WeatherIcons.sunrise, color: Colors.white,),
+                const SizedBox(width: 10,),
+                Text(
+                  '${ref.watch(weatherServiceProvider).data?.currentTemp?.round()}\u00B0C',
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15,),
+          ],
+        ),
+        onTap: () {
+          Navigator.pop(context);
+          PersistentNavBarNavigator.pushNewScreen(
+              context,
+              screen: const WeatherPage());
+        },
+      ),
+    );/*SizedBox(
+      height: screenSize.height  * 1/9,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(WeatherIcons.sunrise,),
+                  const SizedBox(width: 15,),
+                  Column(
+                    children: [
+                      Text(
+                        '${ref.watch(weatherServiceProvider).data?.currentTemp?.round()}\u00B0C',
+                        style: const TextStyle(fontSize: 20,),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              const Text('few clouds'),
+              const Spacer(),
+            ],
+
+          ),
+
+        ],
+      ),
+    );*/
+  }
+
+  Widget buildFutureBuilder(WidgetRef ref, Size screenSize) {
+
+    if(ref.watch(weatherServiceProvider).data == null || (ref.watch(weatherServiceProvider).data != null && isLoading == true)){
+      isLoading = false;
+      return FutureBuilder(
+        future: ref.watch(weatherServiceProvider).getWeatherForDaily(),
+        builder: (context, snapshot) {
+          if(snapshot.hasError){
+            return Text('An error occurred: ${snapshot.error.toString()}');
+          }else if(snapshot.hasData){
+            ref.watch(weatherServiceProvider).data = snapshot.data!;
+            return weatherSection(screenSize);
+          }else{
+            return const Center(child: CircularProgressIndicator());
+          }
+        },);
+    }
+    return weatherSection(screenSize);
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return SizedBox(
       width: screenSize.width * 3 / 4,
@@ -43,15 +156,13 @@ class AppDrawer extends ConsumerWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              curve: Curves.ease,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
                     'assets/images/pexels-photo-1563356.jpg',
                   ),
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
-                color: Colors.red,
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -71,12 +182,11 @@ class AppDrawer extends ConsumerWidget {
                       color: Colors.white70,
                       child: ListTile(
                         leading: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red, width: 5),
-                          ),
-                          child: profilImage()
-                        ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.red, width: 5),
+                            ),
+                            child: profilImage()),
                         title: AutoSizeText(
                             '${FirebaseAuth.instance.currentUser?.displayName}'),
                         subtitle: AutoSizeText(
@@ -87,6 +197,7 @@ class AppDrawer extends ConsumerWidget {
                 ),
               ),
             ),
+            buildFutureBuilder(ref, screenSize),
             ListTile(
               leading: const Icon(Icons.notes),
               title: const Text('My Notes'),
@@ -142,22 +253,24 @@ class AppDrawer extends ConsumerWidget {
               title: const Text('Log out'),
               onTap: () async {
                 Navigator.pop(context);
-                try{
+                try {
                   await signOut(context);
                   await Future.microtask(
-                        () {
-                      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                    () {
+                      Navigator.of(context, rootNavigator: true)
+                          .pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (BuildContext context) {
                             return const FirstScreen();
                           },
                         ),
-                            (_) => false,
+                        (_) => false,
                       );
                     },
                   );
-                }catch(e){
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+                } catch (e) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('$e')));
                 }
               },
             ),

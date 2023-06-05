@@ -1,11 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont/repository/news_repository.dart';
-import 'package:littlefont/screens/weather_page.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:weather_icons/weather_icons.dart';
 import '../widgets/category_sliver_grid.dart';
 import '../widgets/floating_main_page.dart';
 import '../widgets/news_listview.dart';
@@ -14,6 +10,7 @@ import '../modals/news.dart';
 import 'package:littlefont/widgets/app_drawer.dart';
 import 'package:littlefont/screens/category_page.dart';
 import 'package:littlefont/screens/my_notes_page.dart';
+
 
 class AppMainPage extends ConsumerStatefulWidget {
   const AppMainPage({
@@ -27,6 +24,7 @@ class AppMainPage extends ConsumerStatefulWidget {
 class _AppMainPageState extends ConsumerState<AppMainPage> {
   late Future<List<News>?> _future;
   late int nameLenght;
+  late Object? errorValue;
 
   String? name() {
     int lenght = 0;
@@ -46,20 +44,12 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
 
   @override
   void initState() {
-    _future = ref
-        .read(newsProvider)
-        .getNewsByCategory('general', ref.read(newsProvider).generalNews!);
+    _future = ref.read(newsProvider).getNewsByCategory('general', ref.read(newsProvider).generalNews!);
     super.initState();
   }
 
-  Text spaceText(int nameLenght) {
-    int temp = 12 - nameLenght;
-    String space = '';
-    for (int i = 0; i < temp; i++) {
-      space = '$space ';
-    }
-    return Text(space);
-  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,46 +67,9 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                   title: Row(
                     children: [
                       Text(
-                        'Hi, ${name()}!  ',
+                        'Hi, ${name()}!',
                         style: const TextStyle(
                           color: Colors.white,
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        child: InkWell(
-                          onTap: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: const WeatherPage());
-                          },
-                          child: Container(
-                              width: 60,
-                              height: 40,
-                              color: Colors.white60,
-                              child: const Column(children: [
-                                Spacer(),
-                                Padding(
-                                    padding: EdgeInsets.all(2),
-                                    child: Center(
-                                        child: Text(
-                                      'Aydın',
-                                      style: TextStyle(fontSize: 8, color: Colors.black),
-                                    ))),
-                                Spacer(),
-                                Row(children: [
-                                  Spacer(),
-                                  Icon(WeatherIcons.day_sunny, size: 12,),
-                                  Spacer(),
-                                  Center(
-                                      child: Text(
-                                    '27\u00B0C',
-                                    style: TextStyle(fontSize: 12, color: Colors.black),
-                                  )),
-                                  Spacer(),
-                                ]),
-                                Spacer(),
-                              ])),
                         ),
                       ),
                     ],

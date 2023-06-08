@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/repository/notes_repository.dart';
+import 'package:littlefont_app/repository/notes_repository.dart';
 
 
 class NotesListview extends ConsumerWidget {

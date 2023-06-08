@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/modals/category.dart';
-import 'package:littlefont/modals/note.dart';
+import 'package:littlefont_app/modals/category.dart';
+import 'package:littlefont_app/modals/note.dart';
 
 class CategoryRepository extends ChangeNotifier {
   List<Category> category = [

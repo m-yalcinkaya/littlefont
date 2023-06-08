@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/modals/message.dart';
-import 'package:littlefont/services/message_service.dart';
+import 'package:littlefont_app/modals/message.dart';
+import 'package:littlefont_app/services/message_service.dart';
 
 class MessagesRepository extends ChangeNotifier {
   final MessageService dataService;

@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/repository/news_repository.dart';
+import 'package:littlefont_app/repository/news_repository.dart';
 import '../widgets/category_sliver_grid.dart';
 import '../widgets/floating_main_page.dart';
 import '../widgets/news_listview.dart';
 import '../widgets/notes_listview.dart';
 import '../modals/news.dart';
-import 'package:littlefont/widgets/app_drawer.dart';
-import 'package:littlefont/screens/category_page.dart';
-import 'package:littlefont/screens/my_notes_page.dart';
+import 'package:littlefont_app/widgets/app_drawer.dart';
+import 'package:littlefont_app/screens/category_page.dart';
+import 'package:littlefont_app/screens/my_notes_page.dart';
 
 
 class AppMainPage extends ConsumerStatefulWidget {

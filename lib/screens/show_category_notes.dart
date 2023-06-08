@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../repository/category_repository.dart';
-import 'package:littlefont/screens/add_to_category.dart';
-import 'package:littlefont/screens/view_note_page.dart';
+import 'package:littlefont_app/screens/add_to_category.dart';
+import 'package:littlefont_app/screens/view_note_page.dart';
 
 class ShowCategory extends ConsumerWidget {
   final int indexCategory;

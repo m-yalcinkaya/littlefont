@@ -2,9 +2,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/services/message_service.dart';
+import 'package:littlefont_app/services/message_service.dart';
 import '../repository/messages_repository.dart';
-import 'package:littlefont/modals/message.dart';
+import 'package:littlefont_app/modals/message.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
   const MessageScreen({Key? key}) : super(key: key);

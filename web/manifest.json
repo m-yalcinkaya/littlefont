@@ -1,6 +1,6 @@
 {
-    "name": "littlefont",
-    "short_name": "littlefont",
+    "name": "littlefont_app",
+    "short_name": "littlefont_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -2,12 +2,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:littlefont/repository/messages_repository.dart';
-import 'package:littlefont/screens/search_account.dart';
-import 'package:littlefont/services/message_service.dart';
+import 'package:littlefont_app/repository/messages_repository.dart';
+import 'package:littlefont_app/screens/search_account.dart';
+import 'package:littlefont_app/services/message_service.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/screens/message_screen.dart';
+import 'package:littlefont_app/screens/message_screen.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/services/news_service.dart';
+import 'package:littlefont_app/services/news_service.dart';
 
 import '../modals/news.dart';
 

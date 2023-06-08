@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:littlefont/screens/category_page.dart';
+import 'package:littlefont_app/screens/category_page.dart';
 import '../repository/category_repository.dart';
 
 class AddCategory extends ConsumerStatefulWidget {

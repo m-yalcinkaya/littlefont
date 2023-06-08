@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../repository/category_repository.dart';
-import 'package:littlefont/repository/notes_repository.dart';
+import 'package:littlefont_app/repository/notes_repository.dart';
 
 class ShowNote extends ConsumerWidget {
   final int index;

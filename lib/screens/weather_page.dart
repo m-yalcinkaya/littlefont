@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/services/weather_service.dart';
-import 'package:littlefont/utilities/weather_utils.dart';
+import 'package:littlefont_app/services/weather_service.dart';
+import 'package:littlefont_app/utilities/weather_utils.dart';
 
 class WeatherPage extends ConsumerStatefulWidget {
   const WeatherPage({Key? key}) : super(key: key);

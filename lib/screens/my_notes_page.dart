@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:littlefont/screens/create_note_page.dart';
-import 'package:littlefont/screens/edit_page.dart';
-import 'package:littlefont/screens/view_note_page.dart';
+import 'package:littlefont_app/screens/create_note_page.dart';
+import 'package:littlefont_app/screens/edit_page.dart';
+import 'package:littlefont_app/screens/view_note_page.dart';
 import '../repository/notes_repository.dart';
 
 class MyNotes extends ConsumerWidget {

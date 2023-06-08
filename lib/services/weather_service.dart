@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:littlefont/modals/weather.dart';
+import 'package:littlefont_app/modals/weather.dart';
 
 class WeatherService {
 

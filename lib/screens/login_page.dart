@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/services/auth_service.dart';
-import 'package:littlefont/widgets/bottom_nav_bar.dart';
-import 'package:littlefont/widgets/button.dart';
-import 'package:littlefont/screens/first_screen.dart';
-import 'package:littlefont/screens/sign_up_page.dart';
+import 'package:littlefont_app/services/auth_service.dart';
+import 'package:littlefont_app/widgets/bottom_nav_bar.dart';
+import 'package:littlefont_app/widgets/button.dart';
+import 'package:littlefont_app/screens/first_screen.dart';
+import 'package:littlefont_app/screens/sign_up_page.dart';
 
 import '../utilities/google_sign_in.dart';
 

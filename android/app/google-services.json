@@ -1,50 +1,34 @@
 {
   "project_info": {
-    "project_number": "300282932986",
-    "firebase_url": "https://littlefont-3ee9b-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "littlefont-3ee9b",
-    "storage_bucket": "littlefont-3ee9b.appspot.com"
+    "project_number": "1007734945620",
+    "project_id": "littlefontapp",
+    "storage_bucket": "littlefontapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:300282932986:android:3265ef8f96b66c4154a343",
+        "mobilesdk_app_id": "1:1007734945620:android:615f60289d2326c31f3ac1",
         "android_client_info": {
-          "package_name": "com.example.littlefont"
+          "package_name": "com.example.littlefont_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "300282932986-i8olcjg0kvqdfj3ra78gc06pj3ijp6h3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.littlefont",
-            "certificate_hash": "4fdf9b638480a02a914a82b708ee1a0d1d3d1143"
-          }
-        },
-        {
-          "client_id": "300282932986-hr7jmdaecjhvg2ionjhlkbl3n0816pmk.apps.googleusercontent.com",
+          "client_id": "1007734945620-eloa67dgj8jtllb98f94822r8q4q5n13.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJQIn3m-knMjRiOFnV0Au9IQ6MUJBge3E"
+          "current_key": "AIzaSyCASTQshdHs4KEmJCfCowgCN7GZLAQHHwQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "300282932986-hr7jmdaecjhvg2ionjhlkbl3n0816pmk.apps.googleusercontent.com",
+              "client_id": "1007734945620-eloa67dgj8jtllb98f94822r8q4q5n13.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "300282932986-763moi77vkbaia9bt33vr8kqpndajiju.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.littlefont"
-              }
             }
           ]
         }

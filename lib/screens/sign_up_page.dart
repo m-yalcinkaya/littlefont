@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont/services/auth_service.dart';
-import 'package:littlefont/widgets/button.dart';
-import 'package:littlefont/screens/login_page.dart';
+import 'package:littlefont_app/services/auth_service.dart';
+import 'package:littlefont_app/widgets/button.dart';
+import 'package:littlefont_app/screens/login_page.dart';
 
 import '../modals/account.dart';
 

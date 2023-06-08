@@ -1,4 +1,4 @@
-package com.example.littlefont
+package com.example.littlefont_app
 
 import io.flutter.embedding.android.FlutterActivity
 

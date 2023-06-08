@@ -15,6 +15,7 @@ class WeatherService {
           'https://api.openweathermap.org/data/2.5/weather?q=Çİne&units=metric&APPID=43ea6baaad7663dc17637e22ee6f78f2'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> map = jsonDecode(response.body);
+        final country =  map["sys"]["country"];
         final province = map["name"];
         final lat = map["coord"]["lat"];
         final lon = map["coord"]["lon"];
@@ -23,7 +24,7 @@ class WeatherService {
         if(responseDaily.statusCode == 200){
           final Map<String, dynamic> mapDaily = jsonDecode(responseDaily.body);
           final dailyWeather = Weather.fromJson(mapDaily);
-          dailyWeather.areaName = province;
+          dailyWeather.areaName = '$province, $country';
           return dailyWeather;
         }
       }

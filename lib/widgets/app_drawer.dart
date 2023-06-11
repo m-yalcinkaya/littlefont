@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont_app/repository/weather_repository.dart';
 import 'package:littlefont_app/screens/about_page.dart';
 import 'package:littlefont_app/screens/category_page.dart';
 import 'package:littlefont_app/screens/favourites_page.dart';
@@ -10,7 +11,6 @@ import 'package:littlefont_app/screens/profile_page.dart';
 import 'package:littlefont_app/screens/recycle_bin_page.dart';
 import 'package:littlefont_app/screens/weather_page.dart';
 import 'package:littlefont_app/services/auth_service.dart';
-import 'package:littlefont_app/services/weather_service.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -70,14 +70,14 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
         title: Column(
           children: [
             const SizedBox(height: 15,),
-            Text(ref.watch(weatherServiceProvider).data?.areaName ?? 'null', style: const TextStyle(color: Colors.white),),
+            Text(ref.watch(weatherRepository).data?.areaName ?? 'null', style: const TextStyle(color: Colors.white),),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(weatherIcon(ref.watch(weatherServiceProvider).data?.icon), color: Colors.white,),
+                Icon(weatherIcon(ref.watch(weatherRepository).data?.icon), color: Colors.white,),
                 const SizedBox(width: 10,),
                 Text(
-                  '${ref.watch(weatherServiceProvider).data?.currentTemp?.round()}\u00B0C',
+                  '${ref.watch(weatherRepository).data?.currentTemp?.round()}\u00B0C',
                   style: const TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ],
@@ -97,15 +97,15 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
 
   Widget buildFutureBuilder(WidgetRef ref, Size screenSize) {
 
-    if(ref.watch(weatherServiceProvider).data == null || (ref.watch(weatherServiceProvider).data != null && isLoading == true)){
+    if(ref.watch(weatherRepository).data == null || (ref.watch(weatherRepository).data != null && isLoading == true)){
       isLoading = false;
       return FutureBuilder(
-        future: ref.watch(weatherServiceProvider).getWeatherForDaily(),
+        future: ref.watch(weatherRepository).getWeather(ref.watch(weatherRepository).area),
         builder: (context, snapshot) {
           if(snapshot.hasError){
             return Text('An error occurred: ${snapshot.error.toString()}');
           }else if(snapshot.hasData){
-            ref.watch(weatherServiceProvider).data = snapshot.data!;
+            ref.watch(weatherRepository).data = snapshot.data!;
             return weatherSection(screenSize);
           }else{
             return const Center(child: CircularProgressIndicator());

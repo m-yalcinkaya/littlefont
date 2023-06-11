@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/repository/weather_repository.dart';
-import 'package:littlefont_app/utilities/weather_utils.dart';
+import 'package:littlefont_app/widgets/bar_chart.dart';
 import 'package:littlefont_app/widgets/button.dart';
 
 
@@ -51,10 +51,11 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
                                   if(weather != null) {
                                     ref.read(weatherRepository).data = weather;
                                   }else {
-                                    return;
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalided area name')));
                                   }
+                                  controller.text = '';
                                   Navigator.pop(context);
-                                },).catchError(throw Exception('Invalided area name!!'));
+                                },);
                               }catch(e){
                                 Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
@@ -98,6 +99,7 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
             ),
             const SizedBox(height: 20),
 
+            const WeatherChartPage(),
           ],
         ),
       ),

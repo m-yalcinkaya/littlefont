@@ -92,7 +92,7 @@ class MyNotes extends ConsumerWidget {
                         isContain(noteReadRepo, index);
                       },
                       icon: noteWatchRepo.favourites
-                              .contains(noteWatchRepo.notes[index])
+                          .contains(noteWatchRepo.notes[index])
                           ? const Icon(Icons.star)
                           : const Icon(Icons.star_border),
                     ),
@@ -130,7 +130,7 @@ class MyNotes extends ConsumerWidget {
                           delete(noteReadRepo, index, context, ref);
                         } else if (value == 'edit') {
                           final note =
-                              await PersistentNavBarNavigator.pushNewScreen(
+                          await PersistentNavBarNavigator.pushNewScreen(
                             context,
                             screen: EditPage(note: noteReadRepo.notes[index]),
                             withNavBar: false,
@@ -142,7 +142,7 @@ class MyNotes extends ConsumerWidget {
                           await FlutterShare.share(
                             title: 'Share your note',
                             text:
-                                '${noteReadRepo.notes[index].title}\n\n${noteReadRepo.notes[index].content}',
+                            '${noteReadRepo.notes[index].title}\n\n${noteReadRepo.notes[index].content}',
                           );
                         }
                       },

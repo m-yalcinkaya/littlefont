@@ -52,6 +52,7 @@ class MyGridView extends ConsumerWidget {
                                 list[index]
                                     .title ??
                                     'Title : Null',
+                                maxLines: 3,
                                 style: const TextStyle(
                                   color: Colors.white,
                                 )),

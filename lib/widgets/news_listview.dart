@@ -6,9 +6,9 @@ import '../modals/news.dart';
 import '../screens/view_news_page.dart';
 
 
-class NewsListview extends StatelessWidget {
+class NewsListView extends StatelessWidget {
   final List<News>? data;
-  const NewsListview({
+  const NewsListView({
     super.key,
     required this.data,
   });

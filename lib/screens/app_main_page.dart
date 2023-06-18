@@ -112,7 +112,7 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                     } else if (snapshot.hasData) {
                       return SizedBox(
                         height: 150,
-                        child: NewsListview(data: snapshot.data!),
+                        child: NewsListView(data: snapshot.data!),
                       );
                     } else {
                       return const Center(

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,30 +7,82 @@ import 'package:littlefont_app/screens/create_note_page.dart';
 import 'package:littlefont_app/screens/edit_page.dart';
 import 'package:littlefont_app/screens/view_note_page.dart';
 import '../repository/notes_repository.dart';
+import '../utilities/database_helper.dart';
 
-class MyNotes extends ConsumerWidget {
+class MyNotes extends ConsumerStatefulWidget{
   const MyNotes({Key? key}) : super(key: key);
 
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyNotes> createState() => _MyNotesState();
+}
+
+class _MyNotesState extends ConsumerState<MyNotes> {
+
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Notes'),
+        actions: [
+          IconButton(onPressed: () {
+            for(int i=0; ref.read(notesProvider).notes.length>i; i++){
+              print('${ref.read(notesProvider).notes[i].id} ${ref.read(notesProvider).notes[i].title} ${ref.read(notesProvider).notes[i].content}, ${ref.read(notesProvider).notes[i].isFavourite}');
+            }
+            for(int i=0; ref.read(notesProvider).recycle.length>i; i++){
+              print('${ref.read(notesProvider).recycle[i].id} ${ref.read(notesProvider).recycle[i].title} ${ref.read(notesProvider).recycle[i].content} ${ref.read(notesProvider).notes[i].isFavourite}');
+            }
+            }, icon: const Icon(Icons.delete))
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: buildGridView(ref: ref),
+      body: FutureBuilder(
+        future: DatabaseHelper.instance.getNotes(),
+        builder: (context, snapshot) {
+          if(snapshot.hasError){
+            print(snapshot.error);
+                  return AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('An error occured while loading notes. please try again later'),
+                    actions: [
+                      ElevatedButton(onPressed: Navigator.of(context).pop,
+                          child: const Text('Ok'))
+                    ],
+                  );
+          }else if(snapshot.hasData){
+            ref.read(notesProvider).notes = snapshot.data!;
+            return Padding(
+              padding: const EdgeInsets.all(8),
+              child: buildGridView(ref: ref),
+            );
+          }else{
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final noteReadRepo = ref.read(notesProvider);
           final note = await PersistentNavBarNavigator.pushNewScreen(
             context,
             screen: const CreateNote(),
             withNavBar: false,
           );
           if (note != null) {
-            noteReadRepo.addNote(note, noteReadRepo.notes);
+            try{
+                await ref.read(notesProvider).addNote(note);
+            } catch (e) {
+              AlertDialog(
+                title: const Text('Error'),
+                content: const Text(
+                    'An error occurred due to an unknown error. couldn\'t add note),'),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Ok'),
+                  )
+                ],
+              );
+            }
           } else {
             return;
           }
@@ -40,24 +93,27 @@ class MyNotes extends ConsumerWidget {
     );
   }
 
-  void isContain(NotesRepository noteReadRepo, int index) {
-    final value = noteReadRepo.notes[index];
-    if (noteReadRepo.favourites.contains(value)) {
-      noteReadRepo.removeNoteWithValue(value, noteReadRepo.favourites);
+  Future<void> favouriteOperation(NotesRepository noteReadRepo, int index) async {
+    if(await DatabaseHelper.instance.isContain(noteReadRepo, index)){
+      ref.read(notesProvider).removeFavourite(noteReadRepo.notes[index]);
+      noteReadRepo.notes[index].isFavourite = 0;
+      ref.read(notesProvider).updateNote(noteReadRepo.notes[index]);
     } else {
-      noteReadRepo.addNote(value, noteReadRepo.favourites);
+      ref.read(notesProvider).addFavourite(noteReadRepo.notes[index]);
+      noteReadRepo.notes[index].isFavourite = 0;
+      ref.read(notesProvider).updateNote(noteReadRepo.notes[index]);
     }
   }
 
-  void delete(NotesRepository noteReadRepo, int index, context, WidgetRef ref) {
-    if (noteReadRepo.favourites.contains(noteReadRepo.notes[index])) {
+  Future<void> delete(NotesRepository noteReadRepo, int index, context, WidgetRef ref) async {
+    if (await DatabaseHelper.instance.isContain(noteReadRepo, index)) {
       showDialog(
           context: context,
           builder: (context) => buildAlertDialog(context, index, ref: ref));
     } else {
-      noteReadRepo.recycle.add(noteReadRepo.notes[index]);
       final interValue = noteReadRepo.notes[index];
-      noteReadRepo.removeNoteWithValue(interValue, noteReadRepo.notes);
+      ref.read(notesProvider).addRecycle(interValue);
+      ref.read(notesProvider).removeNote(interValue);
     }
   }
 
@@ -76,7 +132,7 @@ class MyNotes extends ConsumerWidget {
         return ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(30)),
           child: Card(
-            color: noteWatchRepo.notes[index].color,
+            color: const Color.fromARGB(200, 200, 250, 220),
             child: InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -89,10 +145,9 @@ class MyNotes extends ConsumerWidget {
                     alignment: Alignment.topRight,
                     child: IconButton(
                       onPressed: () {
-                        isContain(noteReadRepo, index);
+                        favouriteOperation(noteReadRepo, index);
                       },
-                      icon: noteWatchRepo.favourites
-                          .contains(noteWatchRepo.notes[index])
+                      icon: noteWatchRepo.notes[index].isFavourite == 1
                           ? const Icon(Icons.star)
                           : const Icon(Icons.star_border),
                     ),
@@ -127,22 +182,22 @@ class MyNotes extends ConsumerWidget {
                     child: PopupMenuButton(
                       onSelected: (value) async {
                         if (value == 'delete') {
-                          delete(noteReadRepo, index, context, ref);
+                          await delete(noteReadRepo, index, context, ref);
                         } else if (value == 'edit') {
                           final note =
-                          await PersistentNavBarNavigator.pushNewScreen(
+                              await PersistentNavBarNavigator.pushNewScreen(
                             context,
                             screen: EditPage(note: noteReadRepo.notes[index]),
                             withNavBar: false,
                           );
                           note != null
-                              ? noteWatchRepo.updateNote(index, note)
+                              ? noteWatchRepo.updateNote(note)
                               : null;
                         } else if (value == 'share') {
                           await FlutterShare.share(
                             title: 'Share your note',
                             text:
-                            '${noteReadRepo.notes[index].title}\n\n${noteReadRepo.notes[index].content}',
+                                '${noteReadRepo.notes[index].title}\n\n${noteReadRepo.notes[index].content}',
                           );
                         }
                       },
@@ -184,10 +239,8 @@ class MyNotes extends ConsumerWidget {
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            noteReadRepo.recycle.add(noteReadRepo.notes[index]);
-            final noteRepo = noteReadRepo;
-            noteRepo.removeNote(index, noteRepo.notes);
-            noteRepo.removeNote(index, noteRepo.notes);
+            noteReadRepo.addRecycle(noteReadRepo.notes[index]);
+            noteReadRepo.removeNote(noteReadRepo.notes[index]);
           },
           child: const Text('Delete'),
         ),
@@ -200,4 +253,6 @@ class MyNotes extends ConsumerWidget {
       ],
     );
   }
-}
+
+  }
+

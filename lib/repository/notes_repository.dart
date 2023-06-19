@@ -2,70 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/modals/note.dart';
 
+import '../utilities/database_helper.dart';
+
 class NotesRepository extends ChangeNotifier {
-  List<Notes> notes = [
-    Notes(
-        title: 'Randevular',
-        content:
-            'Doktor randevusu: 15 Nisan, 14:30, adres: XYZ Hastanesi, Dr. Ayşe Bey'),
-    Notes(
-        title: 'Notlar',
-        content:
-            'Sunum notları: Başlık slaytında vurgulanması gereken noktalar'),
-    Notes(title: 'Alışveriş Listesi', content: 'Süt, ekmek, yumurta, meyve'),
-    Notes(title: 'Okul Listesi', content: 'Defter, kalem, fon kağıdı, meyve'),
-    Notes(
-        title: 'Yeni Proje Fikirleri',
-        content:
-            'Yaratıcı düşüncelerle dolu bir beyin fırtınası yaparak yeni proje fikirleri üretmeye başla. Ekip üyelerinden geri bildirim al ve ilham verici bir sunum hazırla.'),
-    Notes(
-        title: 'Tatil Planları',
-        content:
-            'Tatil sezonu yaklaşıyor! Uygun tarihleri belirle, konaklama ve ulaşım düzenlemelerini yap, keşfedilecek yerler hakkında araştırma yap ve tatil planlarını tamamla.'),
-    Notes(
-        title: 'Sağlıklı Yaşam',
-        content:
-            ' Daha sağlıklı bir yaşam tarzı için adımlar atmaya başla. Düzenli egzersiz yap, dengeli beslen, yeterli su iç ve stres yönetimi teknikleri uygula. Sağlıklı bir yaşam için hedefler belirle ve planlarını oluştur.'),
-  ];
+  List<Notes> notes = [];
 
   List<Notes> favourites = [];
 
-  List<Notes> recycle = [
-    Notes(
-        title: 'Kitap Listesi',
-        content:
-            'Okunacak kitaplar: "1984" - George Orwell, "Harry Potter ve Felsefe Taşı" - J.K. '),
-  ];
+  List<Notes> recycle = [];
 
-  String recyleInfo =
-      'Sildiğin notlar tamamen silinene kadar 30 gün çöp kutusunda kalır.';
+  String recycleInfo =
+      'Deleted notes are kept in the recycle bin for 30 days until you delete them completely.';
 
-  void addNote(Notes note, List list) {
-    list.add(note);
+
+  Future<void> addNote(Notes note) async {
+    await DatabaseHelper.instance.insertNote(note);
+    for(int i=0; notes.length>i; i++){
+      print('${notes[i].id} ${notes[i].title} ${notes[i].content}');
+    }
+    for(int i=0; recycle.length>i; i++){
+      print('${recycle[i].id} ${recycle[i].title} ${recycle[i].content}');
+    }
     notifyListeners();
   }
 
-  void removeNote(int index, List list) {
-    list.removeAt(index);
+  Future<void> addFavourite(Notes note) async {
+    await DatabaseHelper.instance.insertFavourite(note);
     notifyListeners();
   }
 
-  void removeNoteWithValue(Notes note, List list) {
-    list.remove(note);
+  Future<void> addRecycle(Notes note) async {
+    await DatabaseHelper.instance.insertRecycle(note);
     notifyListeners();
   }
 
-  void updateNote(int index, Notes newNode) {
-    notes[index] = newNode;
+  Future<void> removeNote(Notes note) async {
+    await DatabaseHelper.instance.deleteNote(note.id!);
     notifyListeners();
   }
 
-  void removeNoteFromRecycle(int index) {
-    notes.add(recycle[index]);
-    final interValue = recycle[index];
-    recycle.remove(interValue);
+  Future<void> removeFavourite (Notes note) async {
+    await DatabaseHelper.instance.deleteFavourite(note.id!);
     notifyListeners();
   }
+
+  Future<void> removeRecycle(Notes note) async {
+    await DatabaseHelper.instance.deleteRecycle(note.id!);
+    notifyListeners();
+  }
+
+  Future<void> updateNote(Notes note) async {
+    await DatabaseHelper.instance.renewNote(note);
+    notifyListeners();
+  }
+
 }
 
 final notesProvider = ChangeNotifierProvider((ref) {

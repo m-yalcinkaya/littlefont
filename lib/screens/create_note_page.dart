@@ -55,12 +55,14 @@ class _CreateNoteState extends State<CreateNote> {
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.of(context).pop(
-                                      Notes(
-                                          title: _headController.text,
-                                          content: _textController.text),
-                                    );
+                                      Navigator.pop(context);
+                                      Navigator.of(context).pop(
+                                        Notes(
+                                            title: _headController.text,
+                                            content: _textController.text,
+                                            isFavourite: 0
+                                        ),
+                                      );
                                   },
                                   child: const Text('Save'),
                                 ),

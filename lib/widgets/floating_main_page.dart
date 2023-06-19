@@ -31,7 +31,7 @@ class FloatingMainPage extends ConsumerWidget {
                       screen: const CreateNote(),
                       withNavBar: false,
                     );
-                    ref.read(notesProvider).addNote(note, ref.read(notesProvider).notes);
+                    ref.read(notesProvider).addNote(note);
                   },
                   child: const Text('Add Note'),
                 ),

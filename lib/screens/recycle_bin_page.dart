@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/repository/notes_repository.dart';
 import 'package:littlefont_app/screens/view_note_page.dart';
+import 'package:littlefont_app/utilities/database_helper.dart';
+
+import '../modals/note.dart';
 
 class RecycleBin extends ConsumerWidget {
   const RecycleBin({
@@ -21,45 +24,75 @@ class RecycleBin extends ConsumerWidget {
         ),
         title: const Text('Recycle Bin'),
       ),
-      body: noteRepo.recycle.isEmpty
-          ? Center(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'No deleted note',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 40),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20,
-                    bottom: 75,
-                    right: 65,
-                    left: 85,
-                  ),
-                  child: Text(
-                    noteRepo.recyleInfo,
-                    style: const TextStyle(fontSize: 17),
-                  ),
+      body: FutureBuilder<List<Notes>>(
+        future: DatabaseHelper.instance.getRecycle(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text('An error occurred. Please try again later.'),
+              actions: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
                 ),
               ],
-            ))
-          : Column(children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20) +
-                    const EdgeInsets.only(left: 15),
-                child: Text(
-                  noteRepo.recyleInfo,
-                ),
+            );
+          } else if (snapshot.hasData) {
+            ref.read(notesProvider).recycle = snapshot.data!;
+            for(int i=0; ref.read(notesProvider).notes.length>i; i++){
+              print('${ref.read(notesProvider).notes[i].id} ${ref.read(notesProvider).notes[i].title} ${ref.read(notesProvider).notes[i].content}');
+            }
+            for(int i=0; ref.read(notesProvider).recycle.length>i; i++){
+              print('${ref.read(notesProvider).recycle[i].id} ${ref.read(notesProvider).recycle[i].title} ${ref.read(notesProvider).recycle[i].content}');
+            }
+            return noteRepo.recycle.isEmpty
+                ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'No deleted notes',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 40),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      bottom: 75,
+                      right: 65,
+                      left: 85,
+                    ),
+                    child: Text(
+                      noteRepo.recycleInfo,
+                      style: const TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(child: buildGridView(ref: ref)),
-            ]),
+            )
+                : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20) +
+                      const EdgeInsets.only(left: 15),
+                  child: Text(
+                    noteRepo.recycleInfo,
+                  ),
+                ),
+                Expanded(child: buildGridView(ref)),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 
-  GridView buildGridView({required WidgetRef ref}) {
+  GridView buildGridView(WidgetRef ref) {
     final noteRepo = ref.watch(notesProvider);
     final noteReadRepo = ref.read(notesProvider);
     return GridView.builder(
@@ -72,7 +105,7 @@ class RecycleBin extends ConsumerWidget {
       itemCount: noteRepo.recycle.length,
       itemBuilder: (context, index) {
         return Card(
-          color: noteRepo.recycle[index].color,
+          color: const Color.fromARGB(200, 200, 250, 220),
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -80,35 +113,38 @@ class RecycleBin extends ConsumerWidget {
               ));
             },
             onLongPress: () {
-              noteReadRepo.removeNoteFromRecycle(index);
+              noteReadRepo.addNote(noteReadRepo.recycle[index]);
+              noteReadRepo.removeRecycle(noteReadRepo.recycle[index]);
             },
-            child: Column(children: [
-              const Spacer(),
-              Expanded(
-                child: Text(
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  noteRepo.recycle[index].title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      noteRepo.recycle[index].content,
+            child: Column(
+              children: [
+                const Spacer(),
+                Expanded(
+                  child: Text(
+                    noteRepo.recycle[index].title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
-              const Spacer(),
-            ]),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        noteRepo.recycle[index].content,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
           ),
         );
       },

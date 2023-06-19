@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/repository/notes_repository.dart';
 import 'package:littlefont_app/screens/view_note_page.dart';
+import 'package:littlefont_app/utilities/database_helper.dart';
 
 class FavouritesPage extends ConsumerWidget {
   const FavouritesPage({Key? key}) : super(key: key);
@@ -12,19 +13,40 @@ class FavouritesPage extends ConsumerWidget {
         appBar: AppBar(
           title: const Text('Favourites'),
         ),
-        body: ref.watch(notesProvider).favourites.isEmpty
-            ? const Center(
-                child: Text(
-                'No favourite note',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ))
-            : Padding(
+        body: FutureBuilder(
+          future: DatabaseHelper.instance.getFavourites(),
+          builder: (context, snapshot) {
+            if(snapshot.hasError){
+              return AlertDialog(
+                title: const Text('Error'),
+                content: const Text('An error occured while loading favourite notes'),
+                actions: [
+                  ElevatedButton(onPressed: () {
+                    Navigator.of(context);
+                  }, child: const Text('Ok'))
+                ],
+              );
+            } else if(snapshot.hasData){
+              ref.read(notesProvider).favourites = snapshot.data!;
+              return ref.watch(notesProvider).favourites.isEmpty
+                  ? const Center(
+                  child: Text(
+                    'No favourite note',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  ))
+                  : Padding(
                 padding: const EdgeInsets.all(8),
                 child: buildGridView(ref: ref),
-              ));
+              );
+            }else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+    );
   }
 
   GridView buildGridView({required WidgetRef ref}) {
@@ -40,7 +62,7 @@ class FavouritesPage extends ConsumerWidget {
       itemCount: noteWatchRepo.favourites.length,
       itemBuilder: (context, index) {
         return Card(
-          color: noteWatchRepo.favourites[index].color,
+          color: const Color.fromARGB(200, 200, 250, 220),
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -53,7 +75,7 @@ class FavouritesPage extends ConsumerWidget {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      noteReadRepo.removeNote(index, noteReadRepo.favourites);
+                      noteReadRepo.removeFavourite(noteReadRepo.favourites[index]);
                     },
                     icon: const Icon(Icons.star),
                   ),

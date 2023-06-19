@@ -18,7 +18,7 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
 
-    String path = join(documentDirectory.path, 'note20.db');
+    String path = join(documentDirectory.path, 'note22.db');
     return await openDatabase(
       path,
       version: 1,
@@ -53,7 +53,8 @@ class DatabaseHelper {
   CREATE TABLE IF NOT EXISTS recycle(
       id INTEGER PRIMARY KEY,
       title TEXT NOT NULL,
-      content TEXT NOT NULL  );
+      content TEXT NOT NULL,
+      isFavourite INTEGER NOT NULL);
   ''';
 
   Future<List<Notes>> getNotes() async {

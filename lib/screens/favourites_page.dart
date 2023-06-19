@@ -77,7 +77,7 @@ class FavouritesPage extends ConsumerWidget {
                     onPressed: () {
                       noteReadRepo.removeFavourite(noteReadRepo.favourites[index]);
                     },
-                    icon: const Icon(Icons.star),
+                    icon: const Icon(Icons.favorite, color: Colors.red,),
                   ),
                 ),
               ),

@@ -113,8 +113,52 @@ class RecycleBin extends ConsumerWidget {
               ));
             },
             onLongPress: () {
-              noteReadRepo.addNote(noteReadRepo.recycle[index]);
-              noteReadRepo.removeRecycle(noteReadRepo.recycle[index]);
+              showDialog(context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Alert'),
+                      content: const Text('Are you sure you want to get the deleted note back?'),
+                      actions: [
+                        TextButton(onPressed: () {
+                          noteReadRepo.addNote(noteReadRepo.recycle[index]);
+                          noteReadRepo.removeRecycle(noteReadRepo.recycle[index]);
+                          Navigator.of(context).pop();
+
+                        },
+                            child: const Text('Revoke')
+                        ),
+                        TextButton(onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                            child: const Text('Cancel')
+                        ),
+                      ],
+                    );
+                  },
+              );
+            },
+            onDoubleTap: () {
+              showDialog(context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Alert'),
+                    content: const Text('Are you sure you want to permanently delete the note?'),
+                    actions: [
+                      TextButton(onPressed: () {
+                        noteReadRepo.removeRecycle(noteReadRepo.recycle[index]);
+                        Navigator.of(context).pop();
+                      },
+                          child: const Text('Delete')
+                      ),
+                      TextButton(onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                          child: const Text('Cancel')
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             child: Column(
               children: [

@@ -28,6 +28,8 @@ class NotesRepository extends ChangeNotifier {
 
   Future<void> addFavourite(Notes note) async {
     await DatabaseHelper.instance.insertFavourite(note);
+    note.isFavourite = 1;
+    updateNote(note);
     notifyListeners();
   }
 
@@ -43,6 +45,8 @@ class NotesRepository extends ChangeNotifier {
 
   Future<void> removeFavourite (Notes note) async {
     await DatabaseHelper.instance.deleteFavourite(note.id!);
+    note.isFavourite = 0;
+    updateNote(note);
     notifyListeners();
   }
 

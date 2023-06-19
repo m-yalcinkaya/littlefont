@@ -48,6 +48,7 @@ class _EditPageState extends State<EditPage> {
             onPressed: () {
               isChanged(
                   Notes(
+                    id: widget.note.id,
                       title: _headController.text,
                       content: _textController.text,
                     isFavourite: widget.note.isFavourite
@@ -117,7 +118,7 @@ class _EditPageState extends State<EditPage> {
           onPressed: () {
             Navigator.pop(context);
             Navigator.of(context).pop(
-              Notes(title: _headController.text, content: _textController.text, isFavourite: widget.note.isFavourite),
+              Notes(id: widget.note.id, title: _headController.text, content: _textController.text, isFavourite: widget.note.isFavourite),
             );
           },
           child: const Text('Approve'),
@@ -142,7 +143,7 @@ class _EditPageState extends State<EditPage> {
           onPressed: () {
             Navigator.pop(context);
             Navigator.of(context).pop(
-              Notes(title: _headController.text, content: _textController.text, isFavourite: widget.note.isFavourite),
+              Notes(id: widget.note.id, title: _headController.text, content: _textController.text, isFavourite: widget.note.isFavourite),
             );
           },
           child: const Text('Save'),

@@ -93,15 +93,19 @@ class _MyNotesState extends ConsumerState<MyNotes> {
     );
   }
 
+  Icon? isFavourite(noteWatchRepo, index){
+    if(noteWatchRepo.notes[index].isFavourite == 1){
+      return const Icon(Icons.favorite, color: Colors.red,);
+    }else{
+      return const Icon(Icons.favorite_outline_rounded, color: Colors.black);
+    }
+  }
+
   Future<void> favouriteOperation(NotesRepository noteReadRepo, int index) async {
     if(await DatabaseHelper.instance.isContain(noteReadRepo, index)){
       ref.read(notesProvider).removeFavourite(noteReadRepo.notes[index]);
-      noteReadRepo.notes[index].isFavourite = 0;
-      ref.read(notesProvider).updateNote(noteReadRepo.notes[index]);
     } else {
       ref.read(notesProvider).addFavourite(noteReadRepo.notes[index]);
-      noteReadRepo.notes[index].isFavourite = 0;
-      ref.read(notesProvider).updateNote(noteReadRepo.notes[index]);
     }
   }
 
@@ -147,9 +151,7 @@ class _MyNotesState extends ConsumerState<MyNotes> {
                       onPressed: () {
                         favouriteOperation(noteReadRepo, index);
                       },
-                      icon: noteWatchRepo.notes[index].isFavourite == 1
-                          ? const Icon(Icons.star)
-                          : const Icon(Icons.star_border),
+                      icon: isFavourite(noteWatchRepo, index)!,
                     ),
                   ),
                 ),
@@ -190,6 +192,7 @@ class _MyNotesState extends ConsumerState<MyNotes> {
                             screen: EditPage(note: noteReadRepo.notes[index]),
                             withNavBar: false,
                           );
+                          print('${note.id} + ${note.isFavourite} + ${note.title} + ${note.content}');
                           note != null
                               ? noteWatchRepo.updateNote(note)
                               : null;

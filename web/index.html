@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -15,7 +17,7 @@
     the `--base-href` argument provided to `flutter build`.
   -->
   <base href="$FLUTTER_BASE_HREF">
-
+  <meta name="google-signin-client_id" content="15027043334-4blgiuq8vm4o7agnklpc94hp7a9vofkg.apps.googleusercontent.com">
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
@@ -51,7 +53,7 @@
           engineInitializer.initializeEngine().then(function(appRunner) {
             appRunner.runApp();
           });
-        }
+          }
       });
     });
   </script>

@@ -21,7 +21,6 @@ class _BottomNavBarState extends State<BottomNavBar>
       const AppMainPage(),
       const NewsPage(),
       const ChatScreen(),
-      const ProfilePage(),
     ];
   }
 
@@ -43,12 +42,6 @@ class _BottomNavBarState extends State<BottomNavBar>
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.chat_bubble),
         title: ("Chats"),
-        activeColorPrimary: Colors.red,
-        activeColorSecondary: Colors.black,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(Icons.account_circle),
-        title: ("Profile"),
         activeColorPrimary: Colors.red,
         activeColorSecondary: Colors.black,
       ),

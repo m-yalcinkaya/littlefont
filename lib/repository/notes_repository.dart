@@ -17,12 +17,6 @@ class NotesRepository extends ChangeNotifier {
 
   Future<void> addNote(Notes note) async {
     await DatabaseHelper.instance.insertNote(note);
-    for(int i=0; notes.length>i; i++){
-      print('${notes[i].id} ${notes[i].title} ${notes[i].content}');
-    }
-    for(int i=0; recycle.length>i; i++){
-      print('${recycle[i].id} ${recycle[i].title} ${recycle[i].content}');
-    }
     notifyListeners();
   }
 

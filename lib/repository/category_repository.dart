@@ -3,29 +3,47 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/modals/category.dart';
 import 'package:littlefont_app/modals/note.dart';
 
+import '../utilities/database_helper.dart';
+
 class CategoryRepository extends ChangeNotifier {
-  List<Category> category = [
-    Category(categoryName: 'Job'),
-    Category(categoryName: 'School'),
-    Category(categoryName: 'Meeting')
-  ];
+  List<NoteCategory> category = [];
 
-  void addCategory(String categoryName) {
-    category.add(Category(categoryName: categoryName));
+  List<Notes> notes = [];
+
+
+  Future<void> getCategories() async {
+    await DatabaseHelper.instance.getCategories();
     notifyListeners();
   }
 
-  void removeCategory(int index) {
-    category.removeAt(index);
+  Future<void> getCategoryNotes(int id) async {
+    await DatabaseHelper.instance.getCategoryNotes(id);
     notifyListeners();
   }
 
-  void removeNote(Category category, Notes note) {
+
+  Future<void> addCategory(NoteCategory category) async {
+    await DatabaseHelper.instance.insertCategory(category);
+    notifyListeners();
+  }
+
+  Future<void> removeCategory(NoteCategory category) async {
+    await DatabaseHelper.instance.deleteCategory(category.id!);
+    notifyListeners();
+  }
+
+  Future<void> deleteCategoryNote(Notes note,NoteCategory category) async {
+    await DatabaseHelper.instance.deleteCategoryNote(note.id!, category.id!);
+    notifyListeners();
+  }
+
+
+ /* void removeNote(NoteCategory category, Notes note) {
     category.notes.remove(note);
     notifyListeners();
   }
 
-  void addNote(Category category, Notes note) {
+  void addNote(NoteCategory category, Notes note) {
     category.notes.add(note);
     notifyListeners();
   }
@@ -42,7 +60,7 @@ class CategoryRepository extends ChangeNotifier {
   void removeNoteFromCategory(int indexCategory, Notes value) {
     category[indexCategory].notes.remove(value);
     notifyListeners();
-  }
+  }*/
 }
 
 final categoryProvider = ChangeNotifierProvider((ref) {

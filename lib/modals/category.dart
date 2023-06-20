@@ -1,10 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:littlefont_app/modals/note.dart';
 
-class Category extends ChangeNotifier {
-  String categoryName;
+class NoteCategory {
+  final int? id;
+  final String categoryName;
 
-  List<Notes> notes = [];
+  NoteCategory({this.id, required this.categoryName});
 
-  Category({required this.categoryName});
+  factory NoteCategory.fromJson(Map<String, dynamic> map) {
+    return NoteCategory(
+        id:  map['id'],
+      categoryName: map['category_name']
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{
+      "id": id,
+      "category_name": categoryName,
+    };
+
+    map.removeWhere((key, value) => value == null);
+    return map;
+  }
 }

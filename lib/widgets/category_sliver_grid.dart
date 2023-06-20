@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont_app/utilities/database_helper.dart';
 
 import '../repository/category_repository.dart';
 import '../screens/show_category_notes.dart';
@@ -22,24 +23,43 @@ class CategorySliverGrid extends ConsumerWidget {
       ),
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-          return Card(
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ShowCategory(indexCategory: index),
-                    ));
-              },
-              child: Center(
-                  child: Text(
-                    ref.watch(categoryProvider).category[index].categoryName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
+          return FutureBuilder(
+            future: DatabaseHelper.instance.getCategories(),
+              builder: (context, snapshot) {
+                if(snapshot.hasError){
+                  ref.read(categoryProvider).category = snapshot.data!;
+                  return AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('An error occured loading the categories'),
+                    actions: [
+                      TextButton(onPressed: Navigator.of(context).pop,
+                          child: const Text('OK'))
+                    ],
+                  );
+                }else if(snapshot.hasData){
+                  return Card(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ShowCategory(indexCategory: index),
+                            ));
+                      },
+                      child: Center(
+                          child: Text(
+                            ref.watch(categoryProvider).category[index].categoryName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )),
                     ),
-                  )),
-            ),
+                  );
+                }else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
           );
         },
         childCount: ref.watch(categoryProvider).category.length,

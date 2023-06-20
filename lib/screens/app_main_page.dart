@@ -152,7 +152,7 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                       alignment: Alignment.centerLeft,
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const CategoryPage(),
                           ));
                         },

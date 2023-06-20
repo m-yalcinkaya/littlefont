@@ -25,22 +25,11 @@ class _MyNotesState extends ConsumerState<MyNotes> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Notes'),
-        actions: [
-          IconButton(onPressed: () {
-            for(int i=0; ref.read(notesProvider).notes.length>i; i++){
-              print('${ref.read(notesProvider).notes[i].id} ${ref.read(notesProvider).notes[i].title} ${ref.read(notesProvider).notes[i].content}, ${ref.read(notesProvider).notes[i].isFavourite}');
-            }
-            for(int i=0; ref.read(notesProvider).recycle.length>i; i++){
-              print('${ref.read(notesProvider).recycle[i].id} ${ref.read(notesProvider).recycle[i].title} ${ref.read(notesProvider).recycle[i].content} ${ref.read(notesProvider).notes[i].isFavourite}');
-            }
-            }, icon: const Icon(Icons.delete))
-        ],
       ),
       body: FutureBuilder(
         future: DatabaseHelper.instance.getNotes(),
         builder: (context, snapshot) {
           if(snapshot.hasError){
-            print(snapshot.error);
                   return AlertDialog(
                     title: const Text('Error'),
                     content: const Text('An error occured while loading notes. please try again later'),
@@ -192,7 +181,6 @@ class _MyNotesState extends ConsumerState<MyNotes> {
                             screen: EditPage(note: noteReadRepo.notes[index]),
                             withNavBar: false,
                           );
-                          print('${note.id} + ${note.isFavourite} + ${note.title} + ${note.content}');
                           note != null
                               ? noteWatchRepo.updateNote(note)
                               : null;

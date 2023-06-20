@@ -89,7 +89,6 @@ class _LoginState extends ConsumerState<Login> {
                             }
                           },);
                         } catch (e) {
-                          print(e);
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                               content: Text(
                                   'Log in with Google Error! please try to log in normally')));

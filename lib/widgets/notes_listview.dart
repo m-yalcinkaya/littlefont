@@ -15,9 +15,7 @@ class NotesListview extends ConsumerWidget {
         future: DatabaseHelper.instance.getNotes(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('An error occured loading the notes')));
-            return const Text('');
+            return const SnackBar(content: Text('An error occured loading the notes'),);
           } else if (snapshot.hasData) {
             ref
                 .read(notesProvider)

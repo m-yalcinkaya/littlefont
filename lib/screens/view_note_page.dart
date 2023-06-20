@@ -67,11 +67,7 @@ class ShowCategoryNote extends ConsumerWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    ref
-                        .watch(categoryProvider)
-                        .category[indexCategory]
-                        .notes[index]
-                        .title,
+                    ref.watch(categoryProvider).notes[index].title,
                     style: const TextStyle(
                       fontSize: 30,
                     ),
@@ -81,11 +77,7 @@ class ShowCategoryNote extends ConsumerWidget {
               SizedBox(
                 width: 350,
                 child: Text(
-                  ref
-                      .watch(categoryProvider)
-                      .category[indexCategory]
-                      .notes[index]
-                      .title,
+                  ref.watch(categoryProvider).notes[index].title,
                 ),
               ),
             ],

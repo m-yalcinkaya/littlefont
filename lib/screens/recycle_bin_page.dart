@@ -40,12 +40,6 @@ class RecycleBin extends ConsumerWidget {
             );
           } else if (snapshot.hasData) {
             ref.read(notesProvider).recycle = snapshot.data!;
-            for(int i=0; ref.read(notesProvider).notes.length>i; i++){
-              print('${ref.read(notesProvider).notes[i].id} ${ref.read(notesProvider).notes[i].title} ${ref.read(notesProvider).notes[i].content}');
-            }
-            for(int i=0; ref.read(notesProvider).recycle.length>i; i++){
-              print('${ref.read(notesProvider).recycle[i].id} ${ref.read(notesProvider).recycle[i].title} ${ref.read(notesProvider).recycle[i].content}');
-            }
             return noteRepo.recycle.isEmpty
                 ? Center(
               child: Column(

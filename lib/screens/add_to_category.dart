@@ -5,6 +5,7 @@ import 'package:littlefont_app/repository/notes_repository.dart';
 import 'package:littlefont_app/screens/view_note_page.dart';
 import 'package:littlefont_app/utilities/database_helper.dart';
 
+
 class AddToCategory extends ConsumerWidget {
   final int indexCategory;
 
@@ -36,7 +37,7 @@ class AddToCategory extends ConsumerWidget {
     final noteRepo = ref.watch(notesProvider);
     final categoryRepo = ref.watch(categoryProvider);
     return FutureBuilder(
-      future: DatabaseHelper.instance.getNotes(),
+      future: DatabaseHelper.instance.getPendingCategoryNotes(categoryRepo.category[indexCategory].id!),
       builder: (context, snapshot) {
         if(snapshot.hasError){
           return AlertDialog(
@@ -74,11 +75,9 @@ class AddToCategory extends ConsumerWidget {
                       child: Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          onPressed: () {
-                            final value = ref.read(notesProvider).notes[index];
-                            ref
-                                .read(categoryProvider)
-                                .noteOperation(indexCategory, value);
+                          onPressed: () async {
+                            final value = noteRepo.notes[index];
+                            ref.read(categoryProvider).insertToCategory(value, categoryRepo.category[indexCategory]);
                           },
                           icon: categoryRepo.notes
                               .contains(noteRepo.notes[index])

@@ -27,12 +27,11 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
   }
 
   Future<String?> isFounded(String value) async {
-    if(await DatabaseHelper.instance.isFounded(value) == true){
+    if (await DatabaseHelper.instance.isFounded(value) == true) {
       return 'A category name with the same name already exists!!';
     }
     return null;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +65,10 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print(categoryRepo.category.length);
                   final isSuitable = _formKey.currentState?.validate();
                   if (isSuitable == true) {
-                    final category = NoteCategory(categoryName: _controller.text);
+                    final category =
+                        NoteCategory(categoryName: _controller.text);
                     categoryRepo.addCategory(category);
                     Navigator.pushReplacement(
                         context,
@@ -77,7 +76,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                           builder: (context) => const CategoryPage(),
                         ));
                   }
-                  print(categoryRepo.category.length);
                 },
                 child: const Text('Create'),
               )

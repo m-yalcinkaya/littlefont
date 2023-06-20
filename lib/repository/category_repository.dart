@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/modals/category.dart';
@@ -7,7 +8,6 @@ import '../utilities/database_helper.dart';
 
 class CategoryRepository extends ChangeNotifier {
   List<NoteCategory> category = [];
-
   List<Notes> notes = [];
 
 
@@ -34,6 +34,11 @@ class CategoryRepository extends ChangeNotifier {
 
   Future<void> deleteCategoryNote(Notes note,NoteCategory category) async {
     await DatabaseHelper.instance.deleteCategoryNote(note.id!, category.id!);
+    notifyListeners();
+  }
+
+  Future<void> insertToCategory(Notes note,NoteCategory category) async {
+    await DatabaseHelper.instance.insertToCategory(category, note);
     notifyListeners();
   }
 

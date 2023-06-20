@@ -10,7 +10,6 @@ import '../repository/notes_repository.dart';
 
 class DatabaseHelper {
   DatabaseHelper._privateConstructor();
-
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
   static Database? _database;
 
@@ -19,7 +18,7 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
 
-    String path = join(documentDirectory.path, 'note25.db');
+    String path = join(documentDirectory.path, 'note28.db');
     return await openDatabase(
       path,
       version: 1,
@@ -33,7 +32,6 @@ class DatabaseHelper {
     await db.execute(recycle);
     await db.execute(categories);
     await db.execute(categoryNotes);
-
   }
 
   static const notes = '''
@@ -87,17 +85,21 @@ class DatabaseHelper {
 
   Future<List<Notes>> getCategoryNotes(int id) async {
     Database db = await instance.database;
-    var notes = await db.rawQuery('SELECT * FROM category_notes where category_id = $id');
+    var notes = await db.rawQuery('select *from notes where id in(select note_id from category_notes where category_id = "$id")');
+    List<Notes> noteList = notes.isNotEmpty ? notes.map((e) => Notes.fromJson(e)).toList() : [];
+    return noteList;
+  }
+  Future<List<Notes>> getPendingCategoryNotes(int id) async {
+    Database db = await instance.database;
+    var notes = await db.rawQuery('select *from notes where id not in(select note_id from category_notes where category_id = "$id")');
     List<Notes> noteList = notes.isNotEmpty ? notes.map((e) => Notes.fromJson(e)).toList() : [];
     return noteList;
   }
 
   Future<int> deleteCategoryNote(int noteID, int categoryID) async {
     Database db = await instance.database;
-    return await db.rawDelete('DELETE FROM categories_note WHERE note_id = ? AND category_id = ?', [noteID, categoryID]);
+    return await db.rawDelete('DELETE FROM category_notes WHERE note_id = ? AND category_id = ?', [noteID, categoryID]);
   }
-
-
 
   Future<bool?> isFounded(String value) async {
     Database db = await instance.database;
@@ -108,7 +110,6 @@ class DatabaseHelper {
       return false;
     }
   }
-
 
   Future<List<Notes>> getNotes() async {
     Database db = await instance.database;
@@ -131,6 +132,8 @@ class DatabaseHelper {
     return noteList;
   }
 
+
+
   Future<bool> isContain(NotesRepository noteReadRepo, int index) async {
     Database db = await instance.database;
     final value = noteReadRepo.notes[index].id;
@@ -145,18 +148,20 @@ class DatabaseHelper {
     return false;
   }
 
-
   Future<int> insertCategory(NoteCategory category) async {
     Database db = await instance.database;
     return await db.insert('categories', category.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<int> insertToCategory(NoteCategory category, Notes note) async {
+    Database db = await instance.database;
+    return await db.insert('category_notes', {'category_id': category.id, 'note_id': note.id}, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
 
   Future<int> deleteCategory(int id) async {
     Database db = await instance.database;
     return await db.rawDelete('DELETE FROM categories WHERE id = ?', [id]);
   }
-
 
   Future<int> insertNote(Notes note) async {
     Database db = await instance.database;

@@ -48,9 +48,10 @@ dependencies:
   cloud_firestore: ^4.7.1
   path_provider: ^2.0.15
   weather_icons: ^3.0.0
-  fl_chart: ^0.36.1
+#  fl_chart: ^0.36.1
   sqflite: ^2.2.8+4
   path: ^1.8.3
+  fl_chart: ^0.63.0
 
 dev_dependencies:
   flutter_test:

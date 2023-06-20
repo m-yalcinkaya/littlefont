@@ -70,14 +70,14 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
         title: Column(
           children: [
             const SizedBox(height: 15,),
-            Text(ref.watch(weatherRepository).data?.areaName ?? 'null', style: const TextStyle(color: Colors.white),),
+            Text(ref.watch(weatherProvider).data?.areaName ?? 'null', style: const TextStyle(color: Colors.white),),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(weatherIcon(ref.watch(weatherRepository).data?.icon), color: Colors.white,),
+                Icon(weatherIcon(ref.watch(weatherProvider).data?.icon), color: Colors.white,),
                 const SizedBox(width: 10,),
                 Text(
-                  '${ref.watch(weatherRepository).data?.currentTemp?.round()}\u00B0C',
+                  '${ref.watch(weatherProvider).data?.currentTemp?.round()}\u00B0C',
                   style: const TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ],
@@ -97,15 +97,15 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
 
   Widget buildFutureBuilder(WidgetRef ref, Size screenSize) {
 
-    if(ref.watch(weatherRepository).data == null || (ref.watch(weatherRepository).data != null && isLoading == true)){
+    if(ref.watch(weatherProvider).data == null || (ref.watch(weatherProvider).data != null && isLoading == true)){
       isLoading = false;
       return FutureBuilder(
-        future: ref.watch(weatherRepository).getWeather(ref.watch(weatherRepository).area),
+        future: ref.watch(weatherProvider).getWeather(ref.watch(weatherProvider).area),
         builder: (context, snapshot) {
           if(snapshot.hasError){
             return Text('An error occurred: ${snapshot.error.toString()}');
           }else if(snapshot.hasData){
-            ref.watch(weatherRepository).data = snapshot.data!;
+            ref.watch(weatherProvider).data = snapshot.data!;
             return weatherSection(screenSize);
           }else{
             return const Center(child: CircularProgressIndicator());

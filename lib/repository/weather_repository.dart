@@ -28,6 +28,6 @@ class WeatherRepository extends ChangeNotifier{
 }
 
 
-final weatherRepository = ChangeNotifierProvider((ref) {
+final weatherProvider = ChangeNotifierProvider((ref) {
   return WeatherRepository(ref.read(weatherServiceProvider));
 },);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/repository/weather_repository.dart';
-import 'package:littlefont_app/widgets/bar_chart.dart';
-import 'package:littlefont_app/widgets/button.dart';
+
+import '../widgets/line_chart.dart';
 
 
 class WeatherPage extends ConsumerStatefulWidget {
@@ -42,28 +42,26 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
                   alignment: Alignment.center,
                     actions: [
                       TextField(controller: controller,),
-                      Button(
-                          text: 'Select area',
-                          color: Colors.red,
-                          onPressedOperations: () {
-                              try{
-                                ref.read(weatherRepository).getWeather(controller.text).then((weather) {
-                                  if(weather != null) {
-                                    ref.read(weatherRepository).data = weather;
-                                  }else {
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalided area name')));
-                                  }
-                                  controller.text = '';
-                                  Navigator.pop(context);
-                                },);
-                              }catch(e){
+                      TextButton(
+                        onPressed: () {
+                          try{
+                            setState(() {
+                              ref.read(weatherProvider).getWeather(controller.text).then((weather) {
+                                if(weather != null) {
+                                  ref.read(weatherProvider).data = weather;
+                                }else {
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalided area name')));
+                                }
+                                controller.text = '';
                                 Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
-                              }
-                          },
-                          width: 50,
-                          height: 50,
-                          textColor: Colors.white,
+                              },);
+                            });
+                          }catch(e){
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+                          }
+
+                        },child: const Text('Select Area'),
                       ),
                     ],
                 );
@@ -78,28 +76,37 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
             const SizedBox(height: 70),
             Text(
               ref
-                  .watch(weatherRepository)
+                  .watch(weatherProvider)
                   .data!
                   .areaName ?? 'null',
               style: const TextStyle(fontSize: 20),
             ),
             Text(
               '${ref
-                  .watch(weatherRepository)
+                  .watch(weatherProvider)
                   .data!
                   .currentTemp?.round()} \u00B0C',
               style: const TextStyle(fontSize: 50),
             ),
             Text(
               '${ref
-                  .watch(weatherRepository)
+                  .watch(weatherProvider)
                   .data!
                   .status}',
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20),
-
-            const WeatherChartPage(),
+            const Text(
+              'Humidity: ',
+              style: TextStyle(fontSize: 20),
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                final weatherData = ref.watch(weatherProvider).data;
+                return WeatherLineChart(weatherData: weatherData);
+              },
+            ),
+            // const WeatherChartPage(),
           ],
         ),
       ),

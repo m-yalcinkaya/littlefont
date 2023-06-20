@@ -3,6 +3,7 @@ class Weather {
   double? currentTemp;
   String? status;
   String? icon;
+  List<Map<String, dynamic>> tempsDaily = [];
 
   Weather({
     required this.areaName,
@@ -15,5 +16,14 @@ class Weather {
     currentTemp = map["current"]["temp"];
     status = map["current"]["weather"][0]["main"];
     icon = map["current"]["weather"][0]["icon"];
+    tempsDaily = [
+      map["daily"][0]["temp"],
+      map["daily"][1]["temp"],
+      map["daily"][2]["temp"],
+      map["daily"][3]["temp"],
+      map["daily"][4]["temp"],
+      map["daily"][5]["temp"],
+      map["daily"][6]["temp"],
+      map["daily"][7]["temp"],];
   }
 }

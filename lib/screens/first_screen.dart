@@ -52,7 +52,6 @@ class _FirstScreenState extends State<FirstScreen>
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -66,71 +65,63 @@ class _FirstScreenState extends State<FirstScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Spacer(flex: 8,),
-            Expanded(
-              flex: 5,
-              child: AnimatedBuilder(
-                animation: _opacityAnimation,
-                builder: (BuildContext context, Widget? child) {
-                  return Opacity(
-                    opacity: _opacityAnimation.value,
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Icon(
-                            Icons.access_time_filled,
-                            color: Colors.white,
-                            size: 100,
-                          ),
+            AnimatedBuilder(
+              animation: _opacityAnimation,
+              builder: (BuildContext context, Widget? child) {
+                return Opacity(
+                  opacity: _opacityAnimation.value,
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Icon(
+                          Icons.access_time_filled,
+                          color: Colors.white,
+                          size: 100,
                         ),
-                        AutoSizeText(
-                          'LittleFont',
-                          style: GoogleFonts.akshar(
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          minFontSize: 24,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            const Spacer(flex: 2,),
-            Expanded(
-              flex: 4,
-              child: Column(
-                children: [
-                  Button(
-                    textColor: Colors.white,
-                    text: 'Log in',
-                    color: Colors.red,
-                    onPressedOperations: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => const Login()));
-                    },
-                    width: screenSize.width/2,
-                    height: screenSize.width/8,
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const SignUp(),
-                    )),
-                    child: const Text(
-                      'New to the app? register now',
-                      style: TextStyle(
-                        color: Colors.white,
                       ),
+                      AutoSizeText(
+                        'LittleFont',
+                        style: GoogleFonts.akshar(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        minFontSize: 20,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 50,),
+            Column(
+              children: [
+                Button(
+                  textColor: Colors.white,
+                  text: 'Log in',
+                  color: Colors.red,
+                  onPressedOperations: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const Login()));
+                  },
+                  width: 200,
+                  height: 50,
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SignUp(),
+                  )),
+                  child: const Text(
+                    'New to the app? register now',
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const Spacer(flex: 8,),
           ],
         ),
       ),

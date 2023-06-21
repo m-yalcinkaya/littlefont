@@ -33,7 +33,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
             '${ref
                 .watch(messageProvider)
                 .data['photoUrl']}'),
-        radius: 20,
+        radius: 16,
         backgroundColor: Colors.blue,
       );
     }else {

@@ -39,7 +39,6 @@ dependencies:
   flutter_riverpod: ^2.3.6
   persistent_bottom_nav_bar: ^5.0.2
   auto_size_text: ^3.0.0
-  flutter_slidable: ^3.0.0
   http: ^1.0.0
   webview_flutter: ^4.2.1
   firebase_core: ^2.13.1
@@ -48,7 +47,6 @@ dependencies:
   cloud_firestore: ^4.7.1
   path_provider: ^2.0.15
   weather_icons: ^3.0.0
-#  fl_chart: ^0.36.1
   sqflite: ^2.2.8+4
   path: ^1.8.3
   fl_chart: ^0.63.0

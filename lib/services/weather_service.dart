@@ -9,7 +9,7 @@ class WeatherService {
 
   Future<Weather?> getWeatherForDaily(String area) async {
     final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=$area&units=metric&APPID=565b2883c54ac9bf1d0fb75c6b2b9957'));
+        'https://api.openweathermap.org/data/2.5/weather?q=$area&units=metric&APPID=eef27e5d58354d9920dd2aaf9c75da3d'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> map = jsonDecode(response.body);
       final country =  map["sys"]["country"];
@@ -17,7 +17,7 @@ class WeatherService {
       final lat = map["coord"]["lat"];
       final lon = map["coord"]["lon"];
       final responseDaily = await http.get(Uri.parse(
-          'https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&appid=565b2883c54ac9bf1d0fb75c6b2b9957'));
+          'https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&appid=eef27e5d58354d9920dd2aaf9c75da3d'));
       if(responseDaily.statusCode == 200){
         final Map<String, dynamic> mapDaily = jsonDecode(responseDaily.body);
         final dailyWeather = Weather.fromJson(mapDaily);

@@ -4,7 +4,7 @@ class Weather {
   String? status;
   String? icon;
   double? feelsLike;
-  int?   humidity;
+  int?  humidity;
   List<Map<String, dynamic>> tempsDaily = [];
   List<String> icons = [];
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import '../repository/messages_repository.dart';
@@ -29,6 +30,24 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
     super.dispose();
   }
 
+  Widget profilImage(String? photoUrl) {
+    if (photoUrl != null && photoUrl.isNotEmpty) {
+      return CircleAvatar(
+        backgroundImage: NetworkImage(
+            '${ref
+                .watch(messageProvider)
+                .data['photoUrl']}'),
+        radius: 20,
+        backgroundColor: Colors.blue,
+      );
+    }else {
+      return const CircleAvatar(
+        maxRadius: 16,
+        child: Icon(Icons.person),
+      );
+    }
+  }
+
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('users').snapshots();
 
@@ -44,7 +63,7 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: SpinKitCircle(color: Colors.red),);
           }
 
           List<DocumentSnapshot> documents = snapshot.data!.docs;
@@ -69,12 +88,7 @@ class _SearchAccountState extends ConsumerState<SearchAccount> {
                     children: [
                       ListTile(
                         title: Text('${ref.watch(messageProvider).data['firstName']} ${ref.watch(messageProvider).data['lastName']}'),
-                        leading: CircleAvatar(
-                          backgroundImage:
-                          NetworkImage('${ref.watch(messageProvider).data['photoUrl']}'),
-                          radius: 20,
-                          backgroundColor: Colors.blue,
-                        ),
+                        leading: profilImage(ref.watch(messageProvider).data["photoUrl"]),
                         subtitle: Text(ref.watch(messageProvider).data['email']),
                         onTap: () {
                           PersistentNavBarNavigator.pushNewScreen(

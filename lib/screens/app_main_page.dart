@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:littlefont_app/repository/news_repository.dart';
+import 'package:littlefont_app/screens/news_page.dart';
 import '../repository/category_repository.dart';
 import '../utilities/database_helper.dart';
 import '../widgets/category_sliver_grid.dart';
@@ -97,7 +99,7 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                       child: TextButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const MyNotes(),
+                            builder: (context) => const NewsPage(),
                           ));
                         },
                         child: const Text('News >'),
@@ -119,7 +121,7 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                       );
                     } else {
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: SpinKitCircle(color: Colors.red),
                       );
                     }
                   },
@@ -192,7 +194,7 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                     return const CategorySliverGrid();
                   } else {
                     return const SliverToBoxAdapter(child: Center(
-                        child: CircularProgressIndicator()));
+                        child: SpinKitCircle(color: Colors.red),));
                   }
                 },
               ),

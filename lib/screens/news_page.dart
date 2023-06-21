@@ -131,7 +131,7 @@ class _NewsPageState extends ConsumerState<NewsPage> with TickerProviderStateMix
               } else if (snapshot.hasData) {
                 return MyGridView(list: snapshot.data!);
               } else {
-                return const Center(child: SpinKitFoldingCube(color: Colors.red),);
+                return const Center(child: SpinKitCircle(color: Colors.red),);
               }
             },
           )),

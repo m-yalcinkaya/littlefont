@@ -84,7 +84,7 @@ class WeatherRepository extends ChangeNotifier{
     icon6 = weatherData?.icons[5];
     icon7 = weatherData?.icons[6];
     icon8 = weatherData?.icons[7];
-    feelsLikeTemp = weatherData?.feelsLike;
+    feelsLikeTemp = weatherData?.feelsLike.roundToDouble();
     humidityValue = weatherData?.humidity;
     notifyListeners();
   }

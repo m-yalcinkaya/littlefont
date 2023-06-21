@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:littlefont_app/repository/notes_repository.dart';
 import 'package:littlefont_app/utilities/database_helper.dart';
 
@@ -54,7 +55,7 @@ class NotesListview extends ConsumerWidget {
               },
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: SpinKitCircle(color: Colors.red),);
           }
         }
     );

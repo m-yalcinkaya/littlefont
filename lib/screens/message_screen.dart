@@ -2,6 +2,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:littlefont_app/services/message_service.dart';
 import '../repository/messages_repository.dart';
 import 'package:littlefont_app/modals/message.dart';
@@ -25,6 +26,24 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     return Colors.blueGrey;
   }
 
+  Widget profilImage(String? photoUrl) {
+    if (photoUrl != null && photoUrl.isNotEmpty) {
+      return CircleAvatar(
+        backgroundImage: NetworkImage(
+            '${ref
+                .watch(messageProvider)
+                .data['photoUrl']}'),
+        radius: 20,
+        backgroundColor: Colors.blue,
+      );
+    }else {
+      return const CircleAvatar(
+        maxRadius: 16,
+        child: Icon(Icons.person),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +58,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.arrow_back),
-              CircleAvatar(
-                radius: 16.0,
-                backgroundImage: NetworkImage('${ref.watch(messageProvider).data['photoUrl']}'),
-              ),
+              profilImage(messageWatchRepo.data["photoUrl"]),
             ],
           ),
         ),
@@ -77,7 +93,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                       if (snapshot.hasError) {
                         return const Center(child: Text('Something went wrong'));
                       } else if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: SpinKitCircle(color: Colors.red),);
                       }
 
                       Map<String, dynamic>? documentData = snapshot.data!.data();

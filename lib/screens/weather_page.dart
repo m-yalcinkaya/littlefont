@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/repository/weather_repository.dart';
 import 'package:littlefont_app/utilities/weather_utils.dart';
-import 'package:weather_icons/weather_icons.dart';
 
 import '../widgets/line_chart.dart';
 
@@ -106,7 +105,7 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 5,),
-            Text('Apparent temperature: ${ref.watch(weatherProvider).feelsLikeTemp.toInt()}\u00B0C', style: TextStyle(fontSize: 20),),
+            Text('Apparent temperature: ${ref.watch(weatherProvider).feelsLikeTemp.toInt()}\u00B0C', style: const TextStyle(fontSize: 20),),
             const SizedBox(height: 60,),
             Padding(
               padding: const EdgeInsets.all(5),

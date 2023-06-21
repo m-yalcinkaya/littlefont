@@ -11,6 +11,11 @@ class CategoryRepository extends ChangeNotifier {
   List<Notes> notes = [];
 
 
+  Future<void> updateCategory() async {
+    category = await DatabaseHelper.instance.getCategories();
+    notifyListeners();
+  }
+
   Future<void> getCategories() async {
     await DatabaseHelper.instance.getCategories();
     notifyListeners();

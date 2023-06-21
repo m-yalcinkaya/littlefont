@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont_app/screens/app_main_page.dart';
+import 'package:littlefont_app/repository/category_repository.dart';
 import '../widgets/category_gridview.dart';
 import 'package:littlefont_app/screens/add_category.dart';
 
@@ -14,11 +14,10 @@ class CategoryPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
+        leading:  IconButton(
           onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const AppMainPage(),)
-            );
+            Navigator.of(context).pop();
+            ref.read(categoryProvider).updateCategory();
           },
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),

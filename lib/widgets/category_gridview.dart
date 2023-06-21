@@ -62,6 +62,7 @@ class CategoryGridview extends ConsumerWidget {
                                   onPressed: () {
                                     Navigator.pop(context);
                                     ref.read(categoryProvider).removeCategory(ref.read(categoryProvider).category[index]);
+                                    ref.read(categoryProvider).updateCategory();
                                   },
                                   child: const Text('Delete'),
                                 ),

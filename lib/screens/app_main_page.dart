@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/repository/news_repository.dart';
+import '../repository/category_repository.dart';
+import '../utilities/database_helper.dart';
 import '../widgets/category_sliver_grid.dart';
 import '../widgets/floating_main_page.dart';
 import '../widgets/news_listview.dart';
@@ -44,11 +46,11 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
 
   @override
   void initState() {
-    _future = ref.read(newsProvider).getNewsByCategory('general', ref.read(newsProvider).generalNews!);
+    _future = ref.read(newsProvider).getNewsByCategory('general', ref
+        .read(newsProvider)
+        .generalNews!);
     super.initState();
   }
-
-
 
 
   @override
@@ -108,7 +110,8 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                   builder: (context, AsyncSnapshot<List<News>?> snapshot) {
                     if (snapshot.hasError) {
                       return Text(
-                          'An error occurred while loading the news ${snapshot.error}');
+                          'An error occurred while loading the news ${snapshot
+                              .error}');
                     } else if (snapshot.hasData) {
                       return SizedBox(
                         height: 150,
@@ -151,10 +154,12 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        onPressed: () async {
+                          await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const CategoryPage(),
                           ));
+                          setState(() {
+                          });
                         },
                         child: const Text('Categories >'),
                       ),
@@ -164,9 +169,33 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
               ],
             ),
           ),
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            sliver: CategorySliverGrid(),
+          SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              sliver: FutureBuilder(
+                future: DatabaseHelper.instance.getCategories(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return SliverToBoxAdapter(
+                      child: AlertDialog(
+                        title: const Text('Error'),
+                        content: const Text(
+                            'An error occured loading the categories'),
+                        actions: [
+                          TextButton(onPressed:
+                          Navigator.of(context).pop,
+                              child: const Text('OK'))
+                        ],
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    ref.read(categoryProvider).category = snapshot.data!;
+                    return const CategorySliverGrid();
+                  } else {
+                    return const SliverToBoxAdapter(child: Center(
+                        child: CircularProgressIndicator()));
+                  }
+                },
+              ),
           ),
         ],
       ),

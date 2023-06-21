@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:littlefont_app/repository/weather_repository.dart';
 import 'package:littlefont_app/screens/about_page.dart';
 import 'package:littlefont_app/screens/category_page.dart';
@@ -28,7 +29,7 @@ class AppDrawer extends ConsumerStatefulWidget {
   ConsumerState<AppDrawer> createState() => _AppDrawerState();
 }
 
-class _AppDrawerState extends ConsumerState<AppDrawer> {
+class _AppDrawerState extends ConsumerState<AppDrawer> with TickerProviderStateMixin {
   bool isLoading = false;
 
 
@@ -49,8 +50,8 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
   }
 
 
-    Widget weatherSection(screenSize){
-    return Container(
+    Widget weatherSection(screenSize) {
+      return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
@@ -94,29 +95,32 @@ class _AppDrawerState extends ConsumerState<AppDrawer> {
       ),
     );
   }
-
   Widget buildFutureBuilder(WidgetRef ref, Size screenSize) {
-
-    if(ref.watch(weatherProvider).data == null || (ref.watch(weatherProvider).data != null && isLoading == true)){
+    if (ref.watch(weatherProvider).data == null || (ref.watch(weatherProvider).data != null && isLoading == true)) {
       isLoading = false;
       return FutureBuilder(
         future: ref.watch(weatherProvider).getWeather(ref.watch(weatherProvider).area),
         builder: (context, snapshot) {
-          if(snapshot.hasError){
+          if (snapshot.hasError) {
             return Text('An error occurred: ${snapshot.error.toString()}');
-          }else if(snapshot.hasData){
+          } else if (snapshot.hasData) {
             ref.watch(weatherProvider).data = snapshot.data!;
             return weatherSection(screenSize);
-          }else{
-            return const Center(child: CircularProgressIndicator());
+          } else {
+            return const Center(
+              child: SpinKitWave(color: Colors.red, size: 40, type: SpinKitWaveType.center),
+            );
           }
-        },);
+        },
+      );
     }
     return weatherSection(screenSize);
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     Size screenSize = MediaQuery.of(context).size;
     return SizedBox(
       width: screenSize.width * 3 / 4,

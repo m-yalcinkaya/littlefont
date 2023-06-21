@@ -65,17 +65,19 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  final isSuitable = _formKey.currentState?.validate();
-                  if (isSuitable == true) {
-                    final category =
-                        NoteCategory(categoryName: _controller.text);
-                    categoryRepo.addCategory(category);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CategoryPage(),
-                        ));
-                  }
+                  setState(() {
+                    final isSuitable = _formKey.currentState?.validate();
+                    if (isSuitable == true) {
+                      final category =
+                      NoteCategory(categoryName: _controller.text);
+                      categoryRepo.addCategory(category);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CategoryPage(),
+                          ));
+                    }
+                  });
                 },
                 child: const Text('Create'),
               )

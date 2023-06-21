@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:littlefont_app/repository/news_repository.dart';
 
 import '../widgets/my_grid_view.dart';
@@ -13,7 +14,7 @@ class NewsPage extends ConsumerStatefulWidget {
   ConsumerState<NewsPage> createState() => _NewsPageState();
 }
 
-class _NewsPageState extends ConsumerState<NewsPage> {
+class _NewsPageState extends ConsumerState<NewsPage> with TickerProviderStateMixin {
   late Future<List<News>?> _future;
   late String categoryTitle;
   // ignore: unused_field
@@ -130,7 +131,7 @@ class _NewsPageState extends ConsumerState<NewsPage> {
               } else if (snapshot.hasData) {
                 return MyGridView(list: snapshot.data!);
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: SpinKitFoldingCube(color: Colors.red),);
               }
             },
           )),

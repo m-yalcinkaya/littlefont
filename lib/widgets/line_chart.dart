@@ -1,14 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:littlefont_app/modals/weather.dart';
 import 'package:littlefont_app/repository/weather_repository.dart';
 
 class WeatherLineChart extends ConsumerStatefulWidget {
-  final Weather? weatherData;
   const WeatherLineChart({
     super.key,
-    required this.weatherData,
   });
 
   @override
@@ -68,22 +65,16 @@ class _WeatherLineChartState extends ConsumerState<WeatherLineChart> {
   }
 
 
-  @override
-  initState(){
-    final weatherRepo = ref.read(weatherProvider);
-    weatherRepo.assignTemps(weatherRepo.data);
-    super.initState();
-  }
 
   List<FlSpot> get allSpots => [
-    FlSpot(0, ref.read(weatherProvider).day1Temp),
-    FlSpot(1, ref.read(weatherProvider).day2Temp),
-    FlSpot(2, ref.read(weatherProvider).day3Temp),
-    FlSpot(3, ref.read(weatherProvider).day4Temp),
-    FlSpot(4, ref.read(weatherProvider).day5Temp),
-    FlSpot(5, ref.read(weatherProvider).day6Temp),
-    FlSpot(6, ref.read(weatherProvider).day7Temp),
-    FlSpot(7, ref.read(weatherProvider).day8Temp)
+    FlSpot(0, ref.watch(weatherProvider).day1Temp),
+    FlSpot(1, ref.watch(weatherProvider).day2Temp),
+    FlSpot(2, ref.watch(weatherProvider).day3Temp),
+    FlSpot(3, ref.watch(weatherProvider).day4Temp),
+    FlSpot(4, ref.watch(weatherProvider).day5Temp),
+    FlSpot(5, ref.watch(weatherProvider).day6Temp),
+    FlSpot(6, ref.watch(weatherProvider).day7Temp),
+    FlSpot(7, ref.watch(weatherProvider).day8Temp)
   ];
 
   String getDayOfWeek(int weekday) {

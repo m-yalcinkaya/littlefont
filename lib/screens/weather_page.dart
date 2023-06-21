@@ -45,7 +45,6 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
                       TextButton(
                         onPressed: () {
                           try{
-                            setState(() {
                               ref.read(weatherProvider).getWeather(controller.text).then((weather) {
                                 if(weather != null) {
                                   ref.read(weatherProvider).data = weather;
@@ -54,11 +53,15 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
                                 }
                                 controller.text = '';
                                 Navigator.pop(context);
-                              },);
+                                final weatherRepo = ref.read(weatherProvider);
+                                weatherRepo.assignTemps(weatherRepo.data);
                             });
                           }catch(e){
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+                          }finally{
+                            setState(() {
+                            });
                           }
 
                         },child: const Text('Select Area'),
@@ -100,12 +103,7 @@ class _WeatherPageState extends ConsumerState<WeatherPage> {
               'Humidity: ',
               style: TextStyle(fontSize: 20),
             ),
-            Consumer(
-              builder: (context, ref, child) {
-                final weatherData = ref.watch(weatherProvider).data;
-                return WeatherLineChart(weatherData: weatherData);
-              },
-            ),
+            const WeatherLineChart(),
             // const WeatherChartPage(),
           ],
         ),

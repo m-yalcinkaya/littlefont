@@ -86,7 +86,9 @@ class _AppDrawerState extends ConsumerState<AppDrawer> with TickerProviderStateM
             const SizedBox(height: 15,),
           ],
         ),
-        onTap: () {
+        onTap: () async {
+          final weatherRepo = ref.read(weatherProvider);
+          weatherRepo.assignTemps(weatherRepo.data);
           Navigator.pop(context);
           PersistentNavBarNavigator.pushNewScreen(
               context,

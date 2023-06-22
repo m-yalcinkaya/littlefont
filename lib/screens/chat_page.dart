@@ -95,6 +95,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 }
 
 
+                String controlledLastMessage(String lastMessage){
+                  if(lastMessage.contains('https://firebasestorage.googleapis.com/')){
+                    return 'Photo';
+                  }else {
+                    return lastMessage;
+                  }
+                }
+
+
                 return ListView.builder(
                   itemCount: ref.watch(messageProvider).chatListData.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -132,8 +141,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                       final isMe =
                                       documentData?['lastMessage']['isMe'];
                                       return Text(isMe == true
-                                          ? 'You: $lastMessageText'
-                                          : '$lastMessageText');
+                                          ? 'You: ${controlledLastMessage(lastMessageText)}'
+                                          : controlledLastMessage(lastMessageText));
                                     }
                                   } else if (snapshot.hasError) {
                                     return const Text('Error');

@@ -59,7 +59,19 @@ class ProfilePage extends ConsumerWidget{
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.red, width: 5),
                       ),
-                      child: profilImage(screenSize.height*65/821.4)
+                      child: Stack(
+                          children: [
+                            profilImage(screenSize.height*65/821.4),
+                            const Positioned(
+                              top: 90,
+                              left: 75,
+                              child: IconButton(
+                                onPressed: null,
+                                  icon: Icon(Icons.change_circle_rounded, color: Colors.white, size: 45,),
+                              ),
+                            ),
+                          ],
+                      )
                     ),
                   ),
                 ),

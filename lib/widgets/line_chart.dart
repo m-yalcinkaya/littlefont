@@ -33,7 +33,9 @@ class _WeatherLineChartState extends ConsumerState<WeatherLineChart> {
       weatherRepo.day4Temp,
       weatherRepo.day5Temp,
       weatherRepo.day6Temp,
-      weatherRepo.day7Temp];
+      weatherRepo.day7Temp,
+      weatherRepo.day8Temp
+    ];
     double maxTemp = weatherRepo.day1Temp;
     for(double value in list){
       if(value > maxTemp){
@@ -53,7 +55,9 @@ class _WeatherLineChartState extends ConsumerState<WeatherLineChart> {
       weatherRepo.day4Temp,
       weatherRepo.day5Temp,
       weatherRepo.day6Temp,
-      weatherRepo.day7Temp];
+      weatherRepo.day7Temp,
+      weatherRepo.day8Temp
+    ];
     double minTemp =weatherRepo.day1Temp;
     for(double value in list){
       if(value < minTemp){

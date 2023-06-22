@@ -23,6 +23,23 @@ class MessagesRepository extends ChangeNotifier {
     }
   }
 
+
+  Widget profilImage(String? photoUrl, {bool isBigPhoto = false}) {
+    if (photoUrl != null && photoUrl.isNotEmpty) {
+      return CircleAvatar(
+        backgroundImage: NetworkImage(photoUrl),
+        radius: isBigPhoto ? 20 : 16,
+        backgroundColor: Colors.blue,
+      );
+    }else {
+      return CircleAvatar(
+        maxRadius: isBigPhoto ? 20 : 16,
+        child: const Icon(Icons.person),
+      );
+    }
+  }
+
+
 }
 
 final messageProvider = ChangeNotifierProvider((ref) {

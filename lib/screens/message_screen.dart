@@ -81,8 +81,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
 
   Widget? message(BuildContext context, int index) {
     final messageReadRepo = ref.read(messageProvider);
-    final messageSource = messageReadRepo.messages[messageReadRepo.messages
-        .length - index - 1].text;
+    final messageSource = messageReadRepo.messages[messageReadRepo.messages.length - index - 1].text;
     if (messageSource.contains('https://firebasestorage.googleapis.com/')) {
       return InkWell(
         onTap: () {
@@ -92,12 +91,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
           constraints: const BoxConstraints(
             maxWidth: 320,
           ),
-          color: _color(messageReadRepo
-              .messages[
-          messageReadRepo.messages.length -
-              index -
-              1]
-              .isMe),
+          color: _color(messageReadRepo.messages[messageReadRepo.messages.length - index - 1].isMe),
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Image.network(messageSource, fit: BoxFit.cover,)
@@ -109,12 +103,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
         constraints: const BoxConstraints(
           maxWidth: 320,
         ),
-        color: _color(messageReadRepo
-            .messages[
-        messageReadRepo.messages.length -
-            index -
-            1]
-            .isMe),
+        color: _color(messageReadRepo.messages[messageReadRepo.messages.length - index - 1].isMe),
         child: Padding(
             padding: const EdgeInsets.all(15),
             child: AutoSizeText(
@@ -123,25 +112,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                 color: Colors.white,
               ),),
         ),
-      );
-    }
-  }
-
-
-  Widget profilImage(String? photoUrl) {
-    if (photoUrl != null && photoUrl.isNotEmpty) {
-      return CircleAvatar(
-        backgroundImage: NetworkImage(
-            '${ref
-                .watch(messageProvider)
-                .data['photoUrl']}'),
-        radius: 16,
-        backgroundColor: Colors.blue,
-      );
-    } else {
-      return const CircleAvatar(
-        maxRadius: 16,
-        child: Icon(Icons.person),
       );
     }
   }
@@ -160,7 +130,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.arrow_back),
-              profilImage(messageWatchRepo.data["photoUrl"]),
+              ref.watch(messageProvider).profilImage(messageWatchRepo.data['photoUrl']),
             ],
           ),
         ),

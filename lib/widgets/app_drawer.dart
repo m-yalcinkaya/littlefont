@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:littlefont_app/repository/messages_repository.dart';
 import 'package:littlefont_app/repository/weather_repository.dart';
 import 'package:littlefont_app/screens/about_page.dart';
 import 'package:littlefont_app/screens/category_page.dart';
@@ -33,21 +34,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer> with TickerProviderStateM
   bool isLoading = false;
 
 
-  Widget profilImage() {
-    final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
 
-    if (photoUrl != null) {
-      return CircleAvatar(
-        backgroundImage: NetworkImage(photoUrl),
-        maxRadius: 20,
-      );
-    }
-
-    return const CircleAvatar(
-      maxRadius: 20,
-      child: Icon(Icons.person),
-    );
-  }
 
 
     Widget weatherSection(screenSize) {
@@ -161,7 +148,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer> with TickerProviderStateM
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.red, width: 5),
                             ),
-                            child: profilImage()),
+                            child: ref.watch(messageProvider).profilImage(FirebaseAuth.instance.currentUser?.photoURL, isBigPhoto: true)),
                         title: AutoSizeText(
                             '${FirebaseAuth.instance.currentUser?.displayName}'),
                         subtitle: AutoSizeText(

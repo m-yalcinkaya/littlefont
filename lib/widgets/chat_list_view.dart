@@ -17,6 +17,8 @@ class ChatListView extends ConsumerWidget {
   FirebaseFirestore.instance.collection('users').snapshots();
 
 
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder(
@@ -30,15 +32,16 @@ class ChatListView extends ConsumerWidget {
         } else if (!snapshot.hasData) {
           return const Center(child: Text('No data available'));
         }else {
-
           List<DocumentSnapshot> documents = snapshot.data!.docs;
           ref.watch(messageProvider).chatListData = [];
 
 
-          for (DocumentSnapshot document in documents) {
-            if (document['email'] !=
-                FirebaseAuth.instance.currentUser!.email) {
-              ref.watch(messageProvider).chatListData.add(document);
+          for (int i=0; i<documents.length; i++) {
+            final myEmail = FirebaseAuth.instance.currentUser!.email;
+            final email = documents[i]['email'];
+            final data = documents[i].data() as Map<String, dynamic>;
+            if(email != myEmail) {
+              ref.read(messageProvider).chatListData.add(data);
             }
           }
 
@@ -46,8 +49,8 @@ class ChatListView extends ConsumerWidget {
           return ListView.builder(
             itemCount: ref.watch(messageProvider).chatListData.length,
             itemBuilder: (BuildContext context, int index) {
-              ref.watch(messageProvider).data =
-              ref.watch(messageProvider).chatListData[index].data() as Map<String, dynamic>;
+              ref.watch(messageProvider).data = ref.watch(messageProvider).chatListData[index];
+
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -60,7 +63,7 @@ class ChatListView extends ConsumerWidget {
                         subtitle: const LastMessageWidget(),
                         onTap: () {
                           ref.watch(messageProvider).data =
-                          ref.watch(messageProvider).chatListData[index].data() as Map<String, dynamic>;
+                          ref.watch(messageProvider).chatListData[index];
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
                             screen: const MessageScreen(),

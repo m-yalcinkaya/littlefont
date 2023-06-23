@@ -22,10 +22,15 @@ class MessageScreen extends ConsumerStatefulWidget {
 }
 
 class _MessageScreenState extends ConsumerState<MessageScreen> {
-  final controller = TextEditingController();
+  final _controller = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   FirebaseStorage storage = FirebaseStorage.instance;
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Color _color(bool isMe) {
     if (isMe == true) {
@@ -39,18 +44,18 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
     required BuildContext context,
   }) async {
     if (context.mounted) {
-        try {
-          final XFile? pickedFile = await _picker.pickImage(
-            maxWidth: 1024,
-            maxHeight: 1024,
-            imageQuality: 85,
-            source: source,
-          );
-          setState(() {
-            _setImageFileListFromFile(pickedFile);
-          });
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An Error Occured : $e')));
+      try {
+        final XFile? pickedFile = await _picker.pickImage(
+          maxWidth: 1024,
+          maxHeight: 1024,
+          imageQuality: 85,
+          source: source,
+        );
+        setState(() {
+          _setImageFileListFromFile(pickedFile);
+        });
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('An Error Occured : $e')));
       }
     }
   }
@@ -77,7 +82,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
       });
     }
   }
-
 
   Widget? message(BuildContext context, int index) {
     final messageReadRepo = ref.read(messageProvider);
@@ -235,7 +239,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                       height: 60,
                       width: 300,
                       child: TextField(
-                        controller: controller,
+                        controller: _controller,
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -304,12 +308,12 @@ class _MessageScreenState extends ConsumerState<MessageScreen> {
                         try {
                           await ref.read(messageProvider).sendMessage(ref
                               .read(messageProvider)
-                              .data['email'], controller.text);
+                              .data['email'], _controller.text);
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('$e')));
                         }
-                        controller.text = '';
+                        _controller.text = '';
                       },
                       icon: const Icon(Icons.send, color: Colors.blue),
                     ),

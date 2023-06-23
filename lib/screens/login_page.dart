@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:littlefont_app/services/auth_service.dart';
 import 'package:littlefont_app/widgets/bottom_nav_bar.dart';
 import 'package:littlefont_app/widgets/button.dart';
@@ -23,6 +24,8 @@ class _LoginState extends ConsumerState<Login> {
 
   final _text1Controller = TextEditingController();
   final _text2Controller = TextEditingController();
+  bool isLoading = false;
+
 
   @override
   void dispose() {
@@ -34,10 +37,19 @@ class _LoginState extends ConsumerState<Login> {
   int lenghtString1 = 0;
   int lenghtString2 = 0;
 
+
+  void googleButtonOnPressed(){
+
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
+      body: isLoading ? const Center(child: SpinKitWave(color: Colors.red,)) : Form(
         key: _formKeyLogin,
         child: Container(
           color: Colors.blue.shade100,
@@ -64,30 +76,40 @@ class _LoginState extends ConsumerState<Login> {
                       image: 'assets/images/google.png',
                       onPressedOperations: () async {
                         try {
+                          setState(() {
+                            isLoading= true;
+                          });
                           await signInWithGoogle();
-                          await Future.microtask(() async {
-                            if (FirebaseAuth.instance.currentUser != null) {
-                              await Future.microtask(
-                                    () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                        builder: (context) => const BottomNavBar(),
-                                      ),
-                                          (route) => false);
-                                },
-                              );
-                            } else {
-                              await Future.microtask(
-                                    () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                        builder: (context) => const FirstScreen(),
-                                      ),
-                                          (route) => false);
-                                },
-                              );
-                            }
-                          },);
+                          setState(() {
+                            isLoading= false;
+                          });
+                          if(isLoading == true){
+                            const Center(child: CircularProgressIndicator());
+                          }else {
+                            await Future.microtask(() async {
+                              if (FirebaseAuth.instance.currentUser != null) {
+                                await Future.microtask(
+                                      () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (context) => const BottomNavBar(),
+                                        ),
+                                            (route) => false);
+                                  },
+                                );
+                              } else {
+                                await Future.microtask(
+                                      () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (context) => const FirstScreen(),
+                                        ),
+                                            (route) => false);
+                                  },
+                                );
+                              }
+                            },);
+                          }
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                               content: Text(

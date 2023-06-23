@@ -26,6 +26,7 @@ Future<void> createUser({required Account account}) async {
       'email': account.email,
       'photoUrl': account.photoUrl,
     });
+
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
       throw Exception('The password provided is too weak');

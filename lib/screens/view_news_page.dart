@@ -1,16 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont_app/repository/news_repository.dart';
 import 'package:littlefont_app/widgets/button.dart';
-import 'package:littlefont_app/modals/news.dart';
 import 'package:littlefont_app/widgets/web_view.dart';
 
-class ViewNewsPage extends StatelessWidget {
+class ViewNewsPage extends ConsumerWidget {
   final int indexNews;
-  final List<News> list;
-  const ViewNewsPage({Key? key, required this.indexNews, required this.list}) : super(key: key);
+  const ViewNewsPage({Key? key, required this.indexNews}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -22,7 +22,7 @@ class ViewNewsPage extends StatelessWidget {
               expandedTitleScale: 1.5,
               background: FittedBox(
                 fit: BoxFit.fill,
-                child: Image.network(list[indexNews]
+                child: Image.network(ref.watch(newsProvider).newsList?[indexNews]
                         .urlToImage ??
                     'https://cdn.pixabay.com/photo/2014/06/16/23/39/black-370118_960_720.png'),
               ),
@@ -37,7 +37,7 @@ class ViewNewsPage extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: AutoSizeText(
                       minFontSize: 22,
-                      list[indexNews].title ?? 'title = null',
+                      ref.watch(newsProvider).newsList?[indexNews].title ?? 'title = null',
                       style: const TextStyle(
                         color: Colors.black,
                       ),
@@ -50,7 +50,7 @@ class ViewNewsPage extends StatelessWidget {
                     children: [
                       Flexible(
                           child: Text(
-                              'Author: ${list[indexNews].author}')),
+                              'Author: ${ref.watch(newsProvider).newsList?[indexNews].author}')),
                       const Spacer(),
                     ],
                   ),
@@ -58,7 +58,7 @@ class ViewNewsPage extends StatelessWidget {
                     height: 30,
                   ),
                   Text(
-                    list[indexNews].content ?? 'content : null',
+                    ref.watch(newsProvider).newsList?[indexNews].content ?? 'content : null',
                   ),
                   const SizedBox(
                     height: 30,
@@ -67,12 +67,12 @@ class ViewNewsPage extends StatelessWidget {
                     text: 'Click to read the whole',
                     color: Colors.red,
                     onPressedOperations: () {
-                      list[indexNews].url != null
+                      ref.watch(newsProvider).newsList?[indexNews].url != null
                           ? Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => MyWebView(
                                 selectedUrl:
-                                    list[indexNews].url!,
-                                title: list[indexNews]
+                                ref.watch(newsProvider).newsList![indexNews].url!,
+                                title: ref.watch(newsProvider).newsList?[indexNews]
                                     .title ?? 'title : null',
                               ),
                             ))

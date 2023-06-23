@@ -9,7 +9,6 @@ class LastMessageWidget extends ConsumerWidget {
     super.key,
   });
 
-
   String controlledLastMessage(String lastMessage){
     if(lastMessage.contains('https://firebasestorage.googleapis.com/')){
       return 'Photo';
@@ -17,6 +16,8 @@ class LastMessageWidget extends ConsumerWidget {
       return lastMessage;
     }
   }
+
+
 
 
   @override

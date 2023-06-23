@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:littlefont_app/modals/message.dart';
@@ -10,7 +9,7 @@ class MessagesRepository extends ChangeNotifier {
   MessagesRepository(this.dataService);
 
   List<Message> messages = [];
-  List<DocumentSnapshot> chatListData = [];
+  List<Map<String, dynamic>> chatListData = [];
   Map<String, dynamic> data = {};
 
 

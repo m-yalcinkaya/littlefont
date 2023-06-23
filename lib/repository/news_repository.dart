@@ -9,6 +9,7 @@ class NewsRepository extends ChangeNotifier {
 
   NewsRepository(this.newsService);
 
+  List<News>? newsList = [];
   List<News>? generalNews = [];
   List<News>? healthNews = [];
   List<News>? entertainmentNews = [];

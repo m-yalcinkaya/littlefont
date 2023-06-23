@@ -1,24 +1,23 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:littlefont_app/repository/news_repository.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-import '../modals/news.dart';
 import '../screens/view_news_page.dart';
 
 
-class NewsListView extends StatelessWidget {
-  final List<News>? data;
+class NewsListView extends ConsumerWidget {
   const NewsListView({
     super.key,
-    required this.data,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       scrollDirection: Axis.horizontal,
-      itemCount: data!.length,
+      itemCount: ref.watch(newsProvider).newsList?.length,
       itemBuilder: (BuildContext context, int index) {
         return SizedBox(
           width: 265,
@@ -26,14 +25,14 @@ class NewsListView extends StatelessWidget {
             onTap: () {
               PersistentNavBarNavigator.pushNewScreen(
                 context,
-                screen: ViewNewsPage(indexNews: index, list: data!),
+                screen: ViewNewsPage(indexNews: index),
               );
             },
             child: Card(
               child: Stack(
                 children: [
                   Image.network(
-                    data![index].urlToImage ??
+                    ref.watch(newsProvider).newsList![index].urlToImage ??
                         'https://cdn.pixabay.com/photo/2014/06/16/23/39/black-370118_960_720.png',
                     fit: BoxFit.cover,
                     height: 142,
@@ -49,7 +48,7 @@ class NewsListView extends StatelessWidget {
                             padding: const EdgeInsets.all(10),
                             child: Center(
                               child: AutoSizeText(
-                                data![index].title ?? 'title: null',
+                                ref.watch(newsProvider).newsList![index].title ?? 'title: null',
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),

@@ -26,7 +26,7 @@ class MyGridView extends ConsumerWidget {
           onTap: () {
             PersistentNavBarNavigator.pushNewScreen(
               context,
-              screen: ViewNewsPage(indexNews: index, list: list),
+              screen: ViewNewsPage(indexNews: index),
             );
           },
           child: Card(

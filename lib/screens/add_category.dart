@@ -5,7 +5,6 @@ import 'package:littlefont_app/screens/category_page.dart';
 import '../repository/category_repository.dart';
 import 'package:littlefont_app/modals/category.dart';
 
-import '../utilities/database_helper.dart';
 
 class AddCategory extends ConsumerStatefulWidget {
   const AddCategory({
@@ -26,12 +25,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
     super.dispose();
   }
 
-  Future<String?> isFounded(String value) async {
-    if (await DatabaseHelper.instance.isFounded(value) == true) {
-      return 'A category name with the same name already exists!!';
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +46,6 @@ class _AddCategoryState extends ConsumerState<AddCategory> {
                   maxLength: 50,
                   controller: _controller,
                   validator: (value) {
-                    isFounded(value!);
                     return null;
                   },
                   style: const TextStyle(

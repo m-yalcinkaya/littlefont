@@ -28,7 +28,6 @@ class AppMainPage extends ConsumerStatefulWidget {
 class _AppMainPageState extends ConsumerState<AppMainPage> {
   late Future<List<News>?> _future;
   late int nameLenght;
-  late Object? errorValue;
 
   String? name() {
     int lenght = 0;
@@ -48,9 +47,7 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
 
   @override
   void initState() {
-    _future = ref.read(newsProvider).getNewsByCategory('general', ref
-        .read(newsProvider)
-        .generalNews!);
+    _future = ref.read(newsProvider).getNewsByCategory('general', ref.read(newsProvider).generalNews!);
     super.initState();
   }
 
@@ -63,27 +60,23 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
           SliverAppBar(
             pinned: true,
             expandedHeight: 245.0,
-            flexibleSpace: Stack(
-              children: [
-                FlexibleSpaceBar(
-                  collapseMode: CollapseMode.parallax,
-                  expandedTitleScale: 1.5,
-                  title: Row(
-                    children: [
-                      Text(
-                        'Hi, ${name()}!',
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
+              expandedTitleScale: 1.5,
+              title: Row(
+                children: [
+                  Text(
+                    'Hi, ${name()}!',
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
-                  background: const Image(
-                    image: AssetImage('assets/images/pexels-photo-3225517.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
+                ],
+              ),
+              background: const Image(
+                image: AssetImage('assets/images/pexels-photo-3225517.jpg'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -115,9 +108,10 @@ class _AppMainPageState extends ConsumerState<AppMainPage> {
                           'An error occurred while loading the news ${snapshot
                               .error}');
                     } else if (snapshot.hasData) {
-                      return SizedBox(
+                      ref.read(newsProvider).newsList = snapshot.data!;
+                      return const SizedBox(
                         height: 150,
-                        child: NewsListView(data: snapshot.data!),
+                        child: NewsListView(),
                       );
                     } else {
                       return const Center(

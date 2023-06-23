@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:littlefont_app/repository/messages_repository.dart';
-import 'package:littlefont_app/screens/search_account.dart';
 import 'package:littlefont_app/widgets/chat_list_view.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -75,7 +73,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+    /*  floatingActionButton: FloatingActionButton(
         heroTag: 'ChatFltButton',
         onPressed: () {
           PersistentNavBarNavigator.pushNewScreen(
@@ -84,7 +82,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           );
         },
         child: const Icon(Icons.add_box_rounded),
-      ),
+      ),*/
     );
   }
 }

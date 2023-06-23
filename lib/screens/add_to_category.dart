@@ -79,10 +79,7 @@ class AddToCategory extends ConsumerWidget {
                             final value = noteRepo.notes[index];
                             ref.read(categoryProvider).insertToCategory(value, categoryRepo.category[indexCategory]);
                           },
-                          icon: categoryRepo.notes
-                              .contains(noteRepo.notes[index])
-                              ? const Icon(Icons.add_box_rounded)
-                              : const Icon(Icons.add_box_outlined),
+                          icon: const Icon(Icons.add_box_rounded),
                         ),
                       ),
                     ),
@@ -91,7 +88,6 @@ class AddToCategory extends ConsumerWidget {
                         noteRepo.notes[index].title,
                         maxLines: 1,
                         style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -104,7 +100,6 @@ class AddToCategory extends ConsumerWidget {
                           child: Text(
                             noteRepo.notes[index].content,
                             maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),

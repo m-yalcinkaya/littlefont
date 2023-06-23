@@ -10,6 +10,7 @@ class NotesListview extends ConsumerWidget {
     super.key,
   });
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
@@ -18,9 +19,7 @@ class NotesListview extends ConsumerWidget {
           if (snapshot.hasError) {
             return const SnackBar(content: Text('An error occured loading the notes'),);
           } else if (snapshot.hasData) {
-            ref
-                .read(notesProvider)
-                .notes = snapshot.data!;
+            ref.read(notesProvider).notes = snapshot.data!;
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               scrollDirection: Axis.horizontal,
